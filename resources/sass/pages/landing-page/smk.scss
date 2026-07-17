@@ -1,0 +1,306 @@
+.profile-smk {
+    padding: 0 0 50px;
+    background-color: #f8f9fa;
+
+    .profile-wrapper {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 42px;
+        align-items: center;
+    }
+
+    .school-image {
+        background: #fff;
+        border-radius: 24px;
+        min-height: 420px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 15px 35px rgba(17, 122, 139, 0.1);
+
+        img {
+            width: 72%;
+            max-height: 320px;
+            object-fit: contain;
+        }
+    }
+
+    .section-kicker {
+        color: $color-secondary;
+        font-weight: 700;
+        display: inline-block;
+        margin-bottom: 12px;
+    }
+
+    h2 {
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+        color: $color-primary;
+    }
+
+    p {
+        line-height: 1.8;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .school-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+
+        .info-item {
+            background: #fff;
+            padding: 14px 18px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+            i {
+                color: teal;
+            }
+        }
+    }
+}
+
+.jurusan-smk {
+    padding: 100px 0;
+    background-color: $color-gray-100;
+
+    .jurusan-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 30px;
+    }
+
+    .jurusan-card {
+        background: #fff;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+
+        .top-image {
+            img {
+                width: 100%;
+                height: 220px;
+                object-fit: cover;
+            }
+        }
+
+        .jurusan-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 25px 25px 10px;
+
+            .icon {
+                width: 60px;
+                height: 60px;
+                border-radius: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 70px;
+                    height: 70px;
+                    object-fit: contain;
+                }
+
+            }
+
+            h3 {
+                margin: 0;
+                font-size: 1.5rem;
+            }
+
+            span {
+                color: #777;
+                font-size: 0.9rem;
+            }
+        }
+
+        .desc {
+            padding: 0 25px;
+            line-height: 1.7;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .jurusan-section {
+            padding: 0 25px 25px;
+
+            h4 {
+                font-size: 1rem;
+                margin-bottom: 15px;
+                color: $color-primary;
+
+                i {
+                    margin-right: 8px;
+                }
+            }
+
+            .tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+
+                span {
+                    background: #f3f4f6;
+                    padding: 8px 14px;
+                    border-radius: 12px;
+                    font-size: 0.9rem;
+                }
+            }
+        }
+    }
+}
+
+.keunggulan-smk {
+    padding: 80px 20px;
+    background: #e9f1f2;
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+
+        span {
+            display: inline-block;
+            color: $color-secondary;
+            font-weight: 600;
+        }
+
+        h2 {
+            color: $color-primary;
+            margin-bottom: 15px;
+        }
+
+        p {
+            max-width: 700px;
+            margin: auto;
+            color: $color-text;
+            line-height: 1.8;
+        }
+    }
+
+    .target-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+    }
+
+    .target-card {
+        background: #fff;
+        padding: 35px 25px;
+        border-radius: 18px;
+        text-align: center;
+        border: 1px solid #e9ecef;
+        transition: .3s ease;
+
+        &:hover {
+            transform: translateY(-8px);
+            border-color: $color-primary;
+            box-shadow: 0 15px 35px rgba(17, 122, 139, .12);
+
+            i {
+                background: $color-primary;
+                color: #fff;
+            }
+        }
+
+        i {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(17, 122, 139, .08);
+            color: $color-primary;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            transition: .3s ease;
+        }
+
+        h3 {
+            color: $color-primary;
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+        }
+
+        p {
+            color: $color-text;
+            line-height: 1.8;
+            font-size: .95rem;
+        }
+    }
+}
+
+.section-title {
+    text-align: center;
+    max-width: 750px;
+    margin: auto auto 60px;
+
+    span {
+        color: $color-secondary;
+        font-weight: 600;
+    }
+
+    h2 {
+        font-size: 2.8rem;
+        color: $color-primary;
+        margin: 15px 0;
+    }
+
+    p {
+        color: #666;
+        line-height: 1.8;
+    }
+}
+
+.smk-documentation {
+    background: #f6fafb;
+
+    .smk-studio-board {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 18px;
+        align-items: stretch;
+    }
+
+    figure {
+        position: relative;
+        min-height: 210px;
+        margin: 0;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+
+        &.main-shot {
+            grid-row: span 2;
+            min-height: 450px;
+        }
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    figcaption {
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 18px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.92);
+        color: $color-primary;
+        font-weight: 800;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+    }
+}

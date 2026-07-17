@@ -1,0 +1,59 @@
+.hero-pendidikan {
+    position: relative;
+    padding: 70px 20px 200px;
+    overflow: hidden;
+    background: linear-gradient(
+        135deg,
+        #1691a5 0%,
+        #117a8b 50%,
+        #0d6472 100%
+    );
+    background-size: cover;
+    background-position: center;
+
+    .hero-content {
+        max-width: 850px;
+        margin: auto;
+        text-align: center;
+        color: #fff;
+
+        .badge-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.12);
+            padding: 12px 24px;
+            border-radius: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+
+            i {
+                color: #ffd54f;
+            }
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            
+
+            span {
+                color: #ffd54f;
+            }
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: rgba(255,255,255,0.9);
+        }
+    }
+
+    .wave {
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+    }
+}

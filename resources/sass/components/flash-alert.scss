@@ -1,0 +1,38 @@
+.flash-alerts {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2000;
+    width: min(390px, calc(100vw - 2rem));
+    display: grid;
+    gap: .75rem;
+}
+
+.flash-alert {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: .75rem;
+    align-items: start;
+    padding: 1rem;
+    color: #fff;
+    border-radius: .85rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
+
+    > i { font-size: 1.25rem; margin-top: .15rem; }
+    strong { display: block; margin-bottom: .2rem; }
+    p { margin: 0; font-size: .9rem; line-height: 1.4; }
+}
+
+.flash-alert--success { background: #16803c; }
+.flash-alert--error { background: #bd2636; }
+.flash-alert--warning { background: #ae6800; }
+.flash-alert--info { background: #126f9e; }
+
+.flash-alert__close {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 1.45rem;
+    line-height: 1;
+    cursor: pointer;
+}

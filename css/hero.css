@@ -1,0 +1,46 @@
+.hero-pendidikan {
+  position: relative;
+  padding: 70px 20px 200px;
+  overflow: hidden;
+  background: linear-gradient(rgba(12, 85, 72, 0.92), rgba(7, 52, 60, 0.95)), url("/images/bg-smk.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.hero-pendidikan .hero-content {
+  max-width: 850px;
+  margin: auto;
+  text-align: center;
+  color: #fff;
+}
+.hero-pendidikan .hero-content .badge-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 12px 24px;
+  border-radius: 40px;
+  margin-bottom: 30px;
+  backdrop-filter: blur(10px);
+}
+.hero-pendidikan .hero-content .badge-title i {
+  color: #ffd54f;
+}
+.hero-pendidikan .hero-content h1 {
+  font-size: 5rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+.hero-pendidikan .hero-content h1 span {
+  color: #ffd54f;
+}
+.hero-pendidikan .hero-content p {
+  font-size: 1.2rem;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.9);
+}
+.hero-pendidikan .wave {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+}

@@ -1,0 +1,72 @@
+@import "components/variables";
+@import "components/notification";
+@import "components/flash-alert";
+@import "components/footer";
+@import "components/header";
+@import "components/modal";
+@import "components/hero";
+@import "components/filter";
+@import "components/statistik";
+@import "components/sidebar-admin";
+@import "components/header-admin";
+@import "pages/landing-page/home";
+@import "pages/landing-page/profile";
+@import "pages/landing-page/kegiatan";
+@import "pages/landing-page/berita";
+@import "pages/landing-page/detail-berita";
+@import "pages/landing-page/galery";
+@import "pages/landing-page/tpq";
+@import "pages/landing-page/madqur";
+@import "pages/landing-page/madin";
+@import "pages/landing-page/smp";
+@import "pages/landing-page/smk";
+@import "pages/landing-page/guru";
+@import "pages/landing-page/pendaftaran";
+@import "pages/landing-page/virtual-tour";
+@import "pages/landing-page/form-pendaftaran";
+@import "pages/landing-page/pembayaran";
+@import "pages/landing-page/detail-pembayaran";
+@import "pages/landing-page/pembayaran-berhasil";
+@import "pages/landing-page/cek-pendaftaran";
+@import "pages/landing-page/detail-cek";
+@import "pages/landing-page/daftar-ulang";
+@import "pages/admin/login";
+@import "pages/admin/dashboard";
+@import "pages/admin/berita";
+@import "pages/admin/galeri";
+@import "pages/admin/guru";
+@import "pages/admin/virtual-tour";
+@import "pages/admin/pendaftaran";
+@import "pages/admin/biaya";
+@import "pages/admin/gelombang";
+@import "pages/admin/banner";
+@import "pages/admin/hasil-tes";
+@import "pages/landing-page/responsive";
+
+html {
+    body {
+    margin-top: 70px;
+    }
+
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 0;
+        padding: 0;
+    }
+
+    .admin-layout {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .admin-main {
+        flex: 1;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+}

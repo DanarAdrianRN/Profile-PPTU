@@ -1,0 +1,384 @@
+.form-pendaftaran {
+    padding: 70px 20px;
+    background: #f8f9fa;
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+
+        h2 {
+            color: $color-primary;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+    }
+
+    /* STEP */
+    .step-progress {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            z-index: 0;
+        }
+
+        .step-item {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+
+            .circle {
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                background: #ddd;
+                color: #666;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                margin: 0 auto 10px;
+                font-weight: 600;
+            }
+
+            span {
+                font-size: 0.9rem;
+                color: #777;
+            }
+
+            &.active {
+                .circle {
+                    background: $color-primary;
+                    color: #fff;
+                }
+
+                span {
+                    color: $color-primary;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    /* BOX */
+    .form-box {
+        background: #fff;
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+
+        .form-step {
+            display: none;
+
+            .form-copy {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 15px;
+
+                p,
+                label {
+                    margin: 0;
+                    font-size: 0.95rem;
+                }
+
+                input[type="checkbox"] {
+                    width: 18px;
+                    height: 18px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+            }
+
+            &.active {
+                display: block;
+                animation: fadeSlide 0.4s ease;
+            }
+
+            .step-title {
+                margin-bottom: 30px;
+
+                h3 {
+                    color: $color-primary;
+                    margin-bottom: 5px;
+                }
+
+                p {
+                    color: #666;
+                }
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+
+                .form-group {
+                    display: flex;
+                    flex-direction: column;
+
+                    .select-wrapper {
+                        position: relative;
+
+                        &::after {
+                            content: "\f078";
+                            font-family: "Font Awesome 7 Free";
+                            font-weight: 900;
+                            position: absolute;
+                            right: 18px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            pointer-events: none;
+                            color: #64748b;
+                            font-size: 14px;
+                            transition: 0.3s ease;
+                        }
+
+                        &:focus-within::after {
+                            transform: translateY(-50%) rotate(-180deg);
+                        }
+
+                        select {
+                            height: 52px;
+                            border: 1px solid #e2e8f0;
+                            color: $color-text;
+                            border-radius: 14px;
+                            padding: 0 50px 0 18px;
+                            outline: none;
+                            min-width: 180px;
+                            appearance: none;
+                            -webkit-appearance: none;
+                            -moz-appearance: none;
+
+                            &:focus {
+                                border-color: #0f7a8a;
+                            }
+                        }
+                    }
+
+                    &.smk-jurusan {
+                        display: none;
+                    }
+
+                    &.full {
+                        grid-column: span 2;
+                    }
+
+                    label {
+                        margin-bottom: 10px;
+                        color: $color-primary;
+                        font-weight: 600;
+                    }
+
+                    input,
+                    textarea {
+                        border: 1px solid #ddd;
+                        border-radius: 12px;
+                        padding: 14px;
+                        outline: none;
+                        transition: 0.3s;
+                        color: $color-text;
+
+                        &:focus {
+                            border-color: $color-primary;
+                            box-shadow: 0 0 0 4px rgba(17, 122, 139, 0.1);
+                        }
+                    }
+
+                    .radio-group {
+                        display: flex;
+                        gap: 20px;
+                        padding-top: 10px;
+
+                        label {
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            font-weight: normal;
+                            color: $color-text;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+
+                .upload-card {
+                    label {
+                        display: block;
+                        margin-bottom: 12px;
+                        font-weight: 600;
+                        color: $color-primary;
+                    }
+
+                    .upload-box {
+                        position: relative;
+                        border: 2px dashed #d6dde2;
+                        border-radius: 20px;
+                        padding: 40px 25px;
+                        background: #fff;
+                        text-align: center;
+                        cursor: pointer;
+                        transition: 0.3s;
+                        overflow: hidden;
+
+                        .upload-content {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            gap: 15px;
+                        }
+
+                        .upload-left {
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+
+                            i {
+                                font-size: 1.4rem;
+                                margin: 0;
+                            }
+
+                            span {
+                                font-weight: 600;
+                                color: #555;
+                            }
+                        }
+
+                        .upload-right {
+                            display: flex;
+                            align-items: center;
+                            gap: 5px;
+                            font-size: 0.85rem;
+                            color: #999;
+                            text-align: right;
+                            max-width: 140px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                        }
+
+                        .upload-box.uploaded {
+                            border-color: #198754;
+                            background: rgba(25, 135, 84, 0.05);
+
+                            .upload-right {
+                                color: #198754;
+                                font-weight: 600;
+                            }
+                        }
+
+                        &:hover {
+                            border-color: $color-primary;
+                            background: rgba(17, 122, 139, 0.03);
+                            transform: translateY(-3px);
+                        }
+
+                        i {
+                            font-size: 1.4rem;
+                            color: $color-primary;
+                        }
+
+                        p {
+                            margin: 0;
+                            color: #666;
+                            font-size: 0.95rem;
+                        }
+
+                        input[type="file"] {
+                            position: absolute;
+                            inset: 0;
+                            width: 100%;
+                            height: 100%;
+                            opacity: 0;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* BUTTON */
+    .form-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+
+        .btn-form {
+            border: none;
+            padding: 14px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            &.primary {
+                background: $color-primary;
+                color: #fff;
+
+                &:hover {
+                    background: darken($color-primary, 8%);
+                }
+            }
+
+            &.secondary {
+                background: #e9ecef;
+                color: $color-text;
+
+                &:hover {
+                    background: #dfe3e7;
+                }
+            }
+        }
+    }
+
+    @keyframes fadeSlide {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .form-pendaftaran {
+        .step-progress {
+            overflow-x: auto;
+            gap: 20px;
+        }
+
+        .form-box {
+            padding: 25px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+
+            .form-group.full {
+                grid-column: span 1;
+            }
+        }
+    }
+}

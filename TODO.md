@@ -1,0 +1,5 @@
+- [x] Buat controller landing virtual tour (ambil scene published + scene start, hotspots aktif)
+- [x] Update route landing /virtual-tour agar pakai controller
+- [x] Update landing blade agar dinamis pakai data DB dan hotspot JS membaca data dari server
+- [ ] Verifikasi: panorama tampil + hotspot switch scene + info hotspot popup
+- [ ] (Opsional) Perbaiki test AdminLoginTest (tidak terkait dengan perubahan virtual tour)

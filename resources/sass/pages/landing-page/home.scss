@@ -1,0 +1,437 @@
+.hero {
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("http://127.0.0.1:8000/assets/masjid.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    color: $color-background;
+
+    .hero-content {
+        text-align: left;
+        width: 50%;
+        padding-left: 100px;
+
+        h1 {
+            font-size: 60px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+
+            .btn {
+                background: $color-secondary;
+                padding: 10px 20px;
+                color: $color-primary;
+                text-decoration: none;
+                border-radius: 10px;
+                font-weight: 600;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
+
+                &.fadee {
+                    background-color: transparent;
+                    border: 2px solid $color-background;
+                    color: $color-background;
+
+                    &:hover {
+                        background-color: #ffffff39;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.stats {
+    background: $color-background;
+    padding: 60px 20px;
+
+    .container {
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        margin: 15px;
+        position: relative;
+
+        h2 {
+            font-size: 2.5rem;
+            color: $color-primary;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1rem;
+            color: $color-text;
+        }
+
+        &::after {
+            content: "";
+            width: 40px;
+            height: 3px;
+            background: $color-secondary;
+            display: block;
+            margin: 10px auto 0;
+        }
+    }
+}
+
+.program {
+    padding: 60px 0;
+    background: #fff;
+
+    .section-title {
+        text-align: center;
+        color: $color-primary;
+        margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 50px;
+    }
+
+    .program-grid {
+
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 25px;
+    }
+
+    .card {
+        text-decoration: none;
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #e8ecef;
+        box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        transition: .35s;
+
+        &:hover{
+            transform: translateY(-10px);
+            border-color: #117a8b;
+
+            .logo{
+                transform: scale(1.08);
+            }
+
+            .link{
+                color:#ffd700;
+            }
+
+        }
+
+    }
+
+    .card-body{
+        height: 300px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        padding:35px;
+        text-align:center;
+    }
+
+    .logo{
+        width:110px;
+        height:110px;
+        object-fit:contain;
+        margin-bottom:25px;
+        transition:.35s;
+    }
+
+    h3{
+        color:$color-primary;
+        font-size:18px;
+        line-height:1.3;
+        margin-bottom:20px;
+        min-height:70px;
+    }
+
+    .link{
+        color:$color-primary;
+        font-size:14px;
+        font-weight:600;    
+        transition:.3s;
+    }
+
+}
+
+.why {
+    padding: 90px 0;
+    background: linear-gradient(to bottom, #ffffff, #f8fafc);
+
+    .section-title {
+        text-align: center;
+        color: $color-primary;
+        font-size: 2.3rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+        max-width: 650px;
+        margin: 0 auto 60px;
+        text-align: center;
+        color: #6b7280;
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+
+    .why-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+    }
+
+    .why-card {
+
+        background: #fff;
+        border-radius: 20px;
+        padding: 35px 30px;
+        border: 1px solid #edf2f7;
+
+        min-height: 290px;
+
+        transition: .35s ease;
+
+        display: flex;
+        flex-direction: column;
+
+        &:hover {
+
+            transform: translateY(-10px);
+
+            box-shadow: 0 20px 45px rgba(17,122,139,.12);
+
+            border-color: #117a8b;
+
+            .icon{
+                background:#117a8b;
+
+                i{
+                    color:white;
+                }
+            }
+
+        }
+
+        .icon{
+
+            width:75px;
+            height:75px;
+
+            border-radius:50%;
+
+            background:rgba(17,122,139,.08);
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            margin-bottom:25px;
+
+            transition:.35s;
+
+            i{
+
+                font-size:30px;
+                color:$color-primary;
+                transition:.35s;
+
+            }
+
+        }
+
+        h3{
+
+            font-size:1.35rem;
+            color:$color-primary;
+
+            margin-bottom:15px;
+
+            line-height:1.4;
+
+        }
+
+        p{
+
+            color:#6b7280;
+
+            font-size:1rem;
+
+            line-height:1.8;
+
+            flex:1;
+
+        }
+
+    }
+
+}
+
+.what {
+    padding: 80px 20px;
+    background: $color-primary;
+
+    .section-title {
+        text-align: center;
+        color: #fff;
+        margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        color: rgba(255,255,255,.8);
+        margin-bottom: 50px;
+    }
+
+    .what-slider {
+        overflow: hidden;
+        padding-bottom: 50px;
+    }
+
+    .swiper-wrapper {
+        align-items: stretch;
+        height: fit-content;
+    }
+
+    .swiper-slide {
+        display: flex;
+    }
+
+    .what-card {
+        width: 100%;
+        background: rgba(255,255,255,.08);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: .3s;
+
+        &:hover{
+            transform: translateY(-6px);
+            background: rgba(255,255,255,.12);
+        }
+
+        .stars{
+            color:#ffd700;
+            font-size:20px;
+            margin-bottom:15px;
+        }
+
+        p{
+            color:rgba(255,255,255,.9);
+            line-height:1.8;
+            font-style:italic;
+            flex:1;
+            margin-bottom:25px;
+        }
+
+        .user{
+            display:flex;
+            align-items:center;
+            gap:12px;
+
+            img{
+                width:55px;
+                height:55px;
+                border-radius:50%;
+                border:2px solid rgba(255,255,255,.3);
+            }
+
+            h4{
+                color:#fff;
+                margin:0;
+                font-size:16px;
+                font-weight:600;
+            }
+
+            span{
+                color:rgba(255,255,255,.75);
+                font-size:14px;
+            }
+        }
+    }
+
+    .swiper-pagination-bullet{
+        background:#fff;
+        opacity:.5;
+    }
+
+    .swiper-pagination-bullet-active{
+        background:#ffd700;
+        opacity:1;
+    }
+}
+
+.cta {
+    background: $color-background;
+    text-align: center;
+    padding: 50px 20px;
+
+    h2 {
+        font-size: 2rem;
+        color: $color-primary;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: $color-text;
+        margin-bottom: 20px;
+    }
+
+    .cta-button {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+
+        .btn {
+            margin-top: 15px;
+            display: inline-block;
+            background: $color-primary;
+            color: $color-background;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+
+            &:hover {
+                background: #095662;
+            }
+
+            &.fadee {
+                background-color: transparent;
+                border: 2px solid $color-primary;
+                color: $color-primary;
+
+                &:hover {
+                    background-color: $color-primary;
+                    color: $color-background;
+                }
+            }
+        }
+    }
+}

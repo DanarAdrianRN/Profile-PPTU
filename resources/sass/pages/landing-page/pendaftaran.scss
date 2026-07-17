@@ -1,0 +1,614 @@
+.pendaftaran {
+    padding: 60px 20px 30px 20px;
+    background: #f7f7f7;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .pendaftaran-header {
+        background: $color-primary;
+        border-radius: 20px;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+
+        .content {
+            z-index: 2;
+
+            h2 {
+                margin-bottom: 10px;
+                font-size: 2rem;
+            }
+
+            p {
+                margin-bottom: 20px;
+                opacity: 0.9;
+            }
+
+            .promo {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                background: $color-secondary;
+                color: #000;
+                padding: 10px 18px;
+                border-radius: 30px;
+                font-size: 0.9rem;
+                font-weight: 500;
+            }
+        }
+
+        .icon-bg {
+            position: absolute;
+            right: 30px;
+            font-size: 8rem;
+            opacity: 0.1;
+        }
+    }
+}
+
+.gelombang {
+    padding: 30px 20px 30px 20px;
+    background: #f8f9fa;
+    
+    .jadwal-section {
+        background: #fff;
+        padding: 30px;
+        border-radius: 20px;
+
+        .section-title {
+            color: $color-primary;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .jadwal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+
+            .jadwal-card {
+                border: 1px solid #ddd;
+                border-radius: 15px;
+                padding: 20px;
+                position: relative;
+                transition: 0.3s;
+    
+                &:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+                }
+    
+                h4 {
+                    color: $color-primary;
+                    margin-bottom: 15px;
+                }
+    
+                .tanggal,
+                .diskon {
+                    font-size: 0.9rem;
+                    margin-bottom: 10px;
+                    color: #555;
+    
+                    i {
+                        margin-right: 5px;
+                    }
+                }
+    
+                .diskon {
+                    color: #1e88e5;
+    
+                    &.biru {
+                        color: #1e88e5;
+                    }
+    
+                    &.merah {
+                        color: #e53935;
+                    }
+                }
+    
+                p {
+                    font-size: 0.85rem;
+                    color: #777;
+                }
+    
+                .badge {
+                    position: absolute;
+                    top: -10px;
+                    right: 15px;
+                    background: $color-secondary;
+                    color: #000;
+                    font-size: 0.7rem;
+                    padding: 5px 10px;
+                    border-radius: 20px;
+                    font-weight: 600;
+                }
+    
+                &.active {
+                    border: 2px solid $color-secondary;
+                }
+            }
+        }
+
+        .timeline-pendaftaran {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 25px;
+            margin-top: 35px;
+
+            .timeline-item {
+                text-align: center;
+
+                .icon {
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    background: rgba(17, 122, 139, .1);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 0 auto 10px;
+
+                    i {
+                        font-size: 1.5rem;
+                        color: $color-primary;
+                    }
+                }
+
+                h5 {
+                    margin-bottom: 5px;
+                    color: $color-primary;
+                }
+
+                span {
+                    font-size: .85rem;
+                    color: #666;
+                }
+            }
+
+            .timeline-line {
+                width: 200px;
+                height: 3px;
+                background: $color-primary;
+                border-radius: 20px;
+            }
+        }
+    }
+}
+
+.biaya-pendaftaran {
+    padding: 30px 20px 30px 20px;
+    background: #f8f9fa;
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 40px;
+
+        h2 {
+            color: $color-primary;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+    }
+
+    .biaya-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+    }
+
+    .biaya-card {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+
+        .card-header {
+            background: $color-primary;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            h3 {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin: 0;
+                font-size: 1.2rem;
+            }
+
+            .badge {
+                background: $color-secondary;
+                color: #000;
+                padding: 6px 14px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+            }
+        }
+
+        .table-wrapper {
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+            tr {
+                border-bottom: 1px solid #eee;
+            }
+
+            td {
+                padding: 12px 0;
+                font-size: 0.92rem;
+
+                &:last-child {
+                    text-align: right;
+                    font-weight: 600;
+                    color: $color-primary;
+                }
+            }
+
+            .category {
+                background: rgba(17, 122, 139, 0.08);
+
+                td {
+                    padding: 12px;
+                    font-weight: 700;
+                    color: $color-primary;
+                }
+            }
+
+            .total {
+                background: rgba(255, 215, 0, 0.18);
+
+                td {
+                    padding: 15px 12px;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: #000;
+                }
+            }
+
+            .monthly {
+                background: rgba(17, 122, 139, 0.08);
+
+                td {
+                    padding: 15px 12px;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    color: $color-primary;
+                }
+            }
+        }
+    }
+}
+
+.syarat-ketentuan {
+    padding: 30px 20px 30px 20px;
+    background: #f8f9fa;
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 30px;
+
+        h2 {
+            color: $color-primary;
+            margin-bottom: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+    }
+
+    .syarat-box {
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        max-height: 450px;
+        overflow-y: auto;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: $color-primary;
+            border-radius: 20px;
+        }
+
+        .syarat-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                display: flex;
+                align-items: flex-start;
+                gap: 14px;
+                margin-bottom: 18px;
+                line-height: 1.7;
+                color: $color-text;
+
+                i {
+                    color: $color-primary;
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
+
+    /* CHECKLIST */
+    .agreement-box {
+        margin-top: 25px;
+        background: rgba(17, 122, 139, 0.08);
+        border-radius: 20px;
+        padding: 25px;
+        transition: 0.3s;
+
+        &.warning {
+            border: 2px solid #dc3545;
+            background: rgba(220, 53, 69, 0.08);
+            animation: shake 0.4s ease;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            cursor: pointer;
+
+            input {
+                display: none;
+            }
+
+            .checkmark {
+                width: 24px;
+                height: 24px;
+                border: 2px solid $color-primary;
+                border-radius: 6px;
+                position: relative;
+                flex-shrink: 0;
+                margin-top: 3px;
+                transition: 0.3s;
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    display: none;
+                    left: 7px;
+                    top: 2px;
+                    width: 5px;
+                    height: 11px;
+                    border: solid #fff;
+                    border-width: 0 2px 2px 0;
+                    transform: rotate(45deg);
+                }
+            }
+
+            input:checked + .checkmark {
+                background: $color-primary;
+
+                &::after {
+                    display: block;
+                }
+            }
+
+            p {
+                margin: 0;
+                line-height: 1.7;
+                color: $color-text;
+
+                strong {
+                    color: $color-primary;
+                }
+            }
+        }
+    }
+}
+
+.alur-pendaftaran {
+    padding: 30px 20px 30px 20px;
+    background: #f8f9fa;
+
+    /* BOX */
+    .alur-box {
+        background: #fff;
+        border-radius: 25px;
+        padding: 50px 40px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 50px;
+
+        h2 {
+            color: $color-primary;
+            margin-bottom: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+    }
+
+    .alur-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        gap: 10px;
+
+        /* GARIS UTAMA */
+        &::before {
+            content: "";
+            position: absolute;
+            top: 35px;
+            left: 7%;
+            width: 86%;
+            height: 4px;
+            background: #dcdfe3;
+            z-index: 0;
+            border-radius: 10px;
+        }
+    }
+
+    .alur-item {
+        flex: 1;
+        text-align: center;
+        position: relative;
+        z-index: 2;
+
+        .icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: $color-primary;
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(17, 122, 139, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.4rem;
+            transition: 0.3s;
+        }
+
+        span {
+            display: block;
+            font-size: 0.95rem;
+            color: $color-text;
+            line-height: 1.5;
+        }
+
+
+        &:hover {
+            .icon {
+                transform: translateY(-5px);
+            }
+        }
+    }
+}
+
+.menu-section {
+    padding: 10px 20px 70px;
+    background: #f8f9fa;
+
+    .menu-pendaftaran {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+    }
+
+    .menu-card {
+        background: #fff;
+        border-radius: 15px;
+        padding: 25px;
+        display: flex;
+        gap: 20px;
+        text-decoration: none;
+        transition: 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+        &:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .text {
+            h3 {
+                color: $color-primary;
+                margin-bottom: 5px;
+            }
+
+            p {
+                color: #666;
+                margin-bottom: 15px;
+                font-size: 0.9rem;
+            }
+
+            span {
+                color: $color-primary;
+                font-weight: 500;
+                font-size: 0.9rem;
+            }
+        }
+
+        &.primary {
+            border: 2px solid $color-primary;
+
+            .icon {
+                background: $color-primary;
+                color: #fff;
+            }
+        }
+
+        &.secondary {
+            border: 2px solid $color-secondary;
+
+            .icon {
+                background: $color-secondary;
+                color: #000;
+            }
+        }
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    75% {
+        transform: translateX(-5px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}

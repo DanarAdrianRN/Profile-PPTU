@@ -1,0 +1,180 @@
+.profile-smp {
+    padding: 0 0 50px;
+    background-color: #f8f9fa;
+
+    .profile-wrapper {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 42px;
+        align-items: center;
+    }
+
+    .school-image {
+        background: #fff;
+        border-radius: 24px;
+        min-height: 420px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 15px 35px rgba(17, 122, 139, 0.1);
+
+        img {
+            width: 72%;
+            max-height: 320px;
+            object-fit: contain;
+        }
+    }
+
+    .section-kicker {
+        color: $color-secondary;
+        font-weight: 700;
+        display: inline-block;
+        margin-bottom: 12px;
+    }
+
+    h2 {
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+        color: $color-primary;
+    }
+
+    p {
+        line-height: 1.8;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .school-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+
+        .info-item {
+            background: #fff;
+            padding: 14px 18px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+
+            i {
+                color: teal;
+            }
+        }
+    }
+}
+
+.keunggulan-smp {
+    padding: 80px 20px;
+    background: #e9f1f2;
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+
+        span {
+            display: inline-block;
+            color: $color-secondary;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: $color-primary;
+            margin-bottom: 15px;
+        }
+
+        p {
+            max-width: 700px;
+            margin: auto;
+            color: $color-text;
+            line-height: 1.8;
+        }
+    }
+
+    .target-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+    }
+
+    .target-card {
+        background: #fff;
+        padding: 35px 25px;
+        border-radius: 18px;
+        text-align: center;
+        border: 1px solid #e9ecef;
+        transition: .3s ease;
+
+        &:hover {
+            transform: translateY(-8px);
+            border-color: $color-primary;
+            box-shadow: 0 15px 35px rgba(17, 122, 139, .12);
+
+            i {
+                background: $color-primary;
+                color: #fff;
+            }
+        }
+
+        i {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(17, 122, 139, .08);
+            color: $color-primary;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            transition: .3s ease;
+        }
+
+        h3 {
+            color: $color-primary;
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+        }
+
+        p {
+            color: $color-text;
+            line-height: 1.8;
+            font-size: .95rem;
+        }
+    }
+}
+
+.smp-documentation {
+    background: #fff;
+
+    .smp-mosaic {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        grid-template-rows: 190px 170px 170px;
+        gap: 16px;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 22px;
+        box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+
+        &:first-child {
+            grid-row: span 2;
+        }
+
+        &:last-child {
+            grid-column: span 2;
+        }
+
+        &:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+        }
+    }
+}
+

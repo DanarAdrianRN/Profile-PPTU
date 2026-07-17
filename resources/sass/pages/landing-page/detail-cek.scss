@@ -1,0 +1,268 @@
+.hasil-pendaftaran {
+    padding: 70px 20px;
+    background: #f8f9fa;
+    min-height: 100vh;
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 35px;
+
+        h2 {
+            color: $color-primary;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+    }
+
+    /* STATUS */
+    .status-card {
+        background: #00c853;
+        color: #fff;
+
+        border-radius: 20px;
+        padding: 25px 30px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin-bottom: 25px;
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+
+            h3 {
+                margin-bottom: 6px;
+            }
+
+            p {
+                margin: 0;
+                opacity: 0.9;
+            }
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            i {
+                font-size: 1.7rem;
+            }
+        }
+
+        .status-right {
+            text-align: right;
+
+            span {
+                display: block;
+                font-weight: 700;
+                font-size: 1rem;
+            }
+
+            small {
+                opacity: 0.9;
+            }
+        }
+    }
+
+    /* CARD */
+    .result-card {
+        background: #fff;
+        border-radius: 22px;
+
+        padding: 30px;
+        margin-bottom: 25px;
+
+        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        margin-bottom: 25px;
+
+        i {
+            color: $color-primary;
+        }
+
+        h4 {
+            margin: 0;
+            color: $color-primary;
+        }
+    }
+
+    /* BIODATA */
+    .biodata-grid {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 20px;
+    }
+
+    .bio-item {
+
+        &.full {
+            grid-column: span 2;
+        }
+
+        span {
+            display: block;
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        strong {
+            color: $color-text;
+        }
+    }
+
+    /* NILAI */
+    .nilai-grid {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 18px;
+    }
+
+    .nilai-item {
+        background: #f3f7f8;
+        border-radius: 16px;
+
+        padding: 20px;
+        text-align: center;
+
+        span {
+            display: block;
+            color: #777;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        strong {
+            color: $color-primary;
+            font-size: 1.4rem;
+        }
+    }
+
+    .nilai-total {
+        background: #ffd600;
+        border-radius: 18px;
+
+        padding: 22px;
+        text-align: center;
+
+        margin-top: 25px;
+
+        span {
+            color: #555;
+        }
+
+        h2 {
+            margin: 10px 0;
+            color: #222;
+            font-size: 2.4rem;
+        }
+
+        p {
+            margin: 0;
+            font-weight: 600;
+            color: #444;
+        }
+    }
+
+    /* STEP */
+    .step-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .step-item {
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+
+        .step-icon {
+            min-width: 48px;
+            height: 48px;
+
+            border-radius: 14px;
+            background: rgba(17,122,139,0.1);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            i {
+                color: $color-primary;
+            }
+        }
+
+        h5 {
+            margin-bottom: 6px;
+            color: $color-text;
+        }
+
+        p {
+            margin: 0;
+            color: #666;
+            line-height: 1.6;
+        }
+    }
+
+    /* BUTTON */
+    .result-action {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+
+        margin-top: 30px;
+    }
+
+    .btn-result {
+        border-radius: 14px;
+        padding: 15px;
+
+        text-align: center;
+        text-decoration: none;
+
+        font-weight: 600;
+        transition: 0.3s;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        &.secondary {
+            background: #f1f3f5;
+            color: #555;
+
+            &:hover {
+                background: #e2e6ea;
+            }
+        }
+
+        &.primary {
+            background: #ffd600;
+            color: #222;
+
+            &:hover {
+                background: darken(#ffd600, 6%);
+            }
+        }
+    }
+}

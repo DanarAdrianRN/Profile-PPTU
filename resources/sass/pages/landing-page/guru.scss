@@ -1,0 +1,114 @@
+.guru-section {
+    padding: 60px 0;
+    background-color: $color-gray-100;
+
+    .guru-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        border: none;
+        .tab-btn {
+            border: none;
+            padding: 14px 25px;
+            border-radius: 40px;
+            background: $color-gray-100;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+
+            &.active {
+                background: $color-primary;
+                color: #fff;
+                box-shadow: 0 4px 15px rgba(0, 128, 128, 0.2);
+            }
+
+            &:hover:not(.active) {
+                background: darken(#f3f4f6, 5%);
+            }
+        }
+    }
+
+    .tab-content {
+        .tab-pane {
+            &.fade {
+                transition: opacity 0.15s linear;
+            }
+        }
+    }
+
+    .guru-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+    }
+
+    .guru-card {
+        background: #fff;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: 0.3s;
+
+        &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .guru-image {
+            img {
+                width: 100%;
+                aspect-ratio: 4 / 5;
+                object-fit: cover;
+                object-position: center top;
+            }
+        }
+
+        .guru-info {
+            padding: 25px;
+
+            .label {
+                background: rgba(0, 128, 128, 0.1);
+                color: $color-primary;
+                padding: 6px 14px;
+                border-radius: 30px;
+                font-size: 0.8rem;
+                display: inline-block;
+                margin-bottom: 15px;
+            }
+
+            h3 {
+                margin-bottom: 10px;
+                color: #222;
+                font-size: 1.25rem;
+            }
+
+            .mapel {
+                color: #666;
+                margin-bottom: 20px;
+                font-size: 0.95rem;
+            }
+
+            .meta {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    color: #555;
+                    font-size: 0.9rem;
+
+                    i {
+                        color: $color-primary;
+                        width: 16px;
+                    }
+                }
+            }
+        }
+    }
+}
