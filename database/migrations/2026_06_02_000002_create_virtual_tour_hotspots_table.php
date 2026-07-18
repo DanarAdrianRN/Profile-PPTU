@@ -22,11 +22,14 @@ return new class extends Migration
                 'information',
             ])->default('navigation');
             $table->enum('icon', [
-                'arrow',
+                'arrow-right',
+                'arrow-up',
+                'arrow-down',
+                'arrow-left',
                 'info',
                 'door',
                 'camera',
-            ])->default('arrow');
+            ])->default('arrow-right');
             $table->string('judul')->nullable();
             $table->text('deskripsi')->nullable();
             $table->decimal('yaw', 8, 4)->default(0);

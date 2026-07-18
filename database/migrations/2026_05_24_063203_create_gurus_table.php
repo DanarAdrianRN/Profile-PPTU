@@ -16,7 +16,7 @@ return new class extends Migration
                 'SMP',
                 'SMK',
                 'Madrasah Diniyah',
-                "Madrasah Al-Qur'an",
+                "Madrasah Al-Quran",
                 'TPQ',
             ]);
             $table->string('mapel_bidang');
