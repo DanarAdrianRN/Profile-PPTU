@@ -54,7 +54,7 @@
                             @endforelse
                         </div>
 
-                        <div class="mini-map">
+                        {{-- <div class="mini-map">
                             <div class="map-header">
                                 <h4>Denah Pondok</h4>
                             </div>
@@ -62,7 +62,7 @@
                                 <i class="fa-solid fa-map-location-dot"></i>
                                 <span>Interactive Map</span>
                             </div>
-                        </div>
+                        </div> --}}
                     </aside>
 
                     <div class="tour-viewer-wrapper">
@@ -103,7 +103,7 @@
                                 </div>
                                 <div>
                                     <h5>Informasi Lokasi</h5>
-                                    <p>Gunakan ikon hotspot informasi untuk melihat detail lokasi.</p>
+                                    <p>Klik ikon hotspot informasi untuk melihat detail nama dan penjelasan lokasi.</p>
                                 </div>
                             </div>
                             <div class="info-card">

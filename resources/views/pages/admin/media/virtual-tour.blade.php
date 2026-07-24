@@ -102,11 +102,6 @@
 
             <div class="tour-admin-topbar">
                 <div class="topbar-left">
-                    <div class="autosave-status">
-                        <i class="fa-solid fa-circle-check"></i>
-                        Data tersimpan di database
-                    </div>
-
                     <h2>{{ $activeScene?->nama_lokasi ?? 'Virtual Tour' }}</h2>
                     <p>{{ $activeScene ? 'Kelola panorama dan hotspot lokasi ini' : 'Tambahkan lokasi pertama untuk mulai' }}
                     </p>
@@ -307,7 +302,7 @@
                                             <span>{{ $hotspot->judul ?? ($hotspot->targetScene?->nama_lokasi ?? '-') }}</span>
                                         </div>
 
-                                        <button type="button" class="scene-option" data-toggle="modal"
+                                        <button type="button" class="hotspot-btn" data-toggle="modal"
                                             data-target="#modalEditHotspot{{ $hotspot->id }}">
                                             <i class="fa-solid fa-pen"></i>
                                         </button>

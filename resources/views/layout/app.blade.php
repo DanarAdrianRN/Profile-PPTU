@@ -31,7 +31,7 @@
 
 </head>
 
-<body>
+<body class="{{ request()->is('landing*') ? 'landing-page' : '' }}">
     @include('components.flash-alert')
     @yield('content')
 
