@@ -40,6 +40,27 @@
     <input type="number" name="urutan" value="{{ old('urutan', $scene->urutan ?? 0) }}" min="0">
 </div>
 
+<div class="form-group">
+    <label>Yaw Tampilan Awal</label>
+    <input type="number" step="0.0001" name="initial_yaw"
+        value="{{ old('initial_yaw', $scene?->initial_yaw_degree ?? 0) }}">
+    <small>Gunakan derajat (-360 sampai 360). Data tetap disimpan sebagai radian.</small>
+</div>
+
+<div class="form-group">
+    <label>Pitch Tampilan Awal</label>
+    <input type="number" step="0.0001" name="initial_pitch"
+        value="{{ old('initial_pitch', $scene?->initial_pitch_degree ?? 0) }}">
+    <small>Gunakan derajat (-90 sampai 90). Data tetap disimpan sebagai radian.</small>
+</div>
+
+<div class="form-group">
+    <label>FOV Tampilan Awal</label>
+    <input type="number" step="0.0001" name="initial_fov"
+        value="{{ old('initial_fov', $scene?->initial_fov_degree ?? 90) }}">
+    <small>Gunakan derajat (20 sampai 160). Kosongkan untuk 90 derajat.</small>
+</div>
+
 <div class="form-group full">
     <label>Icon Lokasi</label>
     <select name="thumbnail" required>
@@ -54,9 +75,9 @@
 <div class="form-group">
     <label>Upload Panorama 360°</label>
     <input type="file" name="panorama" accept="image/*">
-    @if ($scene?->panorama)
-        <small>File saat ini: {{ basename($scene->panorama) }}</small>
-    @endif
+    <small data-panorama-file style="{{ $scene?->panorama ? '' : 'display: none;' }}">
+        File saat ini: {{ $scene?->panorama ? basename($scene->panorama) : '' }}
+    </small>
 </div>
 
 <div class="form-switch">

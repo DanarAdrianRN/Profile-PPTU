@@ -59,14 +59,35 @@
 
 <div class="form-group">
     <label>Yaw Position</label>
-    <input type="number" step="0.0001" name="yaw" value="{{ old('yaw', $hotspot->yaw ?? 0) }}" required>
-    <small>Bisa memakai derajat (-360 sampai 360) atau radian.</small>
+    <input type="number" step="0.0001" name="yaw" value="{{ old('yaw', $hotspot?->yaw_degree ?? 0) }}" required>
+    <small>Gunakan derajat (-360 sampai 360). Data tetap disimpan sebagai radian.</small>
 </div>
 
 <div class="form-group">
     <label>Pitch Position</label>
-    <input type="number" step="0.0001" name="pitch" value="{{ old('pitch', $hotspot->pitch ?? 0) }}" required>
-    <small>Bisa memakai derajat (-90 sampai 90) atau radian.</small>
+    <input type="number" step="0.0001" name="pitch" value="{{ old('pitch', $hotspot?->pitch_degree ?? 0) }}" required>
+    <small>Gunakan derajat (-90 sampai 90). Data tetap disimpan sebagai radian.</small>
+</div>
+
+<div class="form-group">
+    <label>Yaw Saat Tiba</label>
+    <input type="number" step="0.0001" name="target_yaw"
+        value="{{ old('target_yaw', $hotspot?->target_yaw_degree ?? '') }}">
+    <small>Opsional untuk hotspot navigasi. Kosongkan agar memakai tampilan awal scene tujuan.</small>
+</div>
+
+<div class="form-group">
+    <label>Pitch Saat Tiba</label>
+    <input type="number" step="0.0001" name="target_pitch"
+        value="{{ old('target_pitch', $hotspot?->target_pitch_degree ?? '') }}">
+    <small>Opsional. Gunakan derajat (-90 sampai 90).</small>
+</div>
+
+<div class="form-group">
+    <label>FOV Saat Tiba</label>
+    <input type="number" step="0.0001" name="target_fov"
+        value="{{ old('target_fov', $hotspot?->target_fov_degree ?? '') }}">
+    <small>Opsional. Gunakan derajat (20 sampai 160).</small>
 </div>
 
 <div class="form-switch">

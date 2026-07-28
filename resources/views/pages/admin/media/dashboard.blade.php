@@ -61,7 +61,7 @@
 
                     <div class="stats-card">
 
-                        <div class="stats-icon red">
+                        <div class="stats-icon yellow">
                             <i class="fa-solid fa-file-signature"></i>
                         </div>
 
@@ -89,13 +89,13 @@
                     {{-- BELUM DAFTAR ULANG --}}
                     <div class="stats-card">
 
-                        <div class="stats-icon yellow">
-                            <i class="fa-solid fa-user-clock"></i>
+                        <div class="stats-icon red">
+                            <i class="fa-solid fa-vr-cardboard"></i>
                         </div>
 
                         <div class="stats-info">
                             <span>Virtual Tour</span>
-                            <h3>{{ number_format($stats['totalVirtualTour']) }} Spot</h3>
+                            <h3>{{ number_format($stats['totalVirtualTour']) }}</h3>
                         </div>
 
                     </div>

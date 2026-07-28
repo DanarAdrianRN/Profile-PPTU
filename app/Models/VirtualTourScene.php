@@ -11,6 +11,9 @@ class VirtualTourScene extends Model
         'is_start_scene' => 'boolean',
         'show_on_landing' => 'boolean',
         'urutan' => 'integer',
+        'initial_yaw' => 'decimal:4',
+        'initial_pitch' => 'decimal:4',
+        'initial_fov' => 'decimal:4',
     ];
 
     public const THUMBNAIL_ICONS = [
@@ -58,5 +61,20 @@ class VirtualTourScene extends Model
         }
 
         return asset('storage/' . ltrim($this->panorama, '/'));
+    }
+
+    public function getInitialYawDegreeAttribute(): float
+    {
+        return round(rad2deg((float) ($this->initial_yaw ?? 0)), 4);
+    }
+
+    public function getInitialPitchDegreeAttribute(): float
+    {
+        return round(rad2deg((float) ($this->initial_pitch ?? 0)), 4);
+    }
+
+    public function getInitialFovDegreeAttribute(): float
+    {
+        return round(rad2deg((float) ($this->initial_fov ?? (pi() / 2))), 4);
     }
 }

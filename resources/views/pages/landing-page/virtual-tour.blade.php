@@ -127,6 +127,11 @@
             document.addEventListener("DOMContentLoaded", function() {
                 let viewer = null;
                 let currentMarzipanoScene = null;
+                let currentInitialView = {
+                    yaw: 0,
+                    pitch: 0,
+                    fov: Math.PI / 2
+                };
 
                 function setViewParameters(parameters) {
                     const view = currentMarzipanoScene?.view?.();
@@ -153,17 +158,13 @@
                 });
 
                 document.getElementById('resetTourButton')?.addEventListener('click', function() {
-                    setViewParameters({
-                        yaw: 0,
-                        pitch: 0,
-                        fov: Math.PI / 2
-                    });
+                    setViewParameters(currentInitialView);
                 });
 
                 document.getElementById('centerTourButton')?.addEventListener('click', function() {
                     setViewParameters({
-                        yaw: 0,
-                        pitch: 0
+                        yaw: currentInitialView.yaw,
+                        pitch: currentInitialView.pitch
                     });
                 });
 
@@ -181,6 +182,7 @@
                 const marzipanoScenes = new Map();
                 const locationItems = document.querySelectorAll('.location-item[data-scene-id]');
                 const titleElement = document.querySelector('.viewer-header h3');
+                const defaultFov = Math.PI / 2;
 
                 if (!sceneDataById.get(Number(activeSceneId))?.panoramaUrl) return;
 
@@ -235,7 +237,11 @@
                         event.preventDefault();
                         event.stopPropagation();
 
-                        if (hotspot.targetSceneId && switchScene(hotspot.targetSceneId, true)) {
+                        if (hotspot.targetSceneId && switchScene(
+                                hotspot.targetSceneId,
+                                true,
+                                getArrivalView(hotspot)
+                            )) {
                             return;
                         }
 
@@ -243,6 +249,42 @@
                     });
 
                     return element;
+                }
+
+                function getInitialView(sceneData) {
+                    return {
+                        yaw: Number(sceneData?.initialView?.yaw ?? 0),
+                        pitch: Number(sceneData?.initialView?.pitch ?? 0),
+                        fov: Number(sceneData?.initialView?.fov ?? defaultFov)
+                    };
+                }
+
+                function getArrivalView(hotspot) {
+                    const hasCustomView = hotspot.targetYaw !== null ||
+                        hotspot.targetPitch !== null ||
+                        hotspot.targetFov !== null;
+
+                    if (!hasCustomView) return null;
+
+                    return {
+                        yaw: hotspot.targetYaw,
+                        pitch: hotspot.targetPitch,
+                        fov: hotspot.targetFov
+                    };
+                }
+
+                function resolveView(sceneData, arrivalView = null) {
+                    if (!arrivalView) {
+                        return getInitialView(sceneData);
+                    }
+
+                    const initialSceneView = getInitialView(sceneData);
+
+                    return {
+                        yaw: Number(arrivalView.yaw ?? initialSceneView.yaw),
+                        pitch: Number(arrivalView.pitch ?? initialSceneView.pitch),
+                        fov: Number(arrivalView.fov ?? initialSceneView.fov)
+                    };
                 }
 
                 function buildScene(sceneData) {
@@ -285,15 +327,20 @@
                     });
                 }
 
-                function switchScene(sceneId, shouldPushState = false) {
+                function switchScene(sceneId, shouldPushState = false, arrivalView = null) {
                     const numericSceneId = Number(sceneId);
                     const sceneData = sceneDataById.get(numericSceneId);
                     const nextScene = buildScene(sceneData);
+                    const viewParameters = resolveView(sceneData, arrivalView);
 
                     if (!sceneData || !nextScene) return false;
 
-                    nextScene.switchTo();
+                    nextScene.view().setParameters(viewParameters);
+                    nextScene.switchTo({
+                        transitionDuration: 650
+                    });
                     currentMarzipanoScene = nextScene;
+                    currentInitialView = getInitialView(sceneData);
                     setActiveSidebar(numericSceneId);
 
                     if (titleElement) {
@@ -302,7 +349,8 @@
 
                     if (shouldPushState) {
                         history.pushState({
-                                sceneId: numericSceneId
+                                sceneId: numericSceneId,
+                                arrivalView
                             },
                             '',
                             sceneData.url
@@ -320,13 +368,17 @@
                     });
                 });
 
-                window.addEventListener('popstate', function() {
+                window.addEventListener('popstate', function(event) {
                     const params = new URLSearchParams(window.location.search);
-                    const sceneId = params.get('scene') || activeSceneId;
+                    const sceneId = event.state?.sceneId || params.get('scene') || activeSceneId;
 
-                    switchScene(sceneId, false);
+                    switchScene(sceneId, false, event.state?.arrivalView || null);
                 });
 
+                history.replaceState({
+                    sceneId: Number(activeSceneId),
+                    arrivalView: null
+                }, '', window.location.href);
                 switchScene(activeSceneId, false);
             });
         </script>

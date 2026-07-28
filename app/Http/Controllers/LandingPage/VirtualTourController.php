@@ -44,6 +44,9 @@ class VirtualTourController extends Controller
                     'deskripsi' => $hotspot->deskripsi,
                     'yaw' => (float) $hotspot->yaw,
                     'pitch' => (float) $hotspot->pitch,
+                    'targetYaw' => $hotspot->target_yaw === null ? null : (float) $hotspot->target_yaw,
+                    'targetPitch' => $hotspot->target_pitch === null ? null : (float) $hotspot->target_pitch,
+                    'targetFov' => $hotspot->target_fov === null ? null : (float) $hotspot->target_fov,
                     'icon' => $hotspot->icon,
                     'targetSceneId' => $hotspot->target_scene_id,
                     'targetUrl' => $hotspot->targetScene
@@ -62,6 +65,11 @@ class VirtualTourController extends Controller
                     'deskripsi' => $scene->deskripsi,
                     'panoramaUrl' => $scene->panorama_url,
                     'url' => route('virtual-tour', ['scene' => $scene->id]),
+                    'initialView' => [
+                        'yaw' => (float) ($scene->initial_yaw ?? 0),
+                        'pitch' => (float) ($scene->initial_pitch ?? 0),
+                        'fov' => (float) ($scene->initial_fov ?? 1.5708),
+                    ],
                     'hotspots' => $scene->hotspots
                         ->map(function ($hotspot) {
                             return [
@@ -70,6 +78,9 @@ class VirtualTourController extends Controller
                                 'deskripsi' => $hotspot->deskripsi,
                                 'yaw' => (float) $hotspot->yaw,
                                 'pitch' => (float) $hotspot->pitch,
+                                'targetYaw' => $hotspot->target_yaw === null ? null : (float) $hotspot->target_yaw,
+                                'targetPitch' => $hotspot->target_pitch === null ? null : (float) $hotspot->target_pitch,
+                                'targetFov' => $hotspot->target_fov === null ? null : (float) $hotspot->target_fov,
                                 'icon' => $hotspot->icon,
                                 'targetSceneId' => $hotspot->target_scene_id,
                                 'targetUrl' => $hotspot->targetScene

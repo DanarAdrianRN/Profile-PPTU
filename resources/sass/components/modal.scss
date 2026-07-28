@@ -2540,24 +2540,23 @@
     }
 
     .modal-header {
-        background:
-            linear-gradient(
-                135deg,
-                #08131d,
-                #0d1722
-            );
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 28px 35px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
         .modal-title-wrap {
             span {
-                color: #38bdf8;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                font-weight: 700;
+                color: #94a3b8;
+                font-size: 0.85rem;
             }
 
             h3 {
-                color: #fff;
+                font-size: 1.7rem;
+                font-weight: 700;
+                color: #0f172a;
+                margin-top: 6px;
             }
         }
 
@@ -2721,42 +2720,6 @@
             &:hover {
                 background: #dc2626;
                 color: #fff;
-            }
-        }
-    }
-
-    @media (max-width: 768px) {
-        .modal-dialog {
-            margin: 16px;
-        }
-
-        .modal-header,
-        .modal-body,
-        .modal-footer {
-            padding: 22px;
-        }
-
-        .virtual-tour-form {
-            grid-template-columns: 1fr;
-
-            .form-group,
-            .form-switch {
-                grid-column: span 1;
-            }
-        }
-
-        .modal-footer {
-            justify-content: stretch;
-            flex-direction: column;
-
-            .virtual-tour-delete,
-            button {
-                width: 100%;
-                margin-right: 0;
-            }
-
-            button {
-                justify-content: center;
             }
         }
     }
