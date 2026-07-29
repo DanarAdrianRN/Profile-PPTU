@@ -19,7 +19,7 @@
 <div class="form-group">
     <label>Username</label>
     <input type="text" name="username" placeholder="Masukkan username admin"
-        value="{{ old('username', $formAdmin?->username) }}" required>
+        value="{{ old('username', $formAdmin?->username) }}" {{ $isEdit ? 'disabled' : 'required' }}>
 </div>
 
 <div class="form-group">
@@ -37,9 +37,9 @@
     </select>
 </div>
 
-<div class="form-group full">
-    <label>Password</label>
-    <input type="password" name="password"
-        placeholder="{{ $isEdit ? 'Kosongkan jika tidak ingin mengganti password' : 'Masukkan password admin' }}"
-        {{ $isEdit ? '' : 'required' }}>
-</div>
+@if (! $isEdit)
+    <div class="form-group full">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Masukkan password admin" required>
+    </div>
+@endif

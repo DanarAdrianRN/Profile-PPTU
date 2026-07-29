@@ -18,11 +18,16 @@ class Admin extends Model
         'role',
         'password',
         'remember_token',
+        'session_version',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'session_version' => 'integer',
     ];
 }
 

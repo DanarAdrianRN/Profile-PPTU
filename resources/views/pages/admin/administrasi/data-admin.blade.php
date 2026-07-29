@@ -67,6 +67,10 @@
                                                     data-target="#modalEditAdmin{{ $admin->id }}">
                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                 </button>
+                                                <button class="btn-action view" data-toggle="modal"
+                                                    data-target="#modalResetPasswordAdmin{{ $admin->id }}">
+                                                    <i class="fa-solid fa-key"></i>
+                                                </button>
                                                 <button class="btn-action delete" data-toggle="modal"
                                                     data-target="#modalHapusAdmin{{ $admin->id }}">
                                                     <i class="fa-regular fa-trash-can"></i>
@@ -146,6 +150,32 @@
                         <button type="submit" class="btn-save">
                             <i class="fa-solid fa-floppy-disk"></i>
                             Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal fade delete-modal" id="modalResetPasswordAdmin{{ $admin->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form class="modal-content" action="{{ route('admin-data.reset-password', $admin->id) }}" method="POST">
+                    @csrf
+
+                    <div class="delete-icon">
+                        <i class="fa-solid fa-key"></i>
+                    </div>
+
+                    <div class="delete-content">
+                        <span class="delete-label">Reset Password</span>
+                        <h3>Kirim link login sementara?</h3>
+                        <p>Link akan dikirim ke {{ $admin->email }} dan admin wajib mengganti password setelah masuk.</p>
+                    </div>
+
+                    <div class="delete-action">
+                        <button type="button" class="btn-cancel" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn-delete-confirm">
+                            <i class="fa-solid fa-envelope"></i>
+                            Kirim Link
                         </button>
                     </div>
                 </form>

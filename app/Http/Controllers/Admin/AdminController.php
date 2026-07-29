@@ -44,21 +44,8 @@ class AdminController extends Controller
                 'max:255',
                 Rule::unique('admins', 'email')->ignore($admin->id),
             ],
-            'username' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('admins', 'username')->ignore($admin->id),
-            ],
             'role' => ['required', Rule::in(['administrasi', 'media'])],
-            'password' => ['nullable', 'string', 'min:6'],
         ]);
-
-        if (! empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
-            unset($validated['password']);
-        }
 
         $admin->update($validated);
 
@@ -69,6 +56,7 @@ class AdminController extends Controller
                 'email' => $admin->email,
                 'username' => $admin->username,
                 'role' => $admin->role,
+                'session_version' => $admin->session_version,
             ]]);
         }
 
@@ -81,8 +69,19 @@ class AdminController extends Controller
             return back()->with('error', 'Admin yang sedang login tidak dapat dihapus');
         }
 
+        if (Admin::count() <= 1) {
+            return back()->with('error', 'Admin terakhir tidak dapat dihapus');
+        }
+
         $admin->delete();
 
         return back()->with('success', 'Data admin berhasil dihapus');
+    }
+
+    public function sendResetPasswordLink(Admin $admin)
+    {
+        app(AuthController::class)->sendTemporaryLoginLink($admin->email, Admin::find(session('admin.id')));
+
+        return back()->with('success', 'Cek email yang anda gunakan, link telah dikirim.');
     }
 }

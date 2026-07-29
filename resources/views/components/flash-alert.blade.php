@@ -6,7 +6,7 @@
         'info' => ['title' => 'Informasi', 'icon' => 'fa-circle-info'],
         'login_error' => ['title' => 'Login Tidak Berhasil', 'icon' => 'fa-circle-xmark'],
         'forgot_error' => ['title' => 'Permintaan Tidak Dapat Diproses', 'icon' => 'fa-circle-xmark'],
-        'forgot_success' => ['title' => 'Password Diperbarui', 'icon' => 'fa-circle-check'],
+        'forgot_success' => ['title' => 'Link Dikirim', 'icon' => 'fa-circle-check'],
     ];
 @endphp
 

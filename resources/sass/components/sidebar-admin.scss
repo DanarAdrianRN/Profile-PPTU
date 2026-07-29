@@ -1,10 +1,16 @@
 .sidebar-admin {
-    min-height: 100vh;
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    bottom: 25px;
+    z-index: 100;
+    overflow-y: auto;
     background: #0f7a8a;
     padding: 20px;
     border-radius: 15px;
     width: 275px;
     flex-shrink: 0;
+    padding-bottom: 90px;
 
     .sidebar-top {
         .logo {
@@ -176,8 +182,8 @@
 
             .logout-btn {
                 position: fixed;
+                bottom: 50px;
                 width: 230px;
-                bottom: 6%;
                 display: flex;
                 align-items: center;
                 gap: 12px;

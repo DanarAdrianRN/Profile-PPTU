@@ -48,13 +48,20 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            padding: 0;
+            border: 0;
+            background: $color-primary;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 15px;
+            padding: 8px 12px;
 
             .avatar {
                 width: 42px;
                 height: 42px;
                 border-radius: 50%;
-                background: #0f7a8a;
-                color: #fff;
+                background: $color-secondary;
+                color: $color-text;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -65,17 +72,18 @@
                 h4 {
                     font-size: 0.95rem;
                     margin-bottom: 2px;
+                    color: #fff;
                 }
 
                 span {
                     font-size: 0.8rem;
-                    color: #6b7280;
+                    color: #fff;
                 }
             }
 
             i {
                 font-size: 0.8rem;
-                color: #9ca3af;
+                color: #fff;
             }
         }
     }

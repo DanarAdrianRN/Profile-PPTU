@@ -179,6 +179,24 @@
             width: 90%;
             margin: 0 auto;
         }
+
+        .password-wrapper {
+            position: relative;
+            
+            input {
+                width: 100%;
+                padding-right: 45px;
+            }
+    
+            .toggle-password {
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                color: #666;
+            }
+        }
     }
 
     .modal-header {
@@ -479,7 +497,7 @@
             }
         }
     }
-    
+
     .preview-content {
         padding: 45px 50px;
 
@@ -2313,7 +2331,7 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-    
+
             .card-header {
                 background: $color-primary;
                 color: #fff;
@@ -2321,7 +2339,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-    
+
                 h3 {
                     display: flex;
                     align-items: center;
@@ -2329,7 +2347,7 @@
                     margin: 0;
                     font-size: 1.2rem;
                 }
-    
+
                 .badge {
                     background: $color-secondary;
                     color: #000;
@@ -2339,43 +2357,43 @@
                     font-weight: 600;
                 }
             }
-    
+
             .table-wrapper {
                 padding: 20px;
             }
-    
+
             table {
                 width: 100%;
                 border-collapse: collapse;
-    
+
                 tr {
                     border-bottom: 1px solid #eee;
                 }
-    
+
                 td {
                     padding: 12px 0;
                     font-size: 0.92rem;
-    
+
                     &:last-child {
                         text-align: right;
                         font-weight: 600;
                         color: $color-primary;
                     }
                 }
-    
+
                 .category {
                     background: rgba(17, 122, 139, 0.08);
-    
+
                     td {
                         padding: 12px;
                         font-weight: 700;
                         color: $color-primary;
                     }
                 }
-    
+
                 .total {
                     background: rgba(255, 215, 0, 0.18);
-    
+
                     td {
                         padding: 15px 12px;
                         font-size: 1rem;
@@ -2383,10 +2401,10 @@
                         color: #000;
                     }
                 }
-    
+
                 .monthly {
                     background: rgba(17, 122, 139, 0.08);
-    
+
                     td {
                         padding: 15px 12px;
                         font-size: 1rem;

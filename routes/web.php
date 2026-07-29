@@ -189,12 +189,37 @@ Route::prefix('admin')->group(function () {
         'resetPassword',
     ])->name('admin-password-reset');
 
+    Route::get('/temporary-login/{token}', [
+        \App\Http\Controllers\Admin\AuthController::class,
+        'loginWithToken',
+    ])->name('admin-password-token-login');
+
     Route::post('/logout', [
         \App\Http\Controllers\Admin\AuthController::class,
         'logout',
     ])->name('admin-logout');
 
     Route::middleware(['App\\Http\\Middleware\\AdminAuthenticated'])->group(function () {
+        Route::get('/ganti-password', [
+            \App\Http\Controllers\Admin\AuthController::class,
+            'showForcePasswordForm',
+        ])->name('admin-password-force-edit');
+
+        Route::post('/ganti-password', [
+            \App\Http\Controllers\Admin\AuthController::class,
+            'completeTemporaryPassword',
+        ])->name('admin-password-force-update');
+
+        Route::post('/profile', [
+            \App\Http\Controllers\Admin\AuthController::class,
+            'updateProfile',
+        ])->name('admin-profile.update');
+
+        Route::post('/profile/password', [
+            \App\Http\Controllers\Admin\AuthController::class,
+            'updateOwnPassword',
+        ])->name('admin-profile.password');
+
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
         ->name('admin-dashboard');
 
@@ -363,6 +388,9 @@ Route::prefix('admin')->group(function () {
 
             Route::post('/data-admin/{admin}/update', [AdminDataController::class, 'update'])
             ->name('admin-data.update');
+
+            Route::post('/data-admin/{admin}/reset-password', [AdminDataController::class, 'sendResetPasswordLink'])
+            ->name('admin-data.reset-password');
 
             Route::delete('/data-admin/{admin}', [AdminDataController::class, 'destroy'])
             ->name('admin-data.destroy');

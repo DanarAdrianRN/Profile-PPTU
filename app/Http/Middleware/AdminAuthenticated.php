@@ -14,27 +14,7 @@ class AdminAuthenticated
         $admin = session('admin');
 
         if (!is_array($admin) || empty($admin['id'])) {
-            $rememberToken = $request->cookie('admin_remember_token');
-
-            if (! $rememberToken) {
-                return redirect()->route('admin-login');
-            }
-
-            $rememberedAdmin = Admin::where('remember_token', hash('sha256', $rememberToken))->first();
-
-            if (! $rememberedAdmin) {
-                return redirect()->route('admin-login');
-            }
-
-            $admin = [
-                'id' => $rememberedAdmin->id,
-                'nama_lengkap' => $rememberedAdmin->nama_lengkap,
-                'email' => $rememberedAdmin->email,
-                'username' => $rememberedAdmin->username,
-                'role' => $rememberedAdmin->role,
-            ];
-
-            session(['admin' => $admin]);
+            return redirect()->route('admin-login');
         }
 
         if (empty($admin['role'])) {
@@ -43,6 +23,36 @@ class AdminAuthenticated
             return redirect()
                 ->route('admin-login')
                 ->with('login_error', 'Role admin belum tersedia. Silakan login ulang.');
+        }
+
+        $currentAdmin = Admin::find($admin['id']);
+
+        if (! $currentAdmin) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()
+                ->route('admin-login')
+                ->with('login_error', 'Sesi admin tidak valid. Silakan login ulang.');
+        }
+
+        if ((int) ($admin['session_version'] ?? 1) !== (int) ($currentAdmin->session_version ?: 1)) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()
+                ->route('admin-login')
+                ->with('login_error', 'Sesi Anda sudah berakhir. Silakan login ulang.');
+        }
+
+        if ((bool) $request->session()->get('admin_force_password_change', false)) {
+            $allowedRoutes = ['admin-password-force-edit', 'admin-password-force-update', 'admin-logout'];
+
+            if (! $request->routeIs(...$allowedRoutes)) {
+                return redirect()
+                    ->route('admin-password-force-edit')
+                    ->with('info', 'Anda harus mengganti password terlebih dahulu.');
+            }
         }
 
         return $next($request);

@@ -69,7 +69,7 @@
                     class="menu-item {{ Route::is('admin-pendaftaran') ? 'active' : '' }}">
 
                     <i class="fa-regular fa-clipboard"></i>
-                    <span>Pendaftaran</span>
+                    <span>Data Pendaftar</span>
 
                 </a>
 
@@ -89,7 +89,7 @@
                         <div class="menu-left">
 
                             <i class="fa-regular fa-file-lines"></i>
-                            <span>Informasi Pendaftaran</span>
+                            <span>Informasi </span>
 
                         </div>
 

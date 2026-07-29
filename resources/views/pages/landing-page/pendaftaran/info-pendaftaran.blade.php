@@ -413,52 +413,47 @@
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Menyerahkan fotocopy Akta Kelahiran 5 lembar
+                        fotocopy Akta Kelahiran
                     </li>
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Menyerahkan fotocopy KTP Orang Tua 5 lembar
+                        fotocopy KTP Orang Tua
                     </li>
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Menyerahkan fotocopy Kartu Keluarga 5 lembar
+                        fotocopy Kartu Keluarga
                     </li>
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Menyerahkan ijazah yang telah dilegalisir 3 lembar
+                        ijazah yang telah dilegalisir
                     </li>
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Menyerahkan NISN 3 lembar
+                        NISN
                     </li>
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Menyerahkan KKS / SKTM / PKH / KIP jika memiliki
+                        KKS / SKTM / PKH / KIP jika memiliki
                     </li>
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Menyerahkan SKL jika ijazah belum tersedia
+                        Gunakan SKL jika ijazah belum tersedia
                     </li>
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Foto berwarna ukuran 3x4 sebanyak 3 lembar
+                        Foto berwarna ukuran 3x4
                     </li>
 
                     <li>
                         <i class="fa-regular fa-circle-check"></i>
-                        Foto hitam putih ukuran 3x4 sebanyak 3 lembar
-                    </li>
-
-                    <li>
-                        <i class="fa-regular fa-circle-check"></i>
-                        Stopmap merah untuk SMP dan hijau untuk SMK
+                        Foto hitam putih ukuran 3x4
                     </li>
 
                     <li>

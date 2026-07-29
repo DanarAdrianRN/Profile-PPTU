@@ -49,7 +49,7 @@
 
                     </div>
 
-                    <form action="{{ route('admin-login-post') }}" method="POST">
+                    <form action="{{ route('admin-login-post', [], false) }}" method="POST">
 
                         @csrf
 
@@ -97,8 +97,8 @@
 
                                 <i class="fa-solid fa-user"></i>
 
-                                <input type="text" name="username_or_email" value="{{ old('username_or_email') }}"
-                                    placeholder="Masukkan username atau email admin">
+                                <input type="text" name="username_or_email" id="loginIdentifier"
+                                    value="{{ old('username_or_email') }}" placeholder="Masukkan username atau email admin">
 
                             </div>
 
@@ -140,7 +140,7 @@
 
                                 <button type="button" class="toggle-password" data-target="loginPassword"
                                     aria-label="Tampilkan password">
-                                    <i class="fa-regular fa-eye"></i>
+                                    <i class="fa-solid fa-eye-slash"></i>
                                 </button>
 
                             </div>
@@ -149,15 +149,9 @@
 
                         <div class="form-extra">
 
-                            <label class="remember">
+                            <span></span>
 
-                                <input type="checkbox" name="remember" value="1" {{ old('remember') ? 'checked' : '' }}>
-
-                                <span>Ingat saya</span>
-
-                            </label>
-
-                            <a href="#" data-toggle="modal" data-target="#forgotPasswordModal">
+                            <a href="#" id="forgotPasswordLink">
                                 Lupa Password?
                             </a>
 
@@ -181,85 +175,57 @@
         </div>
 
     </section>
-
-    <div class="modal fade admin-modal" id="forgotPasswordModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <form class="modal-content" action="{{ route('admin-password-reset') }}" method="POST">
-                @csrf
-
-                <div class="modal-header">
-                    <div class="modal-title-wrap">
-                        <span>Akses Admin</span>
-                        <h3>Lupa Password</h3>
-                    </div>
-                    <button type="button" class="close-modal" data-dismiss="modal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="form-grid">
-                        <div class="form-group full">
-                            <label>Username / Email</label>
-                            <input type="text" name="username_or_email" value="{{ old('username_or_email') }}"
-                                placeholder="Masukkan username atau email admin" required>
-                        </div>
-
-                        <div class="form-group full">
-                            <label>Role</label>
-                            <select name="role" required>
-                                <option value="" disabled {{ old('role') ? '' : 'selected' }}>
-                                    Pilih role admin
-                                </option>
-                                <option value="administrasi" {{ old('role') === 'administrasi' ? 'selected' : '' }}>
-                                    Administrasi
-                                </option>
-                                <option value="media" {{ old('role') === 'media' ? 'selected' : '' }}>
-                                    Media
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full">
-                            <label>Password Baru</label>
-                            <div class="input-group-custom">
-                                <input type="password" name="password" id="newPassword"
-                                    placeholder="Masukkan password baru" required>
-                                <button type="button" class="toggle-password" data-target="newPassword"
-                                    aria-label="Tampilkan password baru">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form-group full">
-                            <label>Konfirmasi Password</label>
-                            <div class="input-group-custom">
-                                <input type="password" name="password_confirmation" id="confirmPassword"
-                                    placeholder="Ulangi password baru" required>
-                                <button type="button" class="toggle-password" data-target="confirmPassword"
-                                    aria-label="Tampilkan konfirmasi password">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn-cancel" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn-save">
-                        <i class="fa-solid fa-key"></i>
-                        Reset Password
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <form action="{{ route('admin-password-reset', [], false) }}" method="POST" id="forgotPasswordForm" class="d-none">
+        @csrf
+        <input type="hidden" name="email" id="forgotPasswordEmail">
+    </form>
 @endsection
 
 @push('script')
     <script>
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const loginIdentifier = document.getElementById('loginIdentifier');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const forgotPasswordEmail = document.getElementById('forgotPasswordEmail');
+
+        function showLoginAlert(message) {
+            const oldAlert = document.getElementById('forgotPasswordInlineAlert');
+
+            if (oldAlert) {
+                oldAlert.remove();
+            }
+
+            const alert = document.createElement('div');
+            alert.id = 'forgotPasswordInlineAlert';
+            alert.className = 'alert alert-danger';
+            alert.setAttribute('role', 'alert');
+            alert.textContent = message;
+
+            loginIdentifier.closest('.form-group').before(alert);
+        }
+
+        forgotPasswordLink.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const email = loginIdentifier.value.trim();
+            const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+            if (!email) {
+                showLoginAlert('Masukkan email admin terlebih dahulu pada form login.');
+                loginIdentifier.focus();
+                return;
+            }
+
+            if (!isEmail) {
+                showLoginAlert('Gunakan email admin untuk meminta link lupa password.');
+                loginIdentifier.focus();
+                return;
+            }
+
+            forgotPasswordEmail.value = email;
+            forgotPasswordForm.submit();
+        });
+
         document.querySelectorAll('.toggle-password').forEach(button => {
             button.addEventListener('click', function() {
                 const input = document.getElementById(this.dataset.target);
@@ -267,8 +233,8 @@
                 const isPassword = input.type === 'password';
 
                 input.type = isPassword ? 'text' : 'password';
-                icon.classList.toggle('fa-eye', !isPassword);
-                icon.classList.toggle('fa-eye-slash', isPassword);
+                icon.classList.toggle('fa-eye-slash', !isPassword);
+                icon.classList.toggle('fa-eye', isPassword);
             });
         });
     </script>
