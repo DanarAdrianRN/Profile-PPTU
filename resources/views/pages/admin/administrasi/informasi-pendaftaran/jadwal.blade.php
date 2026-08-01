@@ -98,6 +98,31 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="table-footer">
+                    <div class="table-row-limit">
+                        <span>Tampilkan</span>
+                        <select id="rowsPerPage">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                        <span>data</span>
+                    </div>
+                    <div class="table-info" id="tableInfo">
+                        Menampilkan data
+                    </div>
+                    <div class="pagination-wrapper">
+                        <button class="pagination-btn" id="prevPage">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <div class="pagination-number" id="paginationNumber">1</div>
+                        <button class="pagination-btn" id="nextPage">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
@@ -334,22 +359,78 @@
         <script>
             const searchInput = document.getElementById('searchInput');
             const statusFilter = document.getElementById('statusFilter');
-            const tableRows = document.querySelectorAll('#jadwalTableBody tr');
+            const tableBody = document.getElementById('jadwalTableBody');
+            const allRows = tableBody.querySelectorAll('tr');
+            const rowsPerPageSelect = document.getElementById('rowsPerPage');
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+            const paginationNumber = document.getElementById('paginationNumber');
+            const tableInfo = document.getElementById('tableInfo');
+
+            let currentPage = 1;
+            let rowsPerPage = parseInt(rowsPerPageSelect.value);
+            let filteredRows = [...allRows];
+
+            function renderTable() {
+                const totalRows = filteredRows.length;
+                const totalPages = Math.ceil(totalRows / rowsPerPage);
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+
+                allRows.forEach(row => row.style.display = 'none');
+                filteredRows.forEach((row, index) => {
+                    if (index >= start && index < end) row.style.display = '';
+                });
+
+                paginationNumber.innerText = currentPage;
+
+                tableInfo.innerText = totalRows > 0
+                    ? `Menampilkan ${start + 1} - ${Math.min(end, totalRows)} dari ${totalRows} data`
+                    : `Data tidak ditemukan`;
+
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+            }
 
             function filterJadwalTable() {
                 const searchValue = searchInput.value.toLowerCase();
                 const statusValue = statusFilter.value;
 
-                tableRows.forEach(row => {
+                filteredRows = [...allRows].filter(row => {
                     const matchSearch = row.innerText.toLowerCase().includes(searchValue);
                     const matchStatus = statusValue === 'all' || row.dataset.status === statusValue;
-
-                    row.style.display = matchSearch && matchStatus ? '' : 'none';
+                    return matchSearch && matchStatus;
                 });
+
+                currentPage = 1;
+                renderTable();
             }
 
             searchInput.addEventListener('keyup', filterJadwalTable);
             statusFilter.addEventListener('change', filterJadwalTable);
+
+            rowsPerPageSelect.addEventListener('change', function() {
+                rowsPerPage = parseInt(this.value);
+                currentPage = 1;
+                renderTable();
+            });
+
+            nextBtn.addEventListener('click', function() {
+                const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+
+            prevBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+
+            renderTable();
         </script>
     @endpush
 @endsection

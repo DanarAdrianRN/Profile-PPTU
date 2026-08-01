@@ -80,6 +80,13 @@
 
                 </a>
 
+                <a href="{{ route('admin-pembayaran-santri') }}"
+                    class="menu-item {{ Route::is('admin-pembayaran-santri') ? 'active' : '' }}">
+
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span>Pembayaran</span>
+                </a>
+
                 {{-- DROPDOWN --}}
                 <div class="menu-dropdown {{ Route::is('admin-gelombang', 'admin-jadwal-pendaftaran', 'admin-pembayaran', 'admin-promo', 'admin-periode') ? 'open' : '' }}">
 

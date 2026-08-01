@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PendaftaranExport;
 
 use App\Models\Pendaftaran;
 use App\Models\PendaftaranPendidikan;
@@ -90,6 +92,65 @@ class PendaftaranController extends Controller
         'lunas',
         'belumLunas'
         ));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT
+    |--------------------------------------------------------------------------
+    */
+
+    public function export(Request $request)
+    {
+        $periodeAktif = Periode::aktif()->first();
+        $selectedPeriodeId = $request->get('periode_id', $periodeAktif?->id);
+
+        $pendaftarans = Pendaftaran::with([
+            'pendidikan',
+            'orangTuas',
+            'tagihanSantri.details',
+        ])
+            ->when($selectedPeriodeId, function ($query, $periodeId) {
+                $query->where('periode_id', $periodeId);
+            })
+            ->when($request->filled('jenjang') && $request->jenjang !== 'all', function ($query) use ($request) {
+                $query->whereHas('pendidikan', function ($q) use ($request) {
+                    $q->where('jenjang_pendidikan', $request->jenjang);
+                });
+            })
+            ->when($request->filled('cari'), function ($query) use ($request) {
+                $query->where('nama_lengkap', 'like', '%' . $request->cari . '%');
+            })
+            ->latest()
+            ->get();
+
+        // Filter status pembayaran (paid/unpaid) dihitung dari relasi, bukan kolom
+        // langsung, jadi diterapkan di level collection setelah data diambil.
+        if ($request->filled('payment') && $request->payment !== 'all') {
+            $wantPaid = $request->payment === 'paid';
+
+            $pendaftarans = $pendaftarans->filter(function ($pendaftaran) use ($wantPaid) {
+                $tagihan = $pendaftaran->tagihanSantri;
+                $totalItem = $tagihan?->details?->count() ?? 0;
+                $totalLunas = $tagihan?->details?->where('status_pembayaran', 'lunas')->count() ?? 0;
+                $isLunas = $totalItem > 0 && $totalItem === $totalLunas;
+
+                return $isLunas === $wantPaid;
+            })->values();
+        }
+
+        $filename = 'data-pendaftaran-' . now()->format('Ymd-His');
+
+        if ($request->get('format') === 'pdf') {
+            $pdf = Pdf::loadView(
+                'pages.admin.administrasi.export-pendaftaran-pdf',
+                compact('pendaftarans')
+            )->setPaper('a4', 'landscape');
+
+            return $pdf->download($filename . '.pdf');
+        }
+
+        return Excel::download(new PendaftaranExport($pendaftarans), $filename . '.xlsx');
     }
 
     /*

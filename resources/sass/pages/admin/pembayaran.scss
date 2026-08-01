@@ -1,0 +1,48 @@
+.admin-biaya-pendaftaran {
+    .payment-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+
+        &.paid {
+            background: rgba(6, 182, 212, 0.12);
+            color: #0891b2;
+        }
+
+        &.unpaid {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+
+        &.blue {
+            background: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+        }
+
+        &.green {
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+        }
+    }
+
+    .biaya-nominal {
+        font-weight: 600;
+        color: #0f172a;
+    }
+}

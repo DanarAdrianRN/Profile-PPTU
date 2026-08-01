@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 
-class PembayaranController extends Controller
+class MasterPembayaranController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -53,42 +53,6 @@
 
                         @csrf
 
-                        @if (session('login_error'))
-                            <div class="alert alert-danger" role="alert">
-                                {{ session('login_error') }}
-                            </div>
-                        @endif
-
-                        @if (session('forgot_success'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('forgot_success') }}
-                            </div>
-                        @endif
-
-                        @if (session('forgot_error'))
-                            <div class="alert alert-danger" role="alert">
-                                {{ session('forgot_error') }}
-                            </div>
-                        @endif
-
-                        @error('username_or_email')
-                            <div class="alert alert-danger" role="alert">
-                                {{ $message }}
-                            </div>
-                        @enderror
-
-                        @error('password')
-                            <div class="alert alert-danger" role="alert">
-                                {{ $message }}
-                            </div>
-                        @enderror
-
-                        @error('role')
-                            <div class="alert alert-danger" role="alert">
-                                {{ $message }}
-                            </div>
-                        @enderror
-
                         <div class="form-group">
 
                             <label>Username / Email</label>

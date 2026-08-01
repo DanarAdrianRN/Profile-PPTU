@@ -7,11 +7,12 @@ use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\LandingPage\GaleriController as LandingGaleriController;
 use App\Http\Controllers\Admin\GuruController as AdminGuruController;
 use App\Http\Controllers\LandingPage\GuruController as LandingGuruController;
-use App\Http\Controllers\Admin\PembayaranController as AdminPembayaranController;
+use App\Http\Controllers\Admin\MasterPembayaranController as AdminMasterPembayaranController;
 use App\Http\Controllers\Admin\PromoController as AdminPromoController;
 use App\Http\Controllers\Admin\HasilTesController as AdminHasilTesController;
 use App\Http\Controllers\Admin\VirtualTourController as AdminVirtualTourController;
-use App\Http\Controllers\LandingPage\PembayaranController as LandingPembayaranController;
+use App\Http\Controllers\LandingPage\MasterPembayaranController as LandingMasterPembayaranController;
+use App\Http\Controllers\Admin\TransaksiPembayaranController as AdminTransaksiPembayaranController;
 use App\Http\Controllers\Admin\GelombangPendaftaranController as AdminGelombangController;
 use App\Http\Controllers\Admin\JadwalPendaftaranController as AdminJadwalPendaftaranController;
 use App\Http\Controllers\Admin\PeriodeController as AdminPeriodeController;
@@ -24,7 +25,7 @@ use App\Http\Controllers\API\TransaksiController as APITransaksiController;
 use App\Http\Controllers\LandingPage\DaftarUlangController as LandingDaftarUlangController;
 use App\Http\Controllers\LandingPage\TransaksiController as LandingTransaksiController;
 
-use App\Http\Controllers\LandingPage\PembayaranController;
+use App\Http\Controllers\LandingPage\MasterPembayaranController;
 
 Route::get('/', [
     LandingHomeController::class,
@@ -103,7 +104,7 @@ Route::prefix('landing-page')->group(function () {
 
 
     Route::prefix('pendaftaran')->group(function () {
-        Route::get('/informasi-pendaftaran',[LandingPembayaranController::class, 'index'])
+        Route::get('/informasi-pendaftaran',[LandingMasterPembayaranController::class, 'index'])
         ->name('informasi-pendaftaran');
 
         Route::get('/form',[LandingPendaftaranController::class, 'index']
@@ -289,6 +290,9 @@ Route::prefix('admin')->group(function () {
             Route::get('/pendaftaran', [AdminPendaftaranController::class, 'index'])
             ->name('admin-pendaftaran');
 
+            Route::get('/pendaftaran/export', [AdminPendaftaranController::class, 'export'])
+            ->name('pendaftaran.export');
+
             Route::post('/pendaftaran/store', [AdminPendaftaranController::class, 'store'])
             ->name('pendaftaran.store');
 
@@ -320,17 +324,38 @@ Route::prefix('admin')->group(function () {
             Route::delete('/hasil-tes/{hasilTes}', [AdminHasilTesController::class, 'destroy'])
             ->name('hasil-tes.destroy');
 
-            Route::get('/pembayaran', [AdminPembayaranController::class, 'index'])
+            Route::get('/pembayaran', [AdminMasterPembayaranController::class, 'index'])
             ->name('admin-pembayaran');
 
-            Route::post('/pembayaran/store', [AdminPembayaranController::class, 'store'])
+            Route::post('/pembayaran/store', [AdminMasterPembayaranController::class, 'store'])
             ->name('pembayaran.store');
 
-            Route::post('/pembayaran/{pembayaran}/update', [AdminPembayaranController::class, 'update'])
+            Route::post('/pembayaran/{pembayaran}/update', [AdminMasterPembayaranController::class, 'update'])
             ->name('pembayaran.update');
 
-            Route::delete('/pembayaran/{pembayaran}', [AdminPembayaranController::class, 'destroy'])
+            Route::delete('/pembayaran/{pembayaran}', [AdminMasterPembayaranController::class, 'destroy'])
             ->name('pembayaran.destroy');
+
+             Route::get('/pembayaran-santri', [AdminTransaksiPembayaranController::class, 'index'])
+            ->name('admin-pembayaran-santri');
+
+            Route::get('/pembayaran-santri/export', [AdminTransaksiPembayaranController::class, 'export'])
+            ->name('pembayaran-santri.export');
+
+            Route::get('/riwayat-transaksi', [AdminTransaksiPembayaranController::class, 'riwayat'])
+            ->name('admin-riwayat-transaksi');
+ 
+            Route::get('/riwayat-transaksi/export', [AdminTransaksiPembayaranController::class, 'exportRiwayat'])
+            ->name('riwayat-transaksi.export');
+
+            Route::get('/riwayat-transaksi/{transaksi}/struk', [AdminTransaksiPembayaranController::class, 'cetakStruk'])
+            ->name('riwayat-transaksi.struk');
+ 
+            Route::get('/pembayaran-santri/{tagihan}/cetak', [AdminTransaksiPembayaranController::class, 'cetakTagihan'])
+            ->name('pembayaran-santri.cetak');
+ 
+            Route::post('/pembayaran-santri/{tagihan}/catat-bayar', [AdminTransaksiPembayaranController::class, 'catatBayar'])
+            ->name('pembayaran-santri.catat-bayar');
 
             Route::get('/gelombang', [AdminGelombangController::class, 'index'])
             ->name('admin-gelombang');

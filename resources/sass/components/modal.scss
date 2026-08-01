@@ -1,4 +1,5 @@
 .modal {
+    z-index: 9999!important;
     &.promosi {
         .promo-content {
             border-radius: 20px;
@@ -182,7 +183,7 @@
 
         .password-wrapper {
             position: relative;
-            
+
             input {
                 width: 100%;
                 padding-right: 45px;
@@ -1935,6 +1936,61 @@
             }
         }
     }
+
+                .form-group {
+                &.full {
+                    grid-column: span 2;
+                }
+
+                label {
+                    display: block;
+                    margin-bottom: 10px;
+                    color: #334155;
+                    font-weight: 600;
+                    font-size: 0.95rem;
+                }
+
+                input,
+                select,
+                textarea {
+                    width: 100%;
+                    border: 1px solid #dbe3ec;
+                    border-radius: 18px;
+                    padding: 16px 18px;
+                    background: #fff;
+                    color: #0f172a;
+                    outline: none;
+                    transition: 0.3s;
+                }
+
+                input:focus,
+                select:focus,
+                textarea:focus {
+                    border-color: #0f7a8a;
+                    box-shadow: 0 0 0 4px rgba(15, 122, 138, 0.1);
+                }
+
+                /* CHECKBOX */
+                .checkbox-wrapper {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 14px;
+
+                    label {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+                        background: #f8fafc;
+                        border: 1px solid #e2e8f0;
+
+                        padding: 12px 16px;
+                        border-radius: 14px;
+
+                        font-size: 0.92rem;
+                    }
+                }
+            }
 
     /* ================================= */
     /* MODAL EDIR PENDAFTAR */

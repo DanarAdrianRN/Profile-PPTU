@@ -46,7 +46,7 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="adminTableBody">
                                 @foreach ($admins as $admin)
                                     <tr>
                                         <td class="admin-search">
@@ -67,10 +67,6 @@
                                                     data-target="#modalEditAdmin{{ $admin->id }}">
                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                 </button>
-                                                <button class="btn-action view" data-toggle="modal"
-                                                    data-target="#modalResetPasswordAdmin{{ $admin->id }}">
-                                                    <i class="fa-solid fa-key"></i>
-                                                </button>
                                                 <button class="btn-action delete" data-toggle="modal"
                                                     data-target="#modalHapusAdmin{{ $admin->id }}">
                                                     <i class="fa-regular fa-trash-can"></i>
@@ -81,6 +77,31 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div class="table-footer">
+                    <div class="table-row-limit">
+                        <span>Tampilkan</span>
+                        <select id="rowsPerPage">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                        <span>data</span>
+                    </div>
+                    <div class="table-info" id="tableInfo">
+                        Menampilkan data
+                    </div>
+                    <div class="pagination-wrapper">
+                        <button class="pagination-btn" id="prevPage">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <div class="pagination-number" id="paginationNumber">1</div>
+                        <button class="pagination-btn" id="nextPage">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -156,32 +177,6 @@
             </div>
         </div>
 
-        <div class="modal fade delete-modal" id="modalResetPasswordAdmin{{ $admin->id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <form class="modal-content" action="{{ route('admin-data.reset-password', $admin->id) }}" method="POST">
-                    @csrf
-
-                    <div class="delete-icon">
-                        <i class="fa-solid fa-key"></i>
-                    </div>
-
-                    <div class="delete-content">
-                        <span class="delete-label">Reset Password</span>
-                        <h3>Kirim link login sementara?</h3>
-                        <p>Link akan dikirim ke {{ $admin->email }} dan admin wajib mengganti password setelah masuk.</p>
-                    </div>
-
-                    <div class="delete-action">
-                        <button type="button" class="btn-cancel" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn-delete-confirm">
-                            <i class="fa-solid fa-envelope"></i>
-                            Kirim Link
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <div class="modal fade delete-modal" id="modalHapusAdmin{{ $admin->id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <form class="modal-content" action="{{ route('admin-data.destroy', $admin->id) }}" method="POST">
@@ -213,16 +208,75 @@
 
 @push('script')
     <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.getElementById('adminTableBody');
+        const allRows = tableBody.querySelectorAll('tr');
+        const rowsPerPageSelect = document.getElementById('rowsPerPage');
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        const paginationNumber = document.getElementById('paginationNumber');
+        const tableInfo = document.getElementById('tableInfo');
+
+        let currentPage = 1;
+        let rowsPerPage = parseInt(rowsPerPageSelect.value);
+        let filteredRows = [...allRows];
+
+        function renderTable() {
+            const totalRows = filteredRows.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            allRows.forEach(row => row.style.display = 'none');
+            filteredRows.forEach((row, index) => {
+                if (index >= start && index < end) row.style.display = '';
+            });
+
+            paginationNumber.innerText = currentPage;
+
+            tableInfo.innerText = totalRows > 0
+                ? `Menampilkan ${start + 1} - ${Math.min(end, totalRows)} dari ${totalRows} data`
+                : `Data tidak ditemukan`;
+
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+        }
+
+        searchInput.addEventListener('keyup', function() {
             const keyword = this.value.toLowerCase();
 
-            document.querySelectorAll('#adminTable tbody tr').forEach(row => {
+            filteredRows = [...allRows].filter(row => {
                 const text = [...row.querySelectorAll('.admin-search')]
                     .map(cell => cell.innerText.toLowerCase())
                     .join(' ');
-
-                row.style.display = text.includes(keyword) ? '' : 'none';
+                return text.includes(keyword);
             });
+
+            currentPage = 1;
+            renderTable();
         });
+
+        rowsPerPageSelect.addEventListener('change', function() {
+            rowsPerPage = parseInt(this.value);
+            currentPage = 1;
+            renderTable();
+        });
+
+        nextBtn.addEventListener('click', function() {
+            const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        });
+
+        prevBtn.addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        });
+
+        renderTable();
     </script>
 @endpush

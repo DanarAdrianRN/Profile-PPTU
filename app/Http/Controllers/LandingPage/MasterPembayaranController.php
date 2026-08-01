@@ -8,7 +8,7 @@ use App\Models\JadwalPendaftaran;
 use App\Models\Pembayaran;
 use App\Models\Periode;
 
-class PembayaranController extends Controller
+class MasterPembayaranController extends Controller
 {
     public function index()
     {

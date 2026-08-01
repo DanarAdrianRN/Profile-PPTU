@@ -93,7 +93,7 @@
                 <div class="filter-wrapper">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Cari nama pendaftar...">
+                        <input type="text" id="searchInput" placeholder="Cari nama pendaftar...">
                     </div>
                     <div class="filter-group">
                         <div class="select-wrapper">
@@ -112,25 +112,34 @@
                             </select>
                         </div>
                         <div class="select-wrapper">
-                            <select>
-                                <option>Semua Jenjang</option>
-                                <option>SMP</option>
-                                <option>SMK</option>
+                            <select id="jenjangFilter">
+                                <option value="all">Semua Jenjang</option>
+                                <option value="SMP">SMP</option>
+                                <option value="SMK">SMK</option>
                             </select>
                         </div>
                         <div class="select-wrapper">
-                        <select>
-                            <option>Semua Pembayaran</option>
-                            <option>Belum Bayar</option>
-                            <option>Lunas</option>
-                            <option>DP</option>
+                        <select id="paymentFilter">
+                            <option value="all">Semua Pembayaran</option>
+                            <option value="unpaid">Belum Lunas</option>
+                            <option value="paid">Lunas</option>
                         </select>
                         </div>
                     </div>
-                    <button class="btn-add">
-                        <i class="fa-solid fa-file-export"></i>
-                        Export
-                    </button>
+                    <div class="export-dropdown">
+                        <button class="btn-add" type="button" onclick="document.getElementById('exportMenuPendaftaran').classList.toggle('show')">
+                            <i class="fa-solid fa-file-export"></i>
+                            Export
+                        </button>
+                        <div class="export-dropdown-menu" id="exportMenuPendaftaran">
+                            <a href="#" onclick="exportPendaftaran('xlsx'); return false;">
+                                <i class="fa-solid fa-file-excel"></i> Excel (.xlsx)
+                            </a>
+                            <a href="#" onclick="exportPendaftaran('pdf'); return false;">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 {{-- TABLE --}}
                 <div class="table-card">
@@ -159,8 +168,20 @@
 
                                 </tr>
                             </thead>
+                            <tbody id="pendaftaranTableBody">
                             @foreach ($pendaftarans as $key => $pendaftaran)
-                                <tr>
+                                @php
+                                    $tagihanRow = $pendaftaran->tagihanSantri;
+                                    $totalTagihanRow = $tagihanRow?->details?->count() ?? 0;
+                                    $totalLunasRow = $tagihanRow?->details
+                                        ?->where('status_pembayaran', 'lunas')
+                                        ->count() ?? 0;
+                                    $isLunasRow = $totalTagihanRow > 0 && $totalTagihanRow === $totalLunasRow;
+                                @endphp
+                                <tr
+                                    data-jenjang="{{ $pendaftaran->pendidikan->jenjang_pendidikan ?? '' }}"
+                                    data-payment="{{ $isLunasRow ? 'paid' : 'unpaid' }}"
+                                >
                                     <td>
                                         {{ $key + 1 }}
                                     </td>
@@ -311,12 +332,142 @@
                                     </td>
                                 </tr>
                             @endforeach
-                            <tbody>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div class="table-footer">
+                    <div class="table-row-limit">
+                        <span>Tampilkan</span>
+                        <select id="rowsPerPage">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                        <span>data</span>
+                    </div>
+                    <div class="table-info" id="tableInfo">
+                        Menampilkan data
+                    </div>
+                    <div class="pagination-wrapper">
+                        <button class="pagination-btn" id="prevPage">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <div class="pagination-number" id="paginationNumber">1</div>
+                        <button class="pagination-btn" id="nextPage">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
             </section>
         </div>
     </div>
+
+    @push('script')
+        <script>
+            const searchInput = document.getElementById('searchInput');
+            const jenjangFilter = document.getElementById('jenjangFilter');
+            const paymentFilter = document.getElementById('paymentFilter');
+            const tableBody = document.getElementById('pendaftaranTableBody');
+            const allRows = tableBody.querySelectorAll('tr');
+            const rowsPerPageSelect = document.getElementById('rowsPerPage');
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+            const paginationNumber = document.getElementById('paginationNumber');
+            const tableInfo = document.getElementById('tableInfo');
+
+            let currentPage = 1;
+            let rowsPerPage = parseInt(rowsPerPageSelect.value);
+            let filteredRows = [...allRows];
+
+            function renderTable() {
+                const totalRows = filteredRows.length;
+                const totalPages = Math.ceil(totalRows / rowsPerPage);
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+
+                allRows.forEach(row => row.style.display = 'none');
+                filteredRows.forEach((row, index) => {
+                    if (index >= start && index < end) row.style.display = '';
+                });
+
+                paginationNumber.innerText = currentPage;
+
+                tableInfo.innerText = totalRows > 0
+                    ? `Menampilkan ${start + 1} - ${Math.min(end, totalRows)} dari ${totalRows} data`
+                    : `Data tidak ditemukan`;
+
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+            }
+
+            function filterTable() {
+                const searchValue = searchInput.value.toLowerCase();
+                const jenjangValue = jenjangFilter.value;
+                const paymentValue = paymentFilter.value;
+
+                filteredRows = [...allRows].filter(row => {
+                    const nameEl = row.querySelector('.student-info h5');
+                    const nama = nameEl ? nameEl.innerText.toLowerCase() : '';
+
+                    const matchSearch = nama.includes(searchValue);
+                    const matchJenjang = jenjangValue === 'all' || row.dataset.jenjang === jenjangValue;
+                    const matchPayment = paymentValue === 'all' || row.dataset.payment === paymentValue;
+
+                    return matchSearch && matchJenjang && matchPayment;
+                });
+
+                currentPage = 1;
+                renderTable();
+            }
+
+            searchInput.addEventListener('keyup', filterTable);
+            jenjangFilter.addEventListener('change', filterTable);
+            paymentFilter.addEventListener('change', filterTable);
+
+            rowsPerPageSelect.addEventListener('change', function() {
+                rowsPerPage = parseInt(this.value);
+                currentPage = 1;
+                renderTable();
+            });
+
+            nextBtn.addEventListener('click', function() {
+                const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+
+            prevBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+
+            renderTable();
+
+            function exportPendaftaran(format) {
+                const params = new URLSearchParams({
+                    format: format,
+                    periode_id: '{{ $selectedPeriodeId }}',
+                    jenjang: jenjangFilter.value,
+                    payment: paymentFilter.value,
+                    cari: searchInput.value,
+                });
+
+                window.location.href = "{{ route('pendaftaran.export') }}?" + params.toString();
+            }
+
+            document.addEventListener('click', function(e) {
+                const menu = document.getElementById('exportMenuPendaftaran');
+                if (menu && !e.target.closest('.export-dropdown')) {
+                    menu.classList.remove('show');
+                }
+            });
+        </script>
+    @endpush
 @endsection

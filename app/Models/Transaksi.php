@@ -47,4 +47,15 @@ class Transaksi extends Model
     {
         return $this->hasMany(TransaksiDetail::class);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI KE ADMIN PENCATAT (khusus transaksi manual/tunai)
+    |--------------------------------------------------------------------------
+    */
+
+    public function dicatatOlehAdmin()
+    {
+        return $this->belongsTo(Admin::class, 'dicatat_oleh_admin_id');
+    }
 }
