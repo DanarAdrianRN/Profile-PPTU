@@ -25,7 +25,7 @@
     @if ($errors->any())
         <div class="flash-alert flash-alert--warning" role="alert">
             <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-            <div><strong>Data Belum Lengkap</strong><p>{{ $errors->first() }}</p></div>
+            <div><strong>Perhatian</strong><p>{{ $errors->first() }}</p></div>
             <button type="button" class="flash-alert__close" aria-label="Tutup notifikasi">&times;</button>
         </div>
     @endif

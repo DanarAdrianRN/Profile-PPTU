@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\JadwalPendaftaran;
 use App\Models\Periode;
 use Illuminate\Http\Request;
 
 class JadwalPendaftaranController extends Controller
 {
+    use LogsAdminActivity;
+
     public function index()
     {
         $jadwals = JadwalPendaftaran::with('periode')
@@ -34,13 +37,15 @@ class JadwalPendaftaranController extends Controller
             'is_publish' => 'nullable|boolean',
         ]);
 
-        JadwalPendaftaran::create([
+        $jadwal = JadwalPendaftaran::create([
             'periode_id' => $validated['periode_id'] ?? null,
             'nama_jadwal' => $validated['nama_jadwal'],
             'tanggal' => $validated['tanggal'],
             'urutan' => $validated['urutan'] ?? 1,
             'is_publish' => $request->boolean('is_publish', true),
         ]);
+
+        $this->catatAktivitas('create', 'Menambahkan jadwal pendaftaran: ' . $jadwal->nama_jadwal, $jadwal);
 
         return back()->with(
             'success',
@@ -66,6 +71,8 @@ class JadwalPendaftaranController extends Controller
             'is_publish' => $request->boolean('is_publish'),
         ]);
 
+        $this->catatAktivitas('update', 'Memperbarui jadwal pendaftaran: ' . $jadwal->nama_jadwal, $jadwal);
+
         return back()->with(
             'success',
             'Jadwal pendaftaran berhasil diperbarui'
@@ -74,7 +81,11 @@ class JadwalPendaftaranController extends Controller
 
     public function destroy(JadwalPendaftaran $jadwal)
     {
+        $namaJadwal = $jadwal->nama_jadwal;
+
         $jadwal->delete();
+
+        $this->catatAktivitas('delete', 'Menghapus jadwal pendaftaran: ' . $namaJadwal);
 
         return back()->with(
             'success',

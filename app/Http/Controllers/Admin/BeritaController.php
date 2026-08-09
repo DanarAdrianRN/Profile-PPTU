@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
 {
+    use LogsAdminActivity;
+
     public function index()
     {
         $beritas = Berita::query()
@@ -103,6 +106,8 @@ class BeritaController extends Controller
             'created_by_admin_id' => $admin['id'] ?? null,
         ]);
 
+        $this->catatAktivitas('create', 'Menambahkan berita: ' . $berita->judul, $berita);
+
         return redirect()
             ->route('admin-berita')
             ->with('success', 'Berita berhasil ditambahkan');
@@ -157,6 +162,8 @@ class BeritaController extends Controller
             'updated_by_admin_id' => $admin['id'] ?? null,
         ]);
 
+        $this->catatAktivitas('update', 'Memperbarui berita: ' . $berita->judul, $berita);
+
         if ($validated['status'] === 'Publish') {
         $data['tanggal_publish'] = now();
         }
@@ -168,6 +175,8 @@ class BeritaController extends Controller
 
     public function destroy(Berita $berita)
     {
+        $judulBerita = $berita->judul;
+
         if (
             $berita->thumbnail &&
             Storage::disk('public')->exists($berita->thumbnail)
@@ -176,6 +185,8 @@ class BeritaController extends Controller
         }
 
         $berita->delete();
+
+        $this->catatAktivitas('delete', 'Menghapus berita: ' . $judulBerita);
 
         return redirect()
             ->route('admin-berita')
@@ -201,4 +212,3 @@ class BeritaController extends Controller
         return $candidate;
     }
 }
-

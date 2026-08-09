@@ -53,9 +53,20 @@
                                         <span class="status {{ $periode->is_active ? 'active' : 'danger' }}">
                                             {{ $periode->is_active ? 'Aktif' : 'Nonaktif' }}
                                         </span>
+                                        @if (session('viewing_periode_id') == $periode->id)
+                                            <span class="status active" style="margin-left: 6px;">
+                                                Sedang Dilihat
+                                            </span>
+                                        @endif
                                     </td>
                                     <td>
                                         <div class="table-action">
+                                            <a class="btn-action view"
+                                                href="{{ route('periode.lihat-data', $periode->id) }}"
+                                                title="Lihat Data Periode Ini">
+                                                <i class="fa-solid fa-folder-open"></i>
+                                            </a>
+
                                             <button class="btn-action edit"
                                                 data-toggle="modal"
                                                 data-target="#modalEditPeriode{{ $periode->id }}">

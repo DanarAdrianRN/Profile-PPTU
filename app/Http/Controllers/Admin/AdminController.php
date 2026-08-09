@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +11,8 @@ use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
+    use LogsAdminActivity;
+
     public function index()
     {
         $admins = Admin::latest()->get();
@@ -29,7 +32,13 @@ class AdminController extends Controller
 
         $validated['password'] = Hash::make($validated['password']);
 
-        Admin::create($validated);
+        $admin = Admin::create($validated);
+
+        $this->catatAktivitas(
+            'create',
+            'Menambahkan akun admin baru: ' . $admin->nama_lengkap . ' (' . $admin->role . ')',
+            $admin
+        );
 
         return back()->with('success', 'Data admin berhasil ditambahkan');
     }
@@ -44,10 +53,29 @@ class AdminController extends Controller
                 'max:255',
                 Rule::unique('admins', 'email')->ignore($admin->id),
             ],
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('admins', 'username')->ignore($admin->id),
+            ],
             'role' => ['required', Rule::in(['administrasi', 'media'])],
+            'password' => ['nullable', 'string', 'min:6'],
         ]);
 
+        if (! empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
         $admin->update($validated);
+
+        $this->catatAktivitas(
+            'update',
+            'Memperbarui data akun admin: ' . $admin->nama_lengkap,
+            $admin
+        );
 
         if (session('admin.id') === $admin->id) {
             session(['admin' => [
@@ -56,7 +84,6 @@ class AdminController extends Controller
                 'email' => $admin->email,
                 'username' => $admin->username,
                 'role' => $admin->role,
-                'session_version' => $admin->session_version,
             ]]);
         }
 
@@ -69,19 +96,12 @@ class AdminController extends Controller
             return back()->with('error', 'Admin yang sedang login tidak dapat dihapus');
         }
 
-        if (Admin::count() <= 1) {
-            return back()->with('error', 'Admin terakhir tidak dapat dihapus');
-        }
+        $namaAdmin = $admin->nama_lengkap;
 
         $admin->delete();
 
+        $this->catatAktivitas('delete', 'Menghapus akun admin: ' . $namaAdmin);
+
         return back()->with('success', 'Data admin berhasil dihapus');
-    }
-
-    public function sendResetPasswordLink(Admin $admin)
-    {
-        app(AuthController::class)->sendTemporaryLoginLink($admin->email, Admin::find(session('admin.id')));
-
-        return back()->with('success', 'Cek email yang anda gunakan, link telah dikirim.');
     }
 }

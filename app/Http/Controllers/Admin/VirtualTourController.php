@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\VirtualTourHotspot;
 use App\Models\VirtualTourScene;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Illuminate\Support\Str;
 
 class VirtualTourController extends Controller
 {
+    use LogsAdminActivity;
+
     public function index(Request $request)
     {
         $scenes = VirtualTourScene::withCount('hotspots')
@@ -63,6 +66,11 @@ class VirtualTourController extends Controller
 
         VirtualTourScene::create($validated);
 
+        $this->catatAktivitas(
+            'create',
+            'Menambahkan scene virtual tour: ' . $validated['nama_lokasi']
+        );
+
         return back()->with('success', 'Scene virtual tour berhasil ditambahkan');
     }
 
@@ -86,6 +94,12 @@ class VirtualTourController extends Controller
 
         $scene->update($validated);
 
+        $this->catatAktivitas(
+            'update',
+            'Memperbarui scene virtual tour: ' . $scene->nama_lokasi,
+            $scene
+        );
+
         return redirect()
             ->route('admin-virtual-tour', ['scene' => $scene->id])
             ->with('success', 'Scene virtual tour berhasil diperbarui');
@@ -93,9 +107,17 @@ class VirtualTourController extends Controller
 
     public function destroyScene(VirtualTourScene $scene)
     {
+        $namaScene = $scene->nama_lokasi;
+
         $this->deleteFile($scene->thumbnail);
         $this->deleteFile($scene->panorama);
+
         $scene->delete();
+
+        $this->catatAktivitas(
+            'delete',
+            'Menghapus scene virtual tour: ' . $namaScene
+        );
 
         return redirect()
             ->route('admin-virtual-tour')
@@ -111,6 +133,12 @@ class VirtualTourController extends Controller
 
         VirtualTourHotspot::create($validated);
 
+        $this->catatAktivitas(
+            'create',
+            'Menambahkan hotspot pada scene: ' . $scene->nama_lokasi,
+            $scene
+        );
+
         return redirect()
             ->route('admin-virtual-tour', ['scene' => $scene->id])
             ->with('success', 'Hotspot berhasil ditambahkan');
@@ -124,6 +152,12 @@ class VirtualTourController extends Controller
 
         $hotspot->update($validated);
 
+        $this->catatAktivitas(
+            'update',
+            'Memperbarui hotspot pada scene: ' . ($hotspot->scene?->nama_lokasi ?? '-'),
+            $hotspot
+        );
+
         return redirect()
             ->route('admin-virtual-tour', ['scene' => $hotspot->virtual_tour_scene_id])
             ->with('success', 'Hotspot berhasil diperbarui');
@@ -134,6 +168,11 @@ class VirtualTourController extends Controller
         $sceneId = $hotspot->virtual_tour_scene_id;
 
         $hotspot->delete();
+
+        $this->catatAktivitas(
+            'delete',
+            'Menghapus hotspot pada scene ID ' . $sceneId
+        );
 
         return redirect()
             ->route('admin-virtual-tour', ['scene' => $sceneId])

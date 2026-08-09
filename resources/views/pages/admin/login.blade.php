@@ -70,30 +70,6 @@
 
                         <div class="form-group">
 
-                            <label>Role</label>
-
-                            <div class="input-group-custom">
-
-                                <i class="fa-solid fa-user-shield"></i>
-
-                                <select name="role" required>
-                                    <option value="" disabled {{ old('role') ? '' : 'selected' }}>
-                                        Pilih role admin
-                                    </option>
-                                    <option value="administrasi" {{ old('role') === 'administrasi' ? 'selected' : '' }}>
-                                        Administrasi
-                                    </option>
-                                    <option value="media" {{ old('role') === 'media' ? 'selected' : '' }}>
-                                        Media
-                                    </option>
-                                </select>
-
-                            </div>
-
-                        </div>
-
-                        <div class="form-group">
-
                             <label>Password</label>
 
                             <div class="input-group-custom">

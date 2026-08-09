@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\Galeri;
 use App\Models\GaleriFoto;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Storage;
 
 class GaleriController extends Controller
 {
+    use LogsAdminActivity;
+
     public function index(Request $request)
     {
         $query = Galeri::query();
@@ -98,6 +101,7 @@ class GaleriController extends Controller
             ]);
         }
 
+        $this->catatAktivitas('create', 'Menambahkan galeri: ' . $galeri->judul, $galeri);
 
         return redirect()->route('admin-galeri')
             ->with('success', 'Galeri berhasil ditambahkan dan siap dikelola.');
@@ -151,6 +155,8 @@ class GaleriController extends Controller
 
         $galeri->save();
 
+        $this->catatAktivitas('update', 'Memperbarui galeri: ' . $galeri->judul, $galeri);
+
         return redirect()
             ->route('admin-galeri')
             ->with('success', 'Galeri berhasil diperbarui');
@@ -168,7 +174,9 @@ class GaleriController extends Controller
         if ($galeri->thumbnail) {
             Storage::disk('public')->delete($galeri->thumbnail);
         }
+        $judulGaleri = $galeri->judul;
         $galeri->delete();
+        $this->catatAktivitas('delete', 'Menghapus galeri: ' . $judulGaleri);
         return back()->with('success', 'Galeri berhasil dihapus');
     }
 }

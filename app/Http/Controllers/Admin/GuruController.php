@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\Guru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class GuruController extends Controller
 {
+    use LogsAdminActivity;
+
     private const KATEGORI_GURU = [
         'Madrasah Diniyah',
         'SMP',
@@ -60,6 +63,8 @@ class GuruController extends Controller
 
         Guru::create($validated);
 
+        $this->catatAktivitas('create', 'Menambahkan data guru: ' . $validated['nama_lengkap']);
+
         return back()->with('success', 'Data guru berhasil ditambahkan');
     }
 
@@ -93,6 +98,8 @@ class GuruController extends Controller
 
         $guru->update($validated);
 
+        $this->catatAktivitas('update', 'Memperbarui data guru: ' . $guru->nama_lengkap, $guru);
+
         return back()->with(
             'success',
             'Data guru berhasil diperbarui'
@@ -105,7 +112,11 @@ class GuruController extends Controller
             Storage::disk('public')->delete($guru->foto);
         }
 
+        $namaGuru = $guru->nama_lengkap;
+
         $guru->delete();
+
+        $this->catatAktivitas('delete', 'Menghapus data guru: ' . $namaGuru);
 
         return back()->with('success', 'Data guru berhasil dihapus');
     }

@@ -9,39 +9,42 @@
                 <!-- STAT -->
                 <div class="stats-grid">
                     <div class="stats-card">
+                        <div class="stats-icon teal">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+
+                        <div class="stats-info">
+                            <span>Semua Santri</span>
+                            <h3>{{ number_format($stats['totalSemuaSantri']) }}</h3>
+                        </div>
+                    </div>
+                    <div class="stats-card">
                         <div class="stats-icon blue">
-                            <i class="fa-solid fa-newspaper"></i>
-                        </div>
-                        <div class="stats-info">
-                            <span>Total Berita</span>
-                            <h3>{{ number_format($stats['totalBerita']) }}</h3>
-                        </div>
-                    </div>
-                    <div class="stats-card">
-                        <div class="stats-icon green">
-                            <i class="fa-solid fa-images"></i>
-                        </div>
-                        <div class="stats-info">
-                            <span>Total Galeri</span>
-                            <h3>{{ number_format($stats['totalGaleri']) }}</h3>
-                        </div>
-                    </div>
-                    <div class="stats-card">
-                        <div class="stats-icon orange">
-                            <i class="fa-solid fa-user-group"></i>
-                        </div>
-                        <div class="stats-info">
-                            <span>Guru & Ustadz</span>
-                            <h3>{{ number_format($stats['totalGuru']) }}</h3>
-                        </div>
-                    </div>
-                    <div class="stats-card">
-                        <div class="stats-icon red">
-                            <i class="fa-solid fa-file-signature"></i>
+                            <i class="fa-solid fa-clipboard-user"></i>
                         </div>
                         <div class="stats-info">
                             <span>Pendaftar Baru</span>
                             <h3>{{ number_format($stats['totalPendaftar']) }}</h3>
+                        </div>
+                    </div>
+                    {{-- BELUM BAYAR --}}
+                    <div class="stats-card">
+                        <div class="stats-icon red">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+                        <div class="stats-info">
+                            <span>Belum Bayar</span>
+                            <h3>{{ number_format($stats['pendaftaranBelumBayar']) }}</h3>
+                        </div>
+                    </div>
+                    {{-- MENUNGGU VERIFIKASI --}}
+                    <div class="stats-card">
+                        <div class="stats-icon yellow">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div class="stats-info">
+                            <span>Verifikasi</span>
+                            <h3>{{ number_format($stats['menungguVerifikasi']) }}</h3>
                         </div>
                     </div>
                     {{-- TOTAL SISWA --}}
@@ -50,28 +53,42 @@
                             <i class="fa-solid fa-graduation-cap"></i>
                         </div>
                         <div class="stats-info">
-                            <span>Santri Diterima</span>
+                            <span>Diterima</span>
                             <h3>{{ number_format($stats['totalSiswa']) }}</h3>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon cyan">
+                            <i class="fa-solid fa-file-signature"></i>
+                        </div>
+
+                        <div class="stats-info">
+                            <span>Sudah Tes</span>
+                            <h3>{{ number_format($stats['sudahTes']) }}</h3>
                         </div>
                     </div>
                     {{-- BELUM DAFTAR ULANG --}}
                     <div class="stats-card">
-                        <div class="stats-icon yellow">
+                        <div class="stats-icon orange">
                             <i class="fa-solid fa-user-clock"></i>
                         </div>
                         <div class="stats-info">
-                            <span>Belum Daftar Ulang</span>
+                            <span>Daftar Ulang</span>
                             <h3>{{ number_format($stats['belumDaftarUlang']) }}</h3>
                         </div>
                     </div>
-                    {{-- VIRTUAL TOUR --}}
+                    {{-- PEMASUKAN PERIODE INI --}}
                     <div class="stats-card">
-                        <div class="stats-icon blue">
-                            <i class="fa-solid fa-vr-cardboard"></i>
+                        <div class="stats-icon green">
+                            <i class="fa-solid fa-sack-dollar"></i>
                         </div>
                         <div class="stats-info">
-                            <span>Virtual Tour</span>
-                            <h3>{{ number_format($stats['totalVirtualTour']) }} Spot</h3>
+                            <span>Pemasukan</span>
+                            <h3
+                                title="Rp {{ number_format($stats['pemasukanPeriode'], 0, ',', '.') }}"
+                            >
+                                Rp {{ $stats['pemasukanPeriodeFormatted'] }}
+                            </h3>
                         </div>
                     </div>
                 </div>

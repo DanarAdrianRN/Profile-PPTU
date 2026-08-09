@@ -6,6 +6,7 @@
         <div class="admin-main">
             @include('components.header-admin', ['title' => 'Riwayat Transaksi'])
             <div class="admin-biaya-pendaftaran">
+                @include('components.archive-banner')
 
                 {{-- TAB NAVIGASI --}}
                 <div class="page-tabs">
@@ -33,18 +34,9 @@
                                 <option value="manual">Manual</option>
                             </select>
                         </div>
-                        {{-- <div class="select-wrapper">
-                            <select id="statusFilter">
-                                <option value="all">Semua Status</option>
-                                <option value="settlement">Settlement</option>
-                                <option value="pending">Pending</option>
-                                <option value="expire">Expire</option>
-                                <option value="cancel">Cancel</option>
-                                <option value="deny">Deny</option>
-                            </select>
-                        </div> --}}
                         <div class="date-filter">
                             <input type="date" id="dariFilter" title="Dari tanggal">
+                            <span>&mdash;</span>
                             <input type="date" id="sampaiFilter" title="Sampai tanggal">
                         </div>
                     </div>
@@ -77,7 +69,7 @@
                                 <th>Metode</th>
                                 <th>Status</th>
                                 <th>Dicatat Oleh</th>
-                                <th>Aksi</th>
+                                <th width="8%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="riwayatTableBody">
@@ -95,7 +87,11 @@
                                         </div>
                                     </td>
                                     <td>
-                                        {{ $transaksi->details->map(fn($d) => $d->tagihanSantriDetail->nama_pembayaran ?? '-')->implode(', ') }}
+                                        @if ($transaksi->details->isNotEmpty())
+                                            {{ $transaksi->details->map(fn($d) => $d->tagihanSantriDetail->nama_pembayaran ?? '-')->implode(', ') }}
+                                        @else
+                                            {{ $transaksi->pembayaran->nama_pembayaran ?? '-' }}
+                                        @endif
                                     </td>
                                     <td>Rp {{ number_format($transaksi->nominal, 0, ',', '.') }}</td>
                                     <td>
@@ -113,8 +109,8 @@
                                     <td>
                                         @if ($transaksi->status === 'settlement')
                                             <div class="table-action">
-                                                <a class="btn-action view" href="{{ route('riwayat-transaksi.struk', $transaksi->id) }}" title="Cetak Struk">
-                                                    <i class="fa-solid fa-print"></i>
+                                                <a class="btn-action view" href="{{ route('download-bukti', $transaksi->id) }}" target="_blank" title="Cetak Struk">
+                                                    <i class="fa-solid fa-receipt"></i>
                                                 </a>
                                             </div>
                                         @endif

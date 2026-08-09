@@ -204,7 +204,7 @@ class TransaksiController extends Controller
 
             ]);
 
-            $transaksi->load('details.tagihanSantriDetail.tagihanSantri');
+            $transaksi->load('details.tagihanSantriDetail.tagihanSantri', 'pendaftaran');
 
             foreach ($transaksi->details as $detail) {
                 $tagihanDetail = $detail->tagihanSantriDetail;
@@ -223,6 +223,13 @@ class TransaksiController extends Controller
                 if ($tagihan) {
                     $this->refreshTagihanSummary($tagihan);
                 }
+            }
+
+            // Begitu pembayaran pendaftaran awal berhasil, status pendaftaran naik
+            // dari "belum_bayar" ke "menunggu_verifikasi" supaya masuk antrean
+            // verifikasi berkas admin.
+            if ($transaksi->pendaftaran && $transaksi->pendaftaran->status === 'belum_bayar') {
+                $transaksi->pendaftaran->update(['status' => 'menunggu_verifikasi']);
             }
         }
 

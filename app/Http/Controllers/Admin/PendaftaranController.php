@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\FilterByPeriode;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
@@ -20,6 +21,8 @@ use Illuminate\Support\Str;
 
 class PendaftaranController extends Controller
 {
+    use FilterByPeriode;
+
     /*
     |--------------------------------------------------------------------------
     | INDEX
@@ -28,11 +31,10 @@ class PendaftaranController extends Controller
 
     public function index()
     {
-        $periodes = Periode::latest()->get();
-        $periodeAktif = Periode::aktif()->first();
-        $selectedPeriodeId = request('periode_id', $periodeAktif?->id);
-        $selectedPeriode = $periodes->firstWhere('id', (int) $selectedPeriodeId);
-        $canManageSelectedPeriod = (bool) $selectedPeriode?->is_active;
+        $periode = $this->resolvePeriode();
+        $selectedPeriodeId = $periode?->id;
+        $isArsip = $periode && ! $periode->is_active;
+        $canManageSelectedPeriod = (bool) $periode?->is_active;
 
         $pendaftaranQuery = Pendaftaran::with([
             'pendidikan',
@@ -80,10 +82,10 @@ class PendaftaranController extends Controller
         })->count();
 
         return view('pages.admin.administrasi.pendaftaran', compact
-        ('pendaftarans', 
-        'periodes',
+        ('pendaftarans',
+        'periode',
+        'isArsip',
         'selectedPeriodeId',
-        'selectedPeriode',
         'canManageSelectedPeriod',
         'jumlahPendaftaran',
         'menungguVerifikasi',
@@ -102,8 +104,8 @@ class PendaftaranController extends Controller
 
     public function export(Request $request)
     {
-        $periodeAktif = Periode::aktif()->first();
-        $selectedPeriodeId = $request->get('periode_id', $periodeAktif?->id);
+        $periode = $this->resolvePeriode();
+        $selectedPeriodeId = $periode?->id;
 
         $pendaftarans = Pendaftaran::with([
             'pendidikan',
@@ -112,6 +114,9 @@ class PendaftaranController extends Controller
         ])
             ->when($selectedPeriodeId, function ($query, $periodeId) {
                 $query->where('periode_id', $periodeId);
+            })
+            ->when($request->filled('status') && $request->status !== 'all', function ($query) use ($request) {
+                $query->where('status', $request->status);
             })
             ->when($request->filled('jenjang') && $request->jenjang !== 'all', function ($query) use ($request) {
                 $query->whereHas('pendidikan', function ($q) use ($request) {

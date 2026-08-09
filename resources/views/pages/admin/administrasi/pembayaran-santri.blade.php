@@ -8,6 +8,7 @@
             {{-- HEADER --}}
             @include('components.header-admin', ['title' => 'Pembayaran'])
             <div class="admin-biaya-pendaftaran">
+                @include('components.archive-banner')
 
                 {{-- FILTER --}}
                 <div class="page-tabs">

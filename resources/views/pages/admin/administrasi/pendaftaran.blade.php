@@ -8,6 +8,8 @@
             {{-- HEADER --}}
             @include('components.header-admin', ['title' => 'Manajemen Pendaftaran'])
             <section class="pendaftaran-admin">
+                @include('components.archive-banner')
+
                 {{-- STATISTICS --}}
                 <div class="pendaftaran-stats">
                     <div class="stat-card">
@@ -97,18 +99,12 @@
                     </div>
                     <div class="filter-group">
                         <div class="select-wrapper">
-                            <select
-                                title="{{ $selectedPeriode?->nama_periode ?? 'Pilih periode' }}"
-                                style="width: 220px; max-width: 220px;"
-                                onchange="window.location.href='{{ route('admin-pendaftaran') }}?periode_id=' + this.value">
-                                @foreach ($periodes as $periode)
-                                    <option value="{{ $periode->id }}"
-                                        title="{{ $periode->nama_periode }}"
-                                        @selected((int) $selectedPeriodeId === $periode->id)>
-                                        {{ \Illuminate\Support\Str::limit($periode->nama_periode, 28) }}
-                                        {{ $periode->is_active ? ' - Aktif' : '' }}
-                                    </option>
-                                @endforeach
+                            <select id="statusFilter">
+                                <option value="all">Semua Status</option>
+                                <option value="belum_bayar">Belum Bayar</option>
+                                <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
+                                <option value="diterima">Diterima</option>
+                                <option value="ditolak">Ditolak</option>
                             </select>
                         </div>
                         <div class="select-wrapper">
@@ -159,6 +155,7 @@
                                     <th>Wali Santri</th>
 
                                     <th>Pembayaran</th>
+                                    <th>Dokumen</th>
 
                                     <th>Tanggal Daftar</th>
 
@@ -180,6 +177,7 @@
                                 @endphp
                                 <tr
                                     data-jenjang="{{ $pendaftaran->pendidikan->jenjang_pendidikan ?? '' }}"
+                                    data-status="{{ $pendaftaran->status }}"
                                     data-payment="{{ $isLunasRow ? 'paid' : 'unpaid' }}"
                                 >
                                     <td>
@@ -259,13 +257,27 @@
                                         </button>
                                     </td>
                                     <td>
+                                        <button
+                                            class="btn-action view"
+                                            data-toggle="modal"
+                                            data-target="#modalDokumen{{ $pendaftaran->id }}"
+                                            title="Lihat Dokumen ({{ $pendaftaran->dokumens->count() }})"
+                                        >
+                                            <i class="fa-solid fa-folder-open"></i>
+                                        </button>
+                                    </td>
+                                    <td>
                                         {{ $pendaftaran->created_at->translatedFormat('d M Y') }}
                                     </td>
                                     <td>
                                         <div class="status-dropdown">
 
-                                            <button class="payment-badge paid">
-
+                                            @php
+                                                $statusBadgeClass = in_array($pendaftaran->status, ['belum_bayar', 'ditolak'])
+                                                    ? 'unpaid'
+                                                    : 'paid';
+                                            @endphp
+                                            <button class="payment-badge {{ $statusBadgeClass }}">
                                                 {{ ucfirst(str_replace('_', ' ', $pendaftaran->status)) }}
                                             </button>
 
@@ -368,6 +380,7 @@
     @push('script')
         <script>
             const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
             const jenjangFilter = document.getElementById('jenjangFilter');
             const paymentFilter = document.getElementById('paymentFilter');
             const tableBody = document.getElementById('pendaftaranTableBody');
@@ -405,6 +418,7 @@
 
             function filterTable() {
                 const searchValue = searchInput.value.toLowerCase();
+                const statusValue = statusFilter.value;
                 const jenjangValue = jenjangFilter.value;
                 const paymentValue = paymentFilter.value;
 
@@ -413,10 +427,11 @@
                     const nama = nameEl ? nameEl.innerText.toLowerCase() : '';
 
                     const matchSearch = nama.includes(searchValue);
+                    const matchStatus = statusValue === 'all' || row.dataset.status === statusValue;
                     const matchJenjang = jenjangValue === 'all' || row.dataset.jenjang === jenjangValue;
                     const matchPayment = paymentValue === 'all' || row.dataset.payment === paymentValue;
 
-                    return matchSearch && matchJenjang && matchPayment;
+                    return matchSearch && matchStatus && matchJenjang && matchPayment;
                 });
 
                 currentPage = 1;
@@ -424,6 +439,7 @@
             }
 
             searchInput.addEventListener('keyup', filterTable);
+            statusFilter.addEventListener('change', filterTable);
             jenjangFilter.addEventListener('change', filterTable);
             paymentFilter.addEventListener('change', filterTable);
 
@@ -453,7 +469,7 @@
             function exportPendaftaran(format) {
                 const params = new URLSearchParams({
                     format: format,
-                    periode_id: '{{ $selectedPeriodeId }}',
+                    status: statusFilter.value,
                     jenjang: jenjangFilter.value,
                     payment: paymentFilter.value,
                     cari: searchInput.value,

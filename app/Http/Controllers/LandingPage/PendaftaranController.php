@@ -11,6 +11,8 @@ use App\Models\PendaftaranOrangTua;
 use App\Models\PendaftaranDokumen;
 use App\Models\Transaksi;
 use App\Models\Pembayaran;
+use App\Models\TagihanSantri;
+use App\Models\TagihanSantriDetail;
 use App\Models\GelombangPendaftaran;
 use App\Models\Periode;
 
@@ -28,6 +30,16 @@ class PendaftaranController extends Controller
 
     public function index()
     {
+        $gelombangAktif = GelombangPendaftaran::aktif()
+            ->orderBy('urutan')
+            ->first();
+
+        if (! $gelombangAktif) {
+            return back()->withErrors([
+                'gelombang' => 'Pendaftaran saat ini sudah ditutup. Silakan menghubungi admin untuk informasi lebih lanjut.',
+            ]);
+        }
+
         $pendaftarans = Pendaftaran::with([
             'pendidikan',
             'orangTuas',
@@ -104,7 +116,17 @@ class PendaftaranController extends Controller
     */
 
     public function store(Request $request)
-    {        
+    {
+        $gelombangAktif = GelombangPendaftaran::aktif()
+            ->orderBy('urutan')
+            ->first();
+
+        if (! $gelombangAktif) {
+            return back()->withErrors([
+                'gelombang' => 'Pendaftaran saat ini sudah ditutup. Silakan menghubungi admin untuk informasi lebih lanjut.',
+            ]);
+        }
+
         $request->validate([
 
             'nama_lengkap' => 'required',
@@ -124,19 +146,49 @@ class PendaftaranController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | CEGAH DATA DOBEL: kalau NISN ini sudah punya pendaftaran yang belum
+        | dibayar, arahkan ke situ lagi untuk lanjut bayar — jangan buat baris
+        | pendaftaran baru.
+        |--------------------------------------------------------------------------
+        */
+        if ($request->filled('nisn')) {
+            $pendaftaranBelumBayar = Pendaftaran::where('status', 'belum_bayar')
+                ->whereHas('pendidikan', function ($query) use ($request) {
+                    $query->where('nisn', $request->nisn);
+                })
+                ->latest()
+                ->first();
+
+            if ($pendaftaranBelumBayar) {
+                $transaksiLama = Transaksi::where('pendaftaran_id', $pendaftaranBelumBayar->id)
+                    ->where(function ($query) {
+                        $query->whereNull('order_id')
+                            ->orWhereIn('status', ['pending', 'expire', 'cancel', 'deny']);
+                    })
+                    ->latest()
+                    ->first();
+
+                if ($transaksiLama) {
+                    return redirect()
+                        ->route('pembayaran-pendaftaran', $transaksiLama->id)
+                        ->with('info', 'Kamu sudah pernah mendaftar dengan NISN ini dan belum menyelesaikan pembayaran. Silakan lanjutkan pembayaran di bawah.');
+                }
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
         | SIMPAN PENDAFTARAN
         |--------------------------------------------------------------------------
         */
-        $gelombangAktif = GelombangPendaftaran::aktif()
-            ->orderBy('urutan')
-            ->first();
-
         $pendaftaran = Pendaftaran::create([
 
             'gelombang_pendaftaran_id' => $gelombangAktif?->id,
             'periode_id' => Periode::aktif()->value('id'),
 
             'kode_pendaftaran' => 'PSB-' . strtoupper(Str::random(6)),
+
+            'status' => 'belum_bayar',
 
             'nama_lengkap' => $request->nama_lengkap,
             'nama_panggilan' => $request->nama_panggilan,
@@ -353,6 +405,51 @@ class PendaftaranController extends Controller
         )
         ->first();
 
+        if (! $pembayaran) {
+            return back()->withErrors([
+                'jenjang_pendidikan' => 'Biaya Pendaftaran Pondok untuk jenjang ini belum diatur admin. Silakan hubungi pihak yayasan.',
+            ])->withInput();
+        }
+
+        // Setiap santri hanya punya satu TagihanSantri (relasinya unik per
+        // pendaftaran) — di titik ini pasti belum ada, jadi dibuat sekalian
+        // supaya biaya Pendaftaran Pondok tercatat sebagai item tagihan yang
+        // sah, bukan cuma transaksi lepas tanpa rincian.
+        $gelombangId = GelombangPendaftaran::whereDate('tanggal_mulai', '<=', now())
+            ->whereDate('tanggal_selesai', '>=', now())
+            ->orderBy('urutan')
+            ->value('id')
+            ?? GelombangPendaftaran::aktif()->orderBy('urutan')->value('id');
+
+        $tagihan = TagihanSantri::firstOrCreate(
+            ['pendaftaran_id' => $pendaftaran->id],
+            [
+                'gelombang_pendaftaran_id' => $gelombangId,
+                'kode_tagihan' => 'TAG-' . now()->format('YmdHis') . '-' . $pendaftaran->id,
+                'jenjang' => $request->jenjang_pendidikan,
+                'boleh_dicicil' => true,
+                'jumlah_cicilan' => 1,
+                'jatuh_tempo' => now()->addDays(7),
+            ]
+        );
+
+        $tagihanDetail = TagihanSantriDetail::create([
+            'tagihan_santri_id' => $tagihan->id,
+            'pembayaran_id' => $pembayaran->id,
+            'nama_pembayaran' => $pembayaran->nama_pembayaran,
+            'kategori' => $pembayaran->kategori,
+            'nominal_awal' => $pembayaran->nominal,
+            'potongan_promo' => 0,
+            'nominal_akhir' => $pembayaran->nominal,
+            'status_pembayaran' => 'belum_dibayar',
+        ]);
+
+        $tagihan->update([
+            'nominal_awal' => $tagihan->nominal_awal + $pembayaran->nominal,
+            'nominal_akhir' => $tagihan->nominal_akhir + $pembayaran->nominal,
+            'sisa_tagihan' => $tagihan->sisa_tagihan + $pembayaran->nominal,
+        ]);
+
         $transaksi = Transaksi::create([
 
 
@@ -369,6 +466,11 @@ class PendaftaranController extends Controller
             'status' => 'pending',
 
         ]);
+
+        $transaksi->details()->create([
+            'tagihan_santri_detail_id' => $tagihanDetail->id,
+            'nominal' => $pembayaran->nominal,
+        ]);
         
 
         return redirect()->route(
@@ -379,134 +481,4 @@ class PendaftaranController extends Controller
 
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | SHOW
-    |--------------------------------------------------------------------------
-    */
-
-    public function show($id)
-    {
-        $pendaftaran = Pendaftaran::with([
-            'pendidikan',
-            'orangTuas',
-            'dokumens'
-        ])->findOrFail($id);
-
-        return view(
-            'pages.admin.administrasi.pendaftaran.show',
-            compact('pendaftaran')
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | EDIT
-    |--------------------------------------------------------------------------
-    */
-
-    public function edit($id)
-    {
-        $pendaftaran = Pendaftaran::with([
-            'pendidikan',
-            'orangTuas',
-            'dokumens'
-        ])->findOrFail($id);
-
-        return view(
-            'pages.admin.administrasi.pendaftaran.edit',
-            compact('pendaftaran')
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE
-    |--------------------------------------------------------------------------
-    */
-
-    public function update(Request $request, $id)
-    {
-
-        $pendaftaran = Pendaftaran::findOrFail($id);
-
-        $pendaftaran->update([
-
-            'nama_lengkap' => $request->nama_lengkap,
-
-            'nama_panggilan' => $request->nama_panggilan,
-
-            'jenis_kelamin' => $request->jenis_kelamin,
-
-            'agama' => $request->agama,
-
-            'alamat' => $request->alamat,
-
-            'status' => $request->status,
-
-        ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | UPDATE PENDIDIKAN
-        |--------------------------------------------------------------------------
-        */
-
-        if ($pendaftaran->pendidikan) {
-
-            $pendaftaran->pendidikan->update([
-
-                'sekolah_asal' => $request->sekolah_asal,
-
-                'jurusan' => $request->jurusan,
-
-                'nisn' => $request->nisn,
-
-            ]);
-        }
-
-        return redirect()
-            ->route('admin.pendaftaran.index')
-            ->with('success', 'Data berhasil diupdate');
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | DESTROY
-    |--------------------------------------------------------------------------
-    */
-
-    public function destroy($id)
-    {
-
-        $pendaftaran = Pendaftaran::with('dokumens')
-            ->findOrFail($id);
-
-        /*
-        |--------------------------------------------------------------------------
-        | HAPUS FILE
-        |--------------------------------------------------------------------------
-        */
-
-        foreach ($pendaftaran->dokumens as $dokumen) {
-
-            if (Storage::disk('public')->exists($dokumen->file)) {
-
-                Storage::disk('public')
-                    ->delete($dokumen->file);
-            }
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | HAPUS DATA
-        |--------------------------------------------------------------------------
-        */
-
-        $pendaftaran->delete();
-
-        return redirect()
-            ->back()
-            ->with('success', 'Data berhasil dihapus');
-    }
 }

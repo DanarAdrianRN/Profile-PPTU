@@ -396,14 +396,23 @@ Route::prefix('admin')->group(function () {
             Route::get('/periode', [AdminPeriodeController::class, 'index'])
             ->name('admin-periode');
 
+            Route::get('/periode', [AdminPeriodeController::class, 'index'])
+            ->name('admin-periode');
+ 
             Route::post('/periode/store', [AdminPeriodeController::class, 'store'])
             ->name('periode.store');
-
+ 
             Route::post('/periode/{periode}/update', [AdminPeriodeController::class, 'update'])
             ->name('periode.update');
-
+ 
             Route::delete('/periode/{periode}', [AdminPeriodeController::class, 'destroy'])
             ->name('periode.destroy');
+ 
+            Route::get('/periode/{periode}/lihat-data', [AdminPeriodeController::class, 'lihatData'])
+            ->name('periode.lihat-data');
+ 
+            Route::get('/periode/keluar-arsip', [AdminPeriodeController::class, 'keluarArsip'])
+            ->name('periode.keluar-arsip');
 
             Route::get('/data-admin', [AdminDataController::class, 'index'])
             ->name('admin-data');

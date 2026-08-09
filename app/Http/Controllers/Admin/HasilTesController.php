@@ -3,22 +3,37 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\FilterByPeriode;
 use App\Models\Pendaftaran;
 use App\Models\PendaftaranHasilTes;
 use Illuminate\Http\Request;
 
 class HasilTesController extends Controller
 {
+    use FilterByPeriode;
+
     public function index()
     {
+        $periode = $this->resolvePeriode();
+        $selectedPeriodeId = $periode?->id;
+        $isArsip = $periode && ! $periode->is_active;
+
         $hasilTes = PendaftaranHasilTes::with([
             'pendaftaran.pendidikan',
         ])
+            ->when($selectedPeriodeId, function ($query) use ($selectedPeriodeId) {
+                $query->whereHas('pendaftaran', function ($q) use ($selectedPeriodeId) {
+                    $q->where('periode_id', $selectedPeriodeId);
+                });
+            })
             ->latest()
             ->get();
 
         $pendaftarans = Pendaftaran::with('pendidikan')
             ->whereDoesntHave('hasilTes')
+            ->when($selectedPeriodeId, function ($query) use ($selectedPeriodeId) {
+                $query->where('periode_id', $selectedPeriodeId);
+            })
             ->latest()
             ->get();
 
@@ -26,6 +41,8 @@ class HasilTesController extends Controller
             'hasilTes' => $hasilTes,
             'hasilTesModal' => $hasilTes,
             'pendaftarans' => $pendaftarans,
+            'periode' => $periode,
+            'isArsip' => $isArsip,
         ]);
     }
 

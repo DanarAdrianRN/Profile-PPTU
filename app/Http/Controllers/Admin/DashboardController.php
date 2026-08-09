@@ -1,16 +1,18 @@
 <?php
-
+ 
 namespace App\Http\Controllers\Admin;
-
+ 
 use App\Http\Controllers\Controller;
+use App\Models\AdminActivityLog;
+use App\Models\Periode;
 use App\Models\Berita;
 use App\Models\Galeri;
 use App\Models\Guru;
 use App\Models\Pendaftaran;
+use App\Models\PendaftaranHasilTes;
 use App\Models\Transaksi;
 use App\Models\VirtualTourScene;
 use App\Models\WebsiteVisit;
-use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -20,7 +22,7 @@ class DashboardController extends Controller
         $role = in_array($role, ['administrasi', 'media'], true)
             ? $role
             : 'administrasi';
-
+ 
         if ($role === 'media') {
             return view('pages.admin.media.dashboard', [
                 'showModal' => false,
@@ -43,35 +45,64 @@ class DashboardController extends Controller
                 ],
                 'mediaRecentLabels' => $this->mediaContentChartByMonth(6)['labels'],
                 'mediaRecentData' => $this->mediaContentChartByMonth(6)['data'],
-                'activities' => $this->mediaActivities(),
+                'activities' => $this->resolveActivities('media'),
             ]);
         }
 
-        $stats = [
-            'totalBerita' => Berita::count(),
-            'totalGaleri' => Galeri::count(),
-            'totalGuru' => Guru::count(),
-            'totalPendaftar' => Pendaftaran::count(),
-            'totalSiswa' => Pendaftaran::where('status', 'diterima')->count(),
-            'belumDaftarUlang' => Pendaftaran::where('status', 'diterima')
-                ->whereDoesntHave('tagihanSantri', function ($query) {
-                    $query->where('status_pembayaran', 'lunas');
+        $periodeAktif = Periode::where('is_active', true)->first();
+        $pemasukanPeriode = $periodeAktif
+            ? Transaksi::where('status', 'settlement')
+                ->whereHas('pendaftaran', function ($query) use ($periodeAktif) {
+                    $query->where('periode_id', $periodeAktif->id);
                 })
-                ->count(),
-            'totalVirtualTour' => VirtualTourScene::count(),
-        ];
+                ->sum('nominal')
+            : 0;
 
+        $stats = [
+            'totalSemuaSantri' => Pendaftaran::count(),
+            'totalPendaftar' => $periodeAktif
+                ? Pendaftaran::where('periode_id', $periodeAktif->id)->count()
+                : 0,
+
+            'pendaftaranBelumBayar' => $periodeAktif
+                ? Pendaftaran::where('periode_id', $periodeAktif->id)
+                    ->where('status', 'belum_bayar')
+                    ->count()
+                : 0,
+
+            'menungguVerifikasi' => $periodeAktif
+                ? Pendaftaran::where('periode_id', $periodeAktif->id)
+                    ->where('status', 'menunggu_verifikasi')
+                    ->count()
+                : 0,
+            'totalSiswa' => $periodeAktif
+                ? Pendaftaran::where('periode_id', $periodeAktif->id)
+                    ->where('status', 'diterima')
+                    ->count()
+                : 0,
+            'belumDaftarUlang' => $periodeAktif
+                ? Pendaftaran::where('periode_id', $periodeAktif->id)
+                    ->where('status', 'diterima')
+                    ->whereDoesntHave('tagihanSantri', function ($query) {
+                        $query->where('status_pembayaran', 'lunas');
+                    })
+                    ->count()
+                : 0,
+            'sudahTes' => $periodeAktif
+                ? PendaftaranHasilTes::whereHas('pendaftaran', function ($query) use ($periodeAktif) {
+                    $query->where('periode_id', $periodeAktif->id);
+                })->count()
+                : 0,
+            'pemasukanPeriode' => $pemasukanPeriode,
+            'pemasukanPeriodeFormatted' => $this->formatNominalDashboard($pemasukanPeriode),
+        ];
+ 
         $visitorYear = $this->visitorChartByMonth(12);
         $registrationRecent = $this->registrationChartByMonth(6);
         $sumberInfo = $this->sumberInfoChart();
-
-        $activities = collect()
-            ->merge($this->pendaftaranActivities())
-            ->merge($this->transaksiActivities())
-            ->sortByDesc('created_at')
-            ->take(5)
-            ->values();
-
+ 
+        $activities = $this->resolveActivities('administrasi');
+ 
         return view('pages.admin.administrasi.dashboard', [
             'showModal' => false,
             'stats' => $stats,
@@ -85,81 +116,106 @@ class DashboardController extends Controller
         ]);
     }
 
+    private function formatNominalDashboard(float|int $nominal): string
+    {
+        $format = function ($value) {
+            $hasil = number_format($value, 1, ',', '.');
+
+            return str_ends_with($hasil, ',0')
+                ? substr($hasil, 0, -2)
+                : $hasil;
+        };
+
+        if ($nominal >= 1000000000) {
+            return $format($nominal / 1000000000) . ' M';
+        }
+
+        if ($nominal >= 1000000) {
+            return $format($nominal / 1000000) . ' Jt';
+        }
+
+        if ($nominal >= 1000) {
+            return $format($nominal / 1000) . ' Rb';
+        }
+
+        return number_format($nominal, 0, ',', '.');
+    }
+ 
     private function registrationChartByMonth(int $monthCount): array
     {
         $start = now()->startOfMonth()->subMonths($monthCount - 1);
-
+ 
         $rows = Pendaftaran::selectRaw('YEAR(created_at) as tahun, MONTH(created_at) as bulan, COUNT(*) as total')
             ->where('created_at', '>=', $start)
             ->groupBy('tahun', 'bulan')
             ->get()
             ->keyBy(fn ($row) => $row->tahun . '-' . $row->bulan);
-
+ 
         $labels = [];
         $data = [];
-
+ 
         for ($i = 0; $i < $monthCount; $i++) {
             $month = (clone $start)->addMonths($i);
             $key = $month->year . '-' . $month->month;
-
+ 
             $labels[] = $month->translatedFormat('M');
             $data[] = (int) ($rows[$key]->total ?? 0);
         }
-
+ 
         return compact('labels', 'data');
     }
-
+ 
     private function visitorChartByMonth(int $monthCount): array
     {
         $start = now()->startOfMonth()->subMonths($monthCount - 1);
-
+ 
         $rows = WebsiteVisit::selectRaw('YEAR(visited_at) as tahun, MONTH(visited_at) as bulan, COUNT(*) as total')
             ->where('visited_at', '>=', $start->toDateString())
             ->groupBy('tahun', 'bulan')
             ->get()
             ->keyBy(fn ($row) => $row->tahun . '-' . $row->bulan);
-
+ 
         $labels = [];
         $data = [];
-
+ 
         for ($i = 0; $i < $monthCount; $i++) {
             $month = (clone $start)->addMonths($i);
             $key = $month->year . '-' . $month->month;
-
+ 
             $labels[] = $month->translatedFormat('M');
             $data[] = (int) ($rows[$key]->total ?? 0);
         }
-
+ 
         return compact('labels', 'data');
     }
-
+ 
     private function mediaContentChartByMonth(int $monthCount): array
     {
         $start = now()->startOfMonth()->subMonths($monthCount - 1);
-
+ 
         $beritaRows = Berita::selectRaw('YEAR(created_at) as tahun, MONTH(created_at) as bulan, COUNT(*) as total')
             ->where('created_at', '>=', $start)
             ->groupBy('tahun', 'bulan')
             ->get()
             ->keyBy(fn ($row) => $row->tahun . '-' . $row->bulan);
-
+ 
         $galeriRows = Galeri::selectRaw('YEAR(created_at) as tahun, MONTH(created_at) as bulan, COUNT(*) as total')
             ->where('created_at', '>=', $start)
             ->groupBy('tahun', 'bulan')
             ->get()
             ->keyBy(fn ($row) => $row->tahun . '-' . $row->bulan);
-
+ 
         $labels = [];
         $data = [];
-
+ 
         for ($i = 0; $i < $monthCount; $i++) {
             $month = (clone $start)->addMonths($i);
             $key = $month->year . '-' . $month->month;
-
+ 
             $labels[] = $month->translatedFormat('M');
             $data[] = (int) (($beritaRows[$key]->total ?? 0) + ($galeriRows[$key]->total ?? 0));
         }
-
+ 
         return compact('labels', 'data');
     }
 
@@ -191,77 +247,51 @@ class DashboardController extends Controller
         return $summary;
     }
 
-    private function pendaftaranActivities()
-    {
-        return Pendaftaran::latest()
-            ->take(5)
-            ->get()
-            ->map(fn (Pendaftaran $pendaftaran) => [
-                'title' => 'Pendaftaran baru masuk',
-                'description' => $pendaftaran->nama_lengkap,
-                'time' => $pendaftaran->created_at?->diffForHumans(),
-                'created_at' => $pendaftaran->created_at,
-                'color' => 'blue',
-            ]);
-    }
+    /**
+     * Ambil feed aktivitas dari AdminActivityLog, difilter sesuai role admin
+     * pelakunya — dipakai baik untuk dashboard administrasi maupun media.
+     */
+private function resolveActivities(string $role)
+{
+    return AdminActivityLog::with('admin')
+        ->where(function ($query) use ($role) {
+            $query->whereHas('admin', function ($q) use ($role) {
+                $q->where('role', $role);
+            })->orWhereNull('admin_id');
+        })
+        ->latest('created_at')
+        ->take(8)
+        ->get()
+        ->map(fn (AdminActivityLog $log) => [
+            'title' => match ($log->aksi) {
+                'login' => 'Login',
+                'logout' => 'Logout',
+                'status_ubah' => 'Ubah Status Pendaftaran',
+                'catat_bayar' => 'Catat Pembayaran',
+                'create' => 'Tambah Data',
+                'update' => 'Perbarui Data',
+                'delete' => 'Hapus Data',
+                default => ucfirst(str_replace('_', ' ', $log->aksi)),
+            },
 
-    private function transaksiActivities()
-    {
-        return Transaksi::with('pendaftaran')
-            ->whereIn('status', ['settlement'])
-            ->latest()
-            ->take(5)
-            ->get()
-            ->map(fn (Transaksi $transaksi) => [
-                'title' => 'Pembayaran berhasil',
-                'description' => $transaksi->pendaftaran?->nama_lengkap ?? $transaksi->kode_transaksi,
-                'time' => ($transaksi->tanggal_bayar ?? $transaksi->updated_at ?? Carbon::now())->diffForHumans(),
-                'created_at' => $transaksi->tanggal_bayar ?? $transaksi->updated_at,
-                'color' => 'green',
-            ]);
-    }
+            'description' => ($log->admin?->username ?? 'Sistem')
+                . ' - '
+                . $log->deskripsi,
 
-    private function mediaActivities()
-    {
-        $beritas = Berita::latest()
-            ->take(5)
-            ->get()
-            ->map(fn (Berita $berita) => [
-                'title' => 'Berita diperbarui',
-                'description' => $berita->judul,
-                'time' => $berita->updated_at?->diffForHumans(),
-                'created_at' => $berita->updated_at,
-                'color' => 'blue',
-            ]);
+            'time' => $log->created_at->diffForHumans(),
 
-        $galeris = Galeri::latest()
-            ->take(5)
-            ->get()
-            ->map(fn (Galeri $galeri) => [
-                'title' => 'Galeri diperbarui',
-                'description' => $galeri->judul,
-                'time' => $galeri->updated_at?->diffForHumans(),
-                'created_at' => $galeri->updated_at,
-                'color' => 'green',
-            ]);
+            'created_at' => $log->created_at,
 
-        $gurus = Guru::latest()
-            ->take(5)
-            ->get()
-            ->map(fn (Guru $guru) => [
-                'title' => 'Data guru diperbarui',
-                'description' => $guru->nama_lengkap,
-                'time' => $guru->updated_at?->diffForHumans(),
-                'created_at' => $guru->updated_at,
-                'color' => 'purple',
-            ]);
-
-        return collect()
-            ->merge($beritas)
-            ->merge($galeris)
-            ->merge($gurus)
-            ->sortByDesc('created_at')
-            ->take(5)
-            ->values();
-    }
+            'color' => match ($log->aksi) {
+                'login' => 'blue',
+                'logout' => 'gray',
+                'status_ubah' => 'purple',
+                'catat_bayar' => 'green',
+                'delete' => 'red',
+                'create' => 'green',
+                'update' => 'blue',
+                default => 'blue',
+            },
+        ]);
+}
 }

@@ -32,7 +32,6 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'username_or_email' => ['required', 'string'],
-            'role' => ['required', Rule::in(['administrasi', 'media'])],
             'password' => ['required', 'string'],
         ]);
 
@@ -56,16 +55,12 @@ class AuthController extends Controller
             return back()->withInput()->with('login_error', 'Username/Email atau password salah');
         }
 
-        if ($admin->role !== $credentials['role']) {
-            return back()->withInput()->with('login_error', 'Role yang dipilih tidak sesuai dengan akun admin');
-        }
-
         $sessionAdmin = [
             'id' => $admin->id,
             'nama_lengkap' => $admin->nama_lengkap,
             'email' => $admin->email,
             'username' => $admin->username,
-            'role' => $credentials['role'],
+            'role' => $admin->role,
             'session_version' => $admin->session_version ?: 1,
         ];
 

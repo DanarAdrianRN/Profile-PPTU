@@ -1,5 +1,5 @@
 .modal {
-    z-index: 9999!important;
+    z-index: 9999 !important;
     &.promosi {
         .promo-content {
             border-radius: 20px;
@@ -188,7 +188,7 @@
                 width: 100%;
                 padding-right: 45px;
             }
-    
+
             .toggle-password {
                 position: absolute;
                 right: 15px;
@@ -1751,6 +1751,93 @@
     }
 
     /* =========================================
+            MODAL DOCUMENT PENDAFTAR
+    ========================================= */
+
+    .document-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border: 1px solid #edf0f4;
+            border-radius: 14px;
+            background: #fff;
+
+            .document-info {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+
+                .document-icon {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: rgba(17, 122, 139, 0.1);
+                    color: #117a8b;
+                    font-size: 16px;
+                    flex-shrink: 0;
+                }
+
+                h5 {
+                    margin: 0 0 2px;
+                    font-size: 13px;
+                    color: #172033;
+                }
+
+                span {
+                    font-size: 11px;
+                    color: #059669;
+                    font-weight: 600;
+                }
+            }
+
+            .document-action {
+                display: flex;
+                gap: 6px;
+
+                a {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: #f0f9fa;
+                    color: #117a8b;
+                    text-decoration: none;
+                    transition: 0.2s;
+
+                    &:hover {
+                        background: #117a8b;
+                        color: #fff;
+                    }
+                }
+            }
+
+            &.missing {
+                background: #fafafa;
+
+                .document-icon {
+                    background: rgba(220, 38, 38, 0.08);
+                    color: #dc2626;
+                }
+
+                .document-info span {
+                    color: #dc2626;
+                }
+            }
+        }
+    }
+
+    /* =========================================
             MODAL INFO PEMBAYARAN PENDAFTAR
     ========================================= */
     .payment-student-info {
@@ -1937,60 +2024,60 @@
         }
     }
 
-                .form-group {
-                &.full {
-                    grid-column: span 2;
-                }
+    .form-group {
+        &.full {
+            grid-column: span 2;
+        }
 
-                label {
-                    display: block;
-                    margin-bottom: 10px;
-                    color: #334155;
-                    font-weight: 600;
-                    font-size: 0.95rem;
-                }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #334155;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
 
-                input,
-                select,
-                textarea {
-                    width: 100%;
-                    border: 1px solid #dbe3ec;
-                    border-radius: 18px;
-                    padding: 16px 18px;
-                    background: #fff;
-                    color: #0f172a;
-                    outline: none;
-                    transition: 0.3s;
-                }
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #dbe3ec;
+            border-radius: 18px;
+            padding: 16px 18px;
+            background: #fff;
+            color: #0f172a;
+            outline: none;
+            transition: 0.3s;
+        }
 
-                input:focus,
-                select:focus,
-                textarea:focus {
-                    border-color: #0f7a8a;
-                    box-shadow: 0 0 0 4px rgba(15, 122, 138, 0.1);
-                }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #0f7a8a;
+            box-shadow: 0 0 0 4px rgba(15, 122, 138, 0.1);
+        }
 
-                /* CHECKBOX */
-                .checkbox-wrapper {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 14px;
+        /* CHECKBOX */
+        .checkbox-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
 
-                    label {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
+            label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
 
-                        background: #f8fafc;
-                        border: 1px solid #e2e8f0;
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
 
-                        padding: 12px 16px;
-                        border-radius: 14px;
+                padding: 12px 16px;
+                border-radius: 14px;
 
-                        font-size: 0.92rem;
-                    }
-                }
+                font-size: 0.92rem;
             }
+        }
+    }
 
     /* ================================= */
     /* MODAL EDIR PENDAFTAR */

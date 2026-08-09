@@ -60,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
                         'created_at' => $transaksi->tanggal_bayar ?? $transaksi->updated_at,
                         'icon' => 'fa-solid fa-wallet',
                         'color' => 'yellow',
-                        'url' => route('admin-pembayaran'),
+                        'url' => route('admin-riwayat-transaksi'),
                     ]);
 
                 $notifications = $notifications->merge($transaksis);

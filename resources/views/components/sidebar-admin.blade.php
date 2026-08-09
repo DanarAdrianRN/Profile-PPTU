@@ -5,9 +5,11 @@
 
     <div class="sidebar-top">
 
-        <a href="#" class="logo">
-            <h2>Tarbiyatul</h2>
-            <span>Ulum Foundation</span>
+        <a href="assets/pptu.png" class="logo">
+            <div class="pp">
+                <img src="{{ asset('assets/pptu.png') }}" alt="Logo pptu">
+            </div>
+            <h2>Yayasan Tarbiyatul 'Ulum</h2>
         </a>
 
     </div>
@@ -81,7 +83,7 @@
                 </a>
 
                 <a href="{{ route('admin-pembayaran-santri') }}"
-                    class="menu-item {{ Route::is('admin-pembayaran-santri') ? 'active' : '' }}">
+                    class="menu-item {{ Route::is('admin-pembayaran-santri','admin-riwayat-transaksi') ? 'active' : '' }}">
 
                     <i class="fa-solid fa-money-bill-wave"></i>
                     <span>Pembayaran</span>

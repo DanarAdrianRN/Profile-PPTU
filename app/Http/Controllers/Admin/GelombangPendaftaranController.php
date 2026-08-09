@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\GelombangPendaftaran;
 use Illuminate\Http\Request;
 
 class GelombangPendaftaranController extends Controller
 {
+    use LogsAdminActivity;
+
     /**
      * Display a listing of the resource.
      */
@@ -56,6 +59,8 @@ class GelombangPendaftaranController extends Controller
             'is_publish' => $request->boolean('is_publish', true),
         ]);
 
+        $this->catatAktivitas('create', 'Menambahkan gelombang pendaftaran: ' . $gelombang->nama_gelombang, $gelombang);
+
         return back()->with(
             'success',
             'Gelombang berhasil ditambahkan'
@@ -91,6 +96,8 @@ class GelombangPendaftaranController extends Controller
             'is_publish' => $request->boolean('is_publish'),
         ]);
 
+        $this->catatAktivitas('update', 'Memperbarui gelombang pendaftaran: ' . $gelombang->nama_gelombang, $gelombang);
+
         return back()->with(
             'success',
             'Gelombang berhasil diperbarui'
@@ -104,7 +111,11 @@ class GelombangPendaftaranController extends Controller
     {
         $gelombang = GelombangPendaftaran::findOrFail($id);
 
+        $namaGelombang = $gelombang->nama_gelombang;
+
         $gelombang->delete();
+
+        $this->catatAktivitas('delete', 'Menghapus gelombang pendaftaran: ' . $namaGelombang);
 
         return back()->with(
             'success',

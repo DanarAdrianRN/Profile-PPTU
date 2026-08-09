@@ -8,6 +8,8 @@
             @include('components.header-admin', ['title' => 'Hasil Tes'])
 
             <section class="hasil-tes">
+                @include('components.archive-banner')
+
                 @if (session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}

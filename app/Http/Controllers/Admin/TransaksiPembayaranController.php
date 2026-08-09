@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\FilterByPeriode;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\Pendaftaran;
 use App\Models\TagihanSantri;
 use App\Models\TagihanSantriDetail;
@@ -16,6 +18,10 @@ use App\Exports\RiwayatTransaksiExport;
 
 class TransaksiPembayaranController extends Controller
 {
+    use FilterByPeriode;
+    use LogsAdminActivity;
+    use LogsAdminActivity;
+
     /**
      * Menu utama "Pembayaran": daftar tagihan semua santri, bisa difilter.
      * Ini yang dulunya cuma tampilan ringkasan di modal Data Pendaftar —
@@ -23,13 +29,22 @@ class TransaksiPembayaranController extends Controller
      */
     public function index(Request $request)
     {
+        $periode = $this->resolvePeriode();
+        $selectedPeriodeId = $periode?->id;
+        $isArsip = $periode && ! $periode->is_active;
+
         $query = TagihanSantri::with([
             'pendaftaran.pendidikan',
             'details' => function ($q) {
                 $q->orderBy('kategori')->orderBy('id');
             },
             'details.pembayaran',
-        ]);
+        ])
+            ->when($selectedPeriodeId, function ($q) use ($selectedPeriodeId) {
+                $q->whereHas('pendaftaran', function ($q2) use ($selectedPeriodeId) {
+                    $q2->where('periode_id', $selectedPeriodeId);
+                });
+            });
 
         if ($request->filled('status')) {
             $query->where('status_pembayaran', $request->status);
@@ -45,7 +60,21 @@ class TransaksiPembayaranController extends Controller
 
         $tagihans = $query->latest()->get();
 
-        return view('pages.admin.administrasi.pembayaran-santri', compact('tagihans'));
+        return view('pages.admin.administrasi.pembayaran-santri', compact('tagihans', 'periode', 'isArsip'));
+    }
+
+    /**
+     * Cetak rincian tagihan satu santri (item lunas & belum bayar) —
+     * untuk dipegang wali santri sebagai referensi tunggakan.
+     */
+    public function cetakTagihan(TagihanSantri $tagihan)
+    {
+        $tagihan->load('pendaftaran.pendidikan', 'details');
+
+        $pdf = Pdf::loadView('pages.admin.administrasi.print-tagihan-santri', compact('tagihan'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('tagihan-' . str_replace(' ', '-', $tagihan->pendaftaran->nama_lengkap) . '.pdf');
     }
 
     /**
@@ -54,11 +83,20 @@ class TransaksiPembayaranController extends Controller
      */
     public function riwayat(Request $request)
     {
+        $periode = $this->resolvePeriode();
+        $selectedPeriodeId = $periode?->id;
+        $isArsip = $periode && ! $periode->is_active;
+
         $transaksis = Transaksi::with([
             'pendaftaran.pendidikan',
             'details.tagihanSantriDetail',
             'dicatatOlehAdmin',
         ])
+            ->when($selectedPeriodeId, function ($query) use ($selectedPeriodeId) {
+                $query->whereHas('pendaftaran', function ($q) use ($selectedPeriodeId) {
+                    $q->where('periode_id', $selectedPeriodeId);
+                });
+            })
             ->when($request->filled('sumber') && $request->sumber !== 'all', function ($query) use ($request) {
                 $query->where('sumber_pembayaran', $request->sumber);
             })
@@ -79,42 +117,7 @@ class TransaksiPembayaranController extends Controller
             ->latest('tanggal_bayar')
             ->get();
 
-        return view('pages.admin.administrasi.riwayat-transaksi', compact('transaksis'));
-    }
-
-    /**
-     * Cetak struk/bukti pembayaran dari sisi admin — dipakai untuk transaksi
-     * apapun (Midtrans maupun manual), terutama supaya admin bisa langsung
-     * cetak bukti untuk wali santri yang bayar tunai di kantor.
-     */
-    public function cetakStruk(Transaksi $transaksi)
-    {
-        abort_unless($transaksi->status === 'settlement', 403);
-
-        $transaksi->load('pendaftaran.pendidikan', 'pembayaran', 'details.tagihanSantriDetail');
-
-        return Pdf::loadView('pages.landing-page.pembayaran.bukti-pembayaran', compact('transaksi'))
-            ->setPaper('a4', 'portrait')
-            ->download('bukti-pembayaran-' . ($transaksi->kode_transaksi ?? $transaksi->order_id) . '.pdf');
-    }
-
-    /**
-     * Cetak rincian tagihan satu santri (item yang sudah lunas & yang belum),
-     * untuk diberikan ke wali santri yang menanyakan sisa tunggakan.
-     */
-    public function cetakTagihan(TagihanSantri $tagihan)
-    {
-        $tagihan->load([
-            'pendaftaran.pendidikan',
-            'details' => function ($q) {
-                $q->orderBy('kategori')->orderBy('id');
-            },
-        ]);
-
-        $pdf = Pdf::loadView('pages.admin.administrasi.cetak-tagihan-pdf', compact('tagihan'))
-            ->setPaper('a4', 'portrait');
-
-        return $pdf->download('rincian-tagihan-' . str($tagihan->pendaftaran->nama_lengkap ?? 'santri')->slug() . '.pdf');
+        return view('pages.admin.administrasi.riwayat-transaksi', compact('transaksis', 'periode', 'isArsip'));
     }
 
     /**
@@ -122,7 +125,15 @@ class TransaksiPembayaranController extends Controller
      */
     public function exportRiwayat(Request $request)
     {
+        $periode = $this->resolvePeriode();
+        $selectedPeriodeId = $periode?->id;
+
         $transaksis = Transaksi::with(['pendaftaran.pendidikan', 'details.tagihanSantriDetail', 'dicatatOlehAdmin'])
+            ->when($selectedPeriodeId, function ($query) use ($selectedPeriodeId) {
+                $query->whereHas('pendaftaran', function ($q) use ($selectedPeriodeId) {
+                    $q->where('periode_id', $selectedPeriodeId);
+                });
+            })
             ->when($request->filled('sumber') && $request->sumber !== 'all', function ($query) use ($request) {
                 $query->where('sumber_pembayaran', $request->sumber);
             })
@@ -147,7 +158,7 @@ class TransaksiPembayaranController extends Controller
 
         if ($request->get('format') === 'pdf') {
             $pdf = Pdf::loadView(
-                'pages.admin.administrasi.export-riwayat-pdf',
+                'pages.admin.administrasi.export-riwayat-transaksi-pdf',
                 compact('transaksis')
             )->setPaper('a4', 'landscape');
 
@@ -164,7 +175,15 @@ class TransaksiPembayaranController extends Controller
      */
     public function export(Request $request)
     {
+        $periode = $this->resolvePeriode();
+        $selectedPeriodeId = $periode?->id;
+
         $tagihans = TagihanSantri::with(['pendaftaran.pendidikan', 'details'])
+            ->when($selectedPeriodeId, function ($query) use ($selectedPeriodeId) {
+                $query->whereHas('pendaftaran', function ($q) use ($selectedPeriodeId) {
+                    $q->where('periode_id', $selectedPeriodeId);
+                });
+            })
             ->when($request->filled('jenjang') && $request->jenjang !== 'all', function ($query) use ($request) {
                 $query->where('jenjang', $request->jenjang);
             })
@@ -250,6 +269,20 @@ class TransaksiPembayaranController extends Controller
 
             $this->refreshTagihanSummary($tagihan);
         });
+
+        $tagihan->loadMissing('pendaftaran');
+
+        $this->catatAktivitas(
+            'catat_bayar',
+            'Mencatat pembayaran ' . $validated['metode_bayar'] . ' untuk ' . ($tagihan->pendaftaran->nama_lengkap ?? 'santri') . ' sebesar Rp ' . number_format($details->sum('nominal_akhir'), 0, ',', '.'),
+            $tagihan
+        );
+
+        $this->catatAktivitas(
+            'catat_bayar',
+            'Mencatat pembayaran tunai/manual untuk ' . ($tagihan->pendaftaran?->nama_lengkap ?? 'santri') . ' sebesar Rp ' . number_format($details->sum('nominal_akhir'), 0, ',', '.'),
+            $tagihan
+        );
 
         return back()->with('success', 'Pembayaran berhasil dicatat.');
     }

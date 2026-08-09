@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\GelombangPendaftaran;
 use App\Models\Pembayaran;
 use App\Models\Promo;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 
 class PromoController extends Controller
 {
+    use LogsAdminActivity;
+
     public function index()
     {
         $promos = Promo::with([
@@ -49,6 +52,8 @@ class PromoController extends Controller
             $this->pembayaranIds($validated)
         );
 
+        $this->catatAktivitas('create', 'Menambahkan promo: ' . $promo->nama_promo, $promo);
+
         return back()->with(
             'success',
             'Promo berhasil ditambahkan'
@@ -65,6 +70,8 @@ class PromoController extends Controller
             $this->pembayaranIds($validated)
         );
 
+        $this->catatAktivitas('update', 'Memperbarui promo: ' . $promo->nama_promo, $promo);
+
         return back()->with(
             'success',
             'Promo berhasil diperbarui'
@@ -73,7 +80,11 @@ class PromoController extends Controller
 
     public function destroy(Promo $promo)
     {
+        $namaPromo = $promo->nama_promo;
+
         $promo->delete();
+
+        $this->catatAktivitas('delete', 'Menghapus promo: ' . $namaPromo);
 
         return back()->with(
             'success',

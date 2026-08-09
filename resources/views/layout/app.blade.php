@@ -2373,6 +2373,79 @@
     @endisset
 
     <!-- ===================================================== -->
+    <!-- MODAL DOCUMENT PENDAFTARAN -->
+    <!-- ===================================================== -->
+    @isset($pendaftarans)
+        @foreach($pendaftarans as $pendaftaran)
+            @php
+                $jenisDokumenLengkap = [
+                    'Akta Kelahiran',
+                    'KTP Orang Tua',
+                    'Kartu Keluarga',
+                    'Ijazah',
+                    'NISN',
+                    'KIP',
+                    'Foto Warna',
+                    'Foto Hitam Putih',
+                ];
+            @endphp
+            <div class="modal fade admin-modal" id="modalDokumen{{ $pendaftaran->id }}" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <!-- HEADER -->
+                        <div class="modal-header">
+                            <div class="modal-title-wrap">
+                                <h3>Dokumen {{ $pendaftaran->nama_lengkap }}</h3>
+                                <span>Berkas yang diupload saat pendaftaran</span>
+                            </div>
+                            <button type="button" class="close-modal" data-dismiss="modal">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <!-- BODY -->
+                        <div class="modal-body">
+                            <div class="document-list">
+                                @foreach ($jenisDokumenLengkap as $jenis)
+                                    @php
+                                        $dokumen = $pendaftaran->dokumens->firstWhere('jenis_dokumen', $jenis);
+                                        $isGambar = $dokumen && preg_match('/\.(jpg|jpeg|png)$/i', $dokumen->file);
+                                    @endphp
+                                    <div class="document-item {{ $dokumen ? '' : 'missing' }}">
+                                        <div class="document-info">
+                                            <div class="document-icon">
+                                                <i class="fa-solid {{ $isGambar ? 'fa-image' : 'fa-file-pdf' }}"></i>
+                                            </div>
+                                            <div>
+                                                <h5>{{ $jenis }}</h5>
+                                                <span>{{ $dokumen ? 'Sudah diupload' : 'Belum diupload' }}</span>
+                                            </div>
+                                        </div>
+
+                                        @if ($dokumen)
+                                            <div class="document-action">
+                                                <a href="{{ asset('storage/' . $dokumen->file) }}" target="_blank" title="Lihat">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </a>
+                                                <a href="{{ asset('storage/' . $dokumen->file) }}" download title="Unduh">
+                                                    <i class="fa-solid fa-download"></i>
+                                                </a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <!-- FOOTER -->
+                        <div class="modal-footer">
+                            <button class="btn-cancel" data-dismiss="modal">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    @endisset
+
+    <!-- ===================================================== -->
     <!-- MODAL PRINT FORMULIR PENDAFTARAN -->
     <!-- ===================================================== -->
     @isset($pendaftarans)
