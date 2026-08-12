@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Arahkan asset Vite ke folder public
+    RewriteCond %{REQUEST_URI} ^/build/(.*)$
+    RewriteRule ^build/(.*)$ public/build/$1 [L]
+
+    # Arahkan file public lainnya
+    RewriteCond %{REQUEST_URI} ^/(.*)$
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Laravel routing
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
