@@ -43,6 +43,21 @@ jobs:
           APP_KEY=${{ secrets.APP_KEY }}
           APP_URL=https://pptusumursongo.web.id
 
+          MAIL_MAILER=smtp
+          MAIL_SCHEME=smtp
+          MAIL_HOST=smtp.gmail.com
+          MAIL_PORT=587
+          MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+          MAIL_FROM_ADDRESS=${{ secrets.MAIL_USERNAME }}
+          MAIL_FROM_NAME="Tarbiyatul Ulum"
+
+          MIDTRANS_SERVER_KEY=${{ secrets.MIDTRANS_SERVER_KEY }}
+          MIDTRANS_CLIENT_KEY=${{ secrets.MIDTRANS_CLIENT_KEY }}
+          MIDTRANS_IS_PRODUCTION=false
+          MIDTRANS_IS_SANITIZED=true
+          MIDTRANS_IS_3DS=true
+
           DB_CONNECTION=mysql
           DB_HOST=${{ secrets.DB_HOST }}
           DB_PORT=3306
