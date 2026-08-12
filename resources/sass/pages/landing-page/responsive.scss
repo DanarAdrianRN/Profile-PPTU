@@ -51,7 +51,7 @@ textarea {
     max-width: 100%;
 }
 
-@media (max-width:991px) {
+@media (max-width: 991px) {
     html,
     body {
         max-width: 100%;
@@ -161,7 +161,7 @@ textarea {
         }
 
         .section-subtitle {
-            font-size: .95rem;
+            font-size: 0.95rem;
             margin-bottom: 45px;
         }
 
@@ -314,28 +314,26 @@ textarea {
             gap: 20px;
         }
 
-        .guru-card{
-
-            .guru-image img{
-                aspect-ratio:3/4;
-                object-fit:cover;
-                object-position:top;
-                height:auto;
+        .guru-card {
+            .guru-image img {
+                aspect-ratio: 3/4;
+                object-fit: cover;
+                object-position: top;
+                height: auto;
             }
 
-            .guru-info{
-                padding:12px;
+            .guru-info {
+                padding: 12px;
 
-                h3{
+                h3 {
                     font-size: 1.2rem;
                 }
 
                 .mapel,
-                .meta span{
+                .meta span {
                     font-size: 0.9rem;
                 }
             }
-
         }
     }
 
@@ -366,11 +364,12 @@ textarea {
             }
 
             p {
-                font-size: .9rem;
+                font-size: 0.9rem;
             }
         }
     }
 
+    .profile-smk,
     .profile-madin,
     .profile-madqur {
         padding: 30px 0 56px;
@@ -382,6 +381,132 @@ textarea {
 
         .school-image {
             min-height: 340px;
+
+            img {
+                width: 55%;
+                max-height: 260px;
+            }
+        }
+
+        h2 {
+            font-size: 2.2rem;
+        }
+
+        p {
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+    }
+
+    .jurusan-smk {
+        padding: 80px 0;
+
+        .jurusan-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .jurusan-card {
+            .top-image img {
+                height: 200px;
+            }
+
+            .jurusan-header {
+                padding: 20px 20px 10px;
+
+                h3 {
+                    font-size: 1.3rem;
+                }
+
+                .icon {
+                    width: 55px;
+                    height: 55px;
+
+                    img {
+                        width: 60px;
+                        height: 60px;
+                    }
+                }
+            }
+
+            .desc {
+                padding: 0 20px;
+                margin-bottom: 20px;
+            }
+
+            .jurusan-section {
+                padding: 0 20px 20px;
+            }
+        }
+    }
+
+    .keunggulan-smk {
+        padding: 70px 0;
+
+        .section-title {
+            margin-bottom: 40px;
+        }
+
+        .target-card {
+            padding: 28px 20px;
+
+            i {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+
+            h3 {
+                font-size: 1.15rem;
+            }
+
+            p {
+                font-size: 0.92rem;
+            }
+        }
+    }
+
+    .smk-documentation {
+                .documentation-layout {
+            grid-template-columns: 1fr;
+            gap: 28px;
+
+            .documentation-copy {
+                span {
+                    margin-bottom: 9px;
+                    font-weight: 500;
+                }
+
+                h2 {
+                    font-size: 1.75rem;
+                    line-height: 1.25;
+                    margin-bottom: 12px;
+                }
+
+                p {
+                    font-size: 0.9rem;
+                    line-height: 1.7;
+                }
+            }
+        }
+
+        .smk-studio-board {
+            grid-template-columns: 1fr 0.8fr;
+            gap: 14px;
+        }
+
+        figure {
+            min-height: 180px;
+        }
+
+        figure.main-shot {
+            grid-row: span 2;
+            min-height: 380px;
+        }
+
+        figcaption {
+            font-size: 0.85rem;
+            padding: 10px 12px;
         }
     }
 
@@ -421,31 +546,94 @@ textarea {
     }
 
     .kegiatan-hero {
-        padding: 70px 0 86px;
+        padding: 70px 0 90px;
+
+        .hero-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .hero-copy {
+            text-align: center;
+
+            h1 {
+                font-size: 3rem;
+                max-width: 100%;
+            }
+
+            p {
+                max-width: 100%;
+            }
+        }
 
         .hero-card {
-            border-radius: 22px;
-
-            .hero-stats {
-                grid-template-columns: repeat(3, 1fr);
-            }
+            max-width: 650px;
+            margin: 0 auto;
         }
     }
 
-    .overview-grid,
-    .periodic-activities .periodic-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
+    .overview-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .periodic-activities .periodic-card.highlight {
-        transform: none;
+    .daily-schedule {
+        .schedule-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .schedule-copy {
+            position: static;
+            top: unset;
+        }
+    }
+
+    .periodic-activities {
+        .periodic-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .periodic-card.highlight {
+            transform: none;
+        }
     }
 
     .extracurricular {
-        .extra-showcase,
+        .extra-showcase {
+            grid-template-columns: 1fr;
+        }
+
         .extra-grid {
             grid-template-columns: 1fr;
+        }
+
+        .feature-points {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .activity-gallery {
+        .gallery-layout {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .gallery-copy {
+            text-align: center;
+        }
+
+        .gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+
+            img {
+                height: 180px;
+
+                &:first-child {
+                    grid-row: span 2;
+                    min-height: 376px;
+                    height: 100%;
+                }
+            }
         }
     }
 
@@ -492,7 +680,7 @@ textarea {
                     }
 
                     span {
-                        font-size: .8rem;
+                        font-size: 0.8rem;
                     }
                 }
 
@@ -518,7 +706,6 @@ textarea {
         }
 
         .biaya-card {
-
             .card-header {
                 padding: 18px;
 
@@ -532,7 +719,7 @@ textarea {
             }
 
             table td {
-                font-size: .9rem;
+                font-size: 0.9rem;
             }
         }
     }
@@ -563,13 +750,13 @@ textarea {
                 }
 
                 p {
-                    font-size: .9rem;
+                    font-size: 0.9rem;
                     margin-bottom: 12px;
                     line-height: 1.5;
                 }
 
                 span {
-                    font-size: .9rem;
+                    font-size: 0.9rem;
                 }
             }
         }
@@ -657,18 +844,18 @@ textarea {
         overflow-x: hidden;
     }
     p {
-        font-size: 0.9rem ;
-        line-height: 1.7 ;
+        font-size: 0.9rem;
+        line-height: 1.7;
     }
 
     h2 {
-        font-size: 1.5rem ;
-        line-height: 1.3 ;
+        font-size: 1.5rem;
+        line-height: 1.3;
     }
 
     h3 {
-        font-size: 1.1rem ;
-        line-height: 1.4 ;
+        font-size: 1.1rem;
+        line-height: 1.4;
     }
 
     .container {
@@ -726,6 +913,11 @@ textarea {
                 font-size: 2.25rem;
                 margin-bottom: 16px;
             }
+
+            p {
+                font-size: 0.9rem;
+                line-height: 1.5;
+            }
         }
     }
 
@@ -757,7 +949,6 @@ textarea {
     .keunggulan-smp .section-title,
     .keunggulan-smk .section-title {
         margin-bottom: 28px;
-
     }
 
     .stats {
@@ -810,7 +1001,7 @@ textarea {
         }
 
         .section-subtitle {
-            font-size: .9rem;
+            font-size: 0.9rem;
             line-height: 1.6;
             margin-bottom: 30px;
         }
@@ -834,7 +1025,6 @@ textarea {
                     font-size: 22px;
                 }
             }
-
         }
     }
 
@@ -891,7 +1081,6 @@ textarea {
     .keunggulan-smp .target-grid,
     .keunggulan-smk .target-grid,
     .program-tpq .program-grid-tpq,
-    .overview-grid,
     .menu-section .menu-pendaftaran {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
@@ -907,7 +1096,6 @@ textarea {
     .keunggulan-smp .target-grid > :last-child:nth-child(odd),
     .keunggulan-smk .target-grid > :last-child:nth-child(odd),
     .program-tpq .program-grid-tpq > :last-child:nth-child(odd),
-    .overview-grid > :last-child:nth-child(odd),
     .biaya-pendaftaran .biaya-grid > :last-child:nth-child(odd),
     .menu-section .menu-pendaftaran > :last-child:nth-child(odd) {
         grid-column: 1 / -1;
@@ -1081,37 +1269,35 @@ textarea {
             }
         }
 
-        .guru-grid{
-            grid-template-columns:repeat(2,1fr);
-            gap:12px;
+        .guru-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
 
-        .guru-card{
-
-            .guru-image img{
-                aspect-ratio:3/4;
-                object-fit:cover;
-                object-position:top;
-                height:auto;
+        .guru-card {
+            .guru-image img {
+                aspect-ratio: 3/4;
+                object-fit: cover;
+                object-position: top;
+                height: auto;
             }
 
-            .guru-info{
-                padding:12px;
+            .guru-info {
+                padding: 12px;
 
-                h3{
-                    font-size:.9rem;
+                h3 {
+                    font-size: 0.9rem;
                 }
 
                 .mapel,
-                .meta span{
-                    font-size:.75rem;
+                .meta span {
+                    font-size: 0.75rem;
                 }
             }
-
         }
     }
-    
-        .statistik {
+
+    .statistik {
         padding: 40px 12px;
 
         .section-title {
@@ -1139,7 +1325,7 @@ textarea {
             }
 
             p {
-                font-size: .8rem;
+                font-size: 0.8rem;
                 line-height: 1.4;
             }
         }
@@ -1171,6 +1357,7 @@ textarea {
 
         .info-item {
             align-items: flex-start;
+            
         }
     }
 
@@ -1218,9 +1405,8 @@ textarea {
             text-align: center;
 
             h3 {
-                margin-bottom: 10px;    
+                margin-bottom: 10px;
             }
-            
         }
 
         .target-card i,
@@ -1240,42 +1426,107 @@ textarea {
         }
     }
 
+    .activity-overview,
+    .periodic-activities,
+    .extracurricular,
+    .activity-gallery,
+    .daily-schedule {
+        padding: 60px 0;
+    }
+
     .kegiatan-hero {
-        padding: 54px 0 74px;
+        padding: 60px 0 80px;
 
         .hero-copy {
+            .hero-badge {
+                font-size: 0.8rem;
+                padding: 8px 14px;
+            }
+
             h1 {
                 font-size: 2rem;
+                line-height: 1.3;
+            }
+
+            p {
+                font-size: 0.95rem;
+                line-height: 1.7;
             }
         }
 
-        .hero-card {
-            padding: 12px;
-            border-radius: 18px;
+        .hero-image {
+            height: 240px;
         }
 
-        .hero-image {
-            height: 210px;
-            border-radius: 14px;
+        .hero-stats {
+            grid-template-columns: 1fr;
+
+            strong {
+                font-size: 1.2rem;
+            }
         }
     }
 
-    .overview-grid .overview-card,
-    .periodic-activities .periodic-card,
-    .extracurricular .extra-card {
-        padding: 22px 18px;
-        border-radius: 18px;
+    .overview-grid,
+    .periodic-grid,
+    .extra-grid,
+    .feature-points {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-card,
+    .periodic-card {
+        padding: 22px;
     }
 
     .daily-schedule {
         .schedule-copy {
-            padding: 26px 20px;
-            border-radius: 20px;
+            padding: 24px;
+
+            span {
+                display: inline-flex;
+                padding: 7px 13px;
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+            }
         }
 
-        .timeline-card {
-            padding: 18px;
-            border-radius: 20px;
+        .timeline-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: 20px 1fr;
+            gap: 4px 12px;
+            align-items: start;
+
+            &::after {
+                display: none;
+            }
+        }
+
+        .time {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .dot {
+            grid-column: 1;
+            grid-row: 1;
+            position: relative;
+            margin-top: 2px;
+
+            &::after {
+                display: none;
+            }
+        }
+
+        .activity {
+            grid-column: 2;
+            grid-row: 2;
         }
     }
 
@@ -1286,14 +1537,37 @@ textarea {
 
         .feature-content {
             padding: 22px;
+
+            h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        .extra-card {
+            min-height: auto;
+            padding: 18px;
         }
     }
 
-    .activity-gallery,
-    .education-documentation {
-        .gallery-copy h2,
-        .documentation-copy h2 {
-            font-size: 1.75rem;
+    .activity-gallery {
+        .gallery-copy {
+            h2 {
+                font-size: 2rem;
+            }
+        }
+
+        .gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+
+            img {
+                height: 120px;
+
+                &:first-child {
+                    grid-row: span 2;
+                    min-height: 250px;
+                }
+            }
         }
     }
 
@@ -1371,11 +1645,11 @@ textarea {
                 .tanggal,
                 .diskon,
                 p {
-                    font-size: .85rem;
+                    font-size: 0.85rem;
                 }
 
                 .badge {
-                    font-size: .65rem;
+                    font-size: 0.65rem;
                     padding: 4px 8px;
                 }
             }
@@ -1396,12 +1670,12 @@ textarea {
                     }
 
                     h5 {
-                        font-size: .95rem;
+                        font-size: 0.95rem;
                         white-space: nowrap;
                     }
 
                     span {
-                        font-size: .8rem;
+                        font-size: 0.8rem;
                     }
                 }
 
@@ -1438,21 +1712,20 @@ textarea {
                 }
 
                 .badge {
-                    font-size: .75rem;
+                    font-size: 0.75rem;
                     padding: 5px 12px;
                 }
             }
 
             .table-wrapper {
                 padding: 15px;
-                overflow-x: auto; 
+                overflow-x: auto;
             }
 
             table {
-
                 td {
                     padding: 10px 0;
-                    font-size: .85rem;
+                    font-size: 0.85rem;
                     white-space: nowrap;
                 }
 
@@ -1460,7 +1733,7 @@ textarea {
                 .total td,
                 .monthly td {
                     padding: 12px 10px;
-                    font-size: .9rem;
+                    font-size: 0.9rem;
                 }
             }
         }
@@ -1527,13 +1800,13 @@ textarea {
                 }
 
                 p {
-                    font-size: .85rem;
+                    font-size: 0.85rem;
                     line-height: 1.5;
                     margin-bottom: 10px;
                 }
 
                 span {
-                    font-size: .85rem;
+                    font-size: 0.85rem;
                 }
             }
         }
@@ -1700,38 +1973,36 @@ textarea {
                 }
             }
 
-.hotspot-arrow {
-
-        i {
-            width: 40px;
-            height: 40px;
-            font-size: 2.4rem;
-        }
-    }
-
-    .info-hotspot {
-
-        .info-icon {
-            width: 40px;
-            height: 40px;
-            font-size: 1rem;
-        }
-
-        .info-popup {
-            width: 180px;
-            padding: 14px;
-            bottom: 55px;
-
-            h5 {
-                font-size: .95rem;
+            .hotspot-arrow {
+                i {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 2.4rem;
+                }
             }
 
-            p {
-                font-size: .8rem;
-                line-height: 1.5;
+            .info-hotspot {
+                .info-icon {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 1rem;
+                }
+
+                .info-popup {
+                    width: 180px;
+                    padding: 14px;
+                    bottom: 55px;
+
+                    h5 {
+                        font-size: 0.95rem;
+                    }
+
+                    p {
+                        font-size: 0.8rem;
+                        line-height: 1.5;
+                    }
+                }
             }
-        }
-    }
         }
 
         .info-card {
@@ -1781,6 +2052,10 @@ textarea {
     .profile-madqur .school-info {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
+
+        .info-item {
+            padding: 12px 16px;
+        }
     }
 
     .program-madin .kitab-list,
@@ -1946,7 +2221,7 @@ textarea {
     .virtual-tour {
         .tour-hero {
             min-height: 0;
-            padding: 104px 0 86px;
+            padding: 30px 0 86px;
 
             .hero-content {
                 max-width: 620px;
@@ -2090,63 +2365,35 @@ textarea {
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             margin-top: 12px;
+            
+            .info-card {
+                display: block;
+                padding: 14px;
+                border-radius: 14px;
+    
+                .info-iconn {
+                    width: 38px;
+                    height: 38px;
+                    margin-bottom: 10px;
+                    border-radius: 12px;
+                }
+    
+                h5 {
+                    font-size: 0.88rem;
+                    margin-bottom: 5px;
+                }
+    
+                p {
+                    font-size: 0.76rem;
+                    line-height: 1.5;
+                }
+            }
         }
 
-        .info-card {
-            display: block;
-            padding: 14px;
-            border-radius: 14px;
-
-            .info-iconn {
-                width: 38px;
-                height: 38px;
-                margin-bottom: 10px;
-                border-radius: 12px;
-            }
-
-            h5 {
-                font-size: 0.88rem;
-                margin-bottom: 5px;
-            }
-
-            p {
-                font-size: 0.76rem;
-                line-height: 1.5;
-            }
-        }
     }
 }
 
-@media (max-width: 390px) {
-    .virtual-tour {
-        .tour-hero {
-            padding: 96px 0 76px;
-        }
 
-        .viewer-info {
-            grid-template-columns: 1fr;
-        }
-    }
-}
-
-@media (max-width: 380px) {
-    .hero .hero-content h1,
-    .hero-pendidikan .hero-content h1,
-    .kegiatan-hero .hero-copy h1,
-    .virtual-tour .tour-hero .hero-content h1,
-    .galeri .gallery-hero .hero-slide .overlay h1 {
-        font-size: 1.95rem;
-    }
-
-    .stats .container {
-        grid-template-columns: 1fr;
-    }
-
-    .berita .news-filter .filter-group .filter-btn,
-    .guru-section .guru-tabs .tab-btn {
-        flex-basis: 100%;
-    }
-}
 
 /* Keep the editorial card compositions readable on phones instead of flattening them. */
 @media (max-width: 576px) {
@@ -2310,86 +2557,81 @@ textarea {
     }
 
     .hasil-pendaftaran {
-        .status-card{
-            padding:22px;
-            gap:20px;
+        .status-card {
+            padding: 22px;
+            gap: 20px;
 
-            .status-left{
-
-                h3{
-                    font-size:1.2rem;
+            .status-left {
+                h3 {
+                    font-size: 1.2rem;
                 }
 
-                p{
-                    font-size:.9rem;
+                p {
+                    font-size: 0.9rem;
                 }
             }
 
-            .status-right{
-
-                span{
-                    font-size:.95rem;
+            .status-right {
+                span {
+                    font-size: 0.95rem;
                 }
 
-                small{
-                    font-size:.8rem;
+                small {
+                    font-size: 0.8rem;
                 }
             }
         }
 
-        .result-card{
-            padding:25px;
+        .result-card {
+            padding: 25px;
         }
 
-        .biodata-grid{
-            grid-template-columns:repeat(2,1fr);
-            gap:18px;
+        .biodata-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
         }
 
-        .nilai-grid{
-            grid-template-columns:repeat(3,1fr);
-            gap:15px;
+        .nilai-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
         }
 
-        .nilai-item{
-            padding:18px;
+        .nilai-item {
+            padding: 18px;
 
-            strong{
-                font-size:1.25rem;
+            strong {
+                font-size: 1.25rem;
             }
         }
 
-        .nilai-total{
-
-            h2{
-                font-size:2rem;
+        .nilai-total {
+            h2 {
+                font-size: 2rem;
             }
         }
-
     }
 
     .pembayaran-page {
-        .payment-wrapper{
-            grid-template-columns:1fr;
-            gap:25px;
+        .payment-wrapper {
+            grid-template-columns: 1fr;
+            gap: 25px;
         }
 
-        .payment-card{
-            padding:25px;
+        .payment-card {
+            padding: 25px;
         }
 
-        .method-content{
-            padding:20px;
+        .method-content {
+            padding: 20px;
         }
 
-        .method-dropdown{
-            padding:0 20px 20px;
+        .method-dropdown {
+            padding: 0 20px 20px;
         }
 
-        .qris-box{
-
-            img{
-                width:160px;
+        .qris-box {
+            img {
+                width: 160px;
             }
         }
     }
@@ -2405,7 +2647,6 @@ textarea {
         }
 
         .countdown-card {
-
             #countdown {
                 font-size: 2.3rem;
             }
@@ -2441,7 +2682,7 @@ textarea {
             }
 
             p {
-                font-size: .95rem;
+                font-size: 0.95rem;
             }
         }
 
@@ -2467,7 +2708,7 @@ textarea {
             a {
                 height: 50px;
                 padding: 0 24px;
-                font-size: .95rem;
+                font-size: 0.95rem;
             }
         }
     }
@@ -2494,20 +2735,20 @@ textarea {
         }
     }
 
-    .cek-pendaftaran{
+    .cek-pendaftaran {
         .cek-card {
             max-width: 100%;
             padding: 35px;
         }
-    
+
         .page-header {
             margin-bottom: 30px;
         }
-    
+
         .cek-icon {
             width: 65px;
             height: 65px;
-    
+
             i {
                 font-size: 1.5rem;
             }
@@ -2562,7 +2803,7 @@ textarea {
             }
 
             p {
-                font-size: .9rem;
+                font-size: 0.9rem;
                 line-height: 1.6;
             }
         }
@@ -2571,19 +2812,19 @@ textarea {
             margin-bottom: 18px;
 
             label {
-                font-size: .9rem;
+                font-size: 0.9rem;
                 margin-bottom: 8px;
             }
 
             input {
                 padding: 12px 14px;
-                font-size: .9rem;
+                font-size: 0.9rem;
             }
         }
 
         .btn-cek {
             padding: 13px;
-            font-size: .95rem;
+            font-size: 0.95rem;
             margin-top: 8px;
         }
 
@@ -2592,14 +2833,14 @@ textarea {
             margin-top: 20px;
 
             h5 {
-                font-size: .9rem;
+                font-size: 0.9rem;
             }
 
             ul {
                 padding-left: 15px;
 
                 li {
-                    font-size: .85rem;
+                    font-size: 0.85rem;
                     margin-bottom: 8px;
                 }
             }
@@ -2607,271 +2848,264 @@ textarea {
 
         .cek-footer {
             margin-top: 20px;
-            font-size: .85rem;
+            font-size: 0.85rem;
         }
     }
 
-    .hasil-pendaftaran {x
-        .status-card{
-            flex-direction:column;
-            align-items:flex-start;
-            gap:18px;
-            padding:20px;
+    .hasil-pendaftaran {
+        x .status-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 18px;
+            padding: 20px;
 
-            .status-left{
-                width:100%;
-                gap:15px;
+            .status-left {
+                width: 100%;
+                gap: 15px;
 
-                h3{
-                    font-size:1.1rem;
+                h3 {
+                    font-size: 1.1rem;
                 }
 
-                p{
-                    font-size:.9rem;
-                }
-            }
-
-            .status-icon{
-                width:50px;
-                height:50px;
-
-                i{
-                    font-size:1.3rem;
+                p {
+                    font-size: 0.9rem;
                 }
             }
 
-            .status-right{
-                width:100%;
-                text-align:left;
+            .status-icon {
+                width: 50px;
+                height: 50px;
+
+                i {
+                    font-size: 1.3rem;
+                }
+            }
+
+            .status-right {
+                width: 100%;
+                text-align: left;
             }
         }
 
-        .result-card{
-            padding:20px;
-            border-radius:16px;
+        .result-card {
+            padding: 20px;
+            border-radius: 16px;
         }
 
-        .card-title{
+        .card-title {
+            margin-bottom: 18px;
 
-            margin-bottom:18px;
-
-            h4{
-                font-size:1.05rem;
-            }
-        }
-
-        .biodata-grid{
-            grid-template-columns:1fr;
-            gap:15px;
-        }
-
-        .bio-item{
-
-            &.full{
-                grid-column:auto;
-            }
-
-            span{
-                font-size:.85rem;
-            }
-
-            strong{
-                font-size:.95rem;
-                overflow-wrap:break-word;
+            h4 {
+                font-size: 1.05rem;
             }
         }
 
-        .nilai-grid{
-            grid-template-columns:1fr;
-            gap:15px;
+        .biodata-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
 
-        .nilai-item{
-
-            padding:16px;
-
-            span{
-                font-size:.85rem;
+        .bio-item {
+            &.full {
+                grid-column: auto;
             }
 
-            strong{
-                font-size:1.2rem;
-            }
-        }
-
-        .nilai-total{
-
-            padding:18px;
-
-            h2{
-                font-size:2rem;
+            span {
+                font-size: 0.85rem;
             }
 
-            p{
-                font-size:.9rem;
+            strong {
+                font-size: 0.95rem;
+                overflow-wrap: break-word;
             }
         }
 
-        .step-item{
-            gap:12px;
+        .nilai-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
 
-            .step-icon{
-                min-width:42px;
-                height:42px;
-                border-radius:12px;
+        .nilai-item {
+            padding: 16px;
+
+            span {
+                font-size: 0.85rem;
             }
 
-            h5{
-                font-size:1rem;
-            }
-
-            p{
-                font-size:.85rem;
+            strong {
+                font-size: 1.2rem;
             }
         }
 
-        .result-action{
-            grid-template-columns:1fr;
-            gap:12px;
-            margin-top:20px;
+        .nilai-total {
+            padding: 18px;
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
         }
 
-        .btn-result{
-            padding:13px;
-            font-size:.9rem;
+        .step-item {
+            gap: 12px;
+
+            .step-icon {
+                min-width: 42px;
+                height: 42px;
+                border-radius: 12px;
+            }
+
+            h5 {
+                font-size: 1rem;
+            }
+
+            p {
+                font-size: 0.85rem;
+            }
+        }
+
+        .result-action {
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-result {
+            padding: 13px;
+            font-size: 0.9rem;
         }
     }
 
     .pembayaran-page {
-        .page-header{
-            margin-bottom:30px;
+        .page-header {
+            margin-bottom: 30px;
 
-            h2{
-                font-size:1.6rem;
-                gap:8px;
-                flex-wrap:wrap;
+            h2 {
+                font-size: 1.6rem;
+                gap: 8px;
+                flex-wrap: wrap;
             }
 
-            p{
-                font-size:.9rem;
+            p {
+                font-size: 0.9rem;
             }
         }
 
-        .payment-wrapper{
-            grid-template-columns:1fr;
-            gap:20px;
+        .payment-wrapper {
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
-        .payment-card{
-            padding:18px;
-            border-radius:18px;
+        .payment-card {
+            padding: 18px;
+            border-radius: 18px;
         }
 
         .card-header,
-        .card-title{
+        .card-title {
+            margin-bottom: 18px;
 
-            margin-bottom:18px;
-
-            h4{
-                font-size:1.05rem;
+            h4 {
+                font-size: 1.05rem;
             }
         }
 
-        .payment-item{
-            font-size:.9rem;
-            gap:10px;
+        .payment-item {
+            font-size: 0.9rem;
+            gap: 10px;
 
-            &.total{
-
-                strong{
-                    font-size:1.1rem;
+            &.total {
+                strong {
+                    font-size: 1.1rem;
                 }
             }
         }
 
-        .payment-info-item{
-            font-size:.9rem;
-            gap:10px;
+        .payment-info-item {
+            font-size: 0.9rem;
+            gap: 10px;
         }
 
-        .method-content{
-            padding:18px;
-            flex-direction:column;
-            align-items:flex-start;
-            gap:15px;
+        .method-content {
+            padding: 18px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
         }
 
-        .method-left{
-            width:100%;
-            gap:12px;
+        .method-left {
+            width: 100%;
+            gap: 12px;
 
-            i{
-                font-size:1.4rem;
-                flex-shrink:0;
+            i {
+                font-size: 1.4rem;
+                flex-shrink: 0;
             }
 
-            h5{
-                font-size:1rem;
+            h5 {
+                font-size: 1rem;
             }
 
-            p{
-                font-size:.85rem;
-            }
-        }
-
-        .method-right{
-            width:100%;
-            justify-content:space-between;
-        }
-
-        .badge-method{
-            padding:8px 12px;
-            font-size:.75rem;
-        }
-
-        .method-dropdown{
-            padding:0 18px 18px;
-        }
-
-        .sub-method{
-            font-size:.9rem;
-        }
-
-        .qris-box{
-            flex-direction:column;
-            align-items:center;
-            text-align:center;
-            gap:18px;
-
-            img{
-                width:180px;
-                max-width:100%;
+            p {
+                font-size: 0.85rem;
             }
         }
 
-        .qris-info{
+        .method-right {
+            width: 100%;
+            justify-content: space-between;
+        }
 
-            h5{
-                font-size:1rem;
-            }
+        .badge-method {
+            padding: 8px 12px;
+            font-size: 0.75rem;
+        }
 
-            p{
-                font-size:.85rem;
+        .method-dropdown {
+            padding: 0 18px 18px;
+        }
+
+        .sub-method {
+            font-size: 0.9rem;
+        }
+
+        .qris-box {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 18px;
+
+            img {
+                width: 180px;
+                max-width: 100%;
             }
         }
 
-        .qris-expired{
-            font-size:.8rem;
-            padding:8px 12px;
+        .qris-info {
+            h5 {
+                font-size: 1rem;
+            }
+
+            p {
+                font-size: 0.85rem;
+            }
+        }
+
+        .qris-expired {
+            font-size: 0.8rem;
+            padding: 8px 12px;
         }
 
         /* BUTTON */
 
-        .btn-payment{
-            margin-top:20px;
-            padding:14px;
-            font-size:.95rem;
-            border-radius:14px;
+        .btn-payment {
+            margin-top: 20px;
+            padding: 14px;
+            font-size: 0.95rem;
+            border-radius: 14px;
         }
     }
 
@@ -2881,7 +3115,7 @@ textarea {
 
             .payment-status {
                 padding: 10px 16px;
-                font-size: .85rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -2898,13 +3132,12 @@ textarea {
                 }
 
                 .status-info {
-
                     h5 {
                         font-size: 1rem;
                     }
 
                     p {
-                        font-size: .85rem;
+                        font-size: 0.85rem;
                     }
                 }
             }
@@ -2915,7 +3148,6 @@ textarea {
             border-radius: 18px;
 
             .card-title {
-
                 margin-bottom: 18px;
 
                 h4 {
@@ -2925,9 +3157,8 @@ textarea {
         }
 
         .countdown-card {
-
             h5 {
-                font-size: .9rem;
+                font-size: 0.9rem;
             }
 
             #countdown {
@@ -2936,7 +3167,7 @@ textarea {
             }
 
             p {
-                font-size: .85rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -2960,11 +3191,10 @@ textarea {
         }
 
         small {
-            font-size: .8rem;
+            font-size: 0.8rem;
         }
 
         .qris-payment {
-
             img {
                 width: 220px;
                 padding: 12px;
@@ -2972,11 +3202,10 @@ textarea {
         }
 
         .bill-item {
-            font-size: .9rem;
+            font-size: 0.9rem;
             gap: 10px;
 
             &.total {
-
                 strong {
                     font-size: 1.1rem;
                 }
@@ -2992,11 +3221,11 @@ textarea {
                 span {
                     min-width: 30px;
                     height: 30px;
-                    font-size: .85rem;
+                    font-size: 0.85rem;
                 }
 
                 p {
-                    font-size: .85rem;
+                    font-size: 0.85rem;
                     line-height: 1.5;
                 }
             }
@@ -3029,7 +3258,7 @@ textarea {
 
             .status-badge {
                 padding: 8px 16px;
-                font-size: .8rem;
+                font-size: 0.8rem;
             }
 
             h2 {
@@ -3038,7 +3267,7 @@ textarea {
             }
 
             p {
-                font-size: .9rem;
+                font-size: 0.9rem;
                 line-height: 1.6;
             }
         }
@@ -3051,11 +3280,11 @@ textarea {
                 padding: 16px;
 
                 span {
-                    font-size: .8rem;
+                    font-size: 0.8rem;
                 }
 
                 strong {
-                    font-size: .95rem;
+                    font-size: 0.95rem;
                     word-break: break-word;
                 }
             }
@@ -3066,7 +3295,7 @@ textarea {
             border-radius: 18px;
 
             .payment-title {
-                font-size: .9rem;
+                font-size: 0.9rem;
             }
 
             .payment-list {
@@ -3081,7 +3310,7 @@ textarea {
 
             .payment-name,
             .payment-price {
-                font-size: .88rem;
+                font-size: 0.88rem;
             }
 
             .payment-total {
@@ -3101,7 +3330,7 @@ textarea {
             a {
                 width: 100%;
                 height: 48px;
-                font-size: .9rem;
+                font-size: 0.9rem;
                 border-radius: 14px;
             }
         }
@@ -3113,7 +3342,7 @@ textarea {
 
             .header-badge {
                 padding: 10px 16px;
-                font-size: .85rem;
+                font-size: 0.85rem;
                 gap: 8px;
             }
 
@@ -3123,7 +3352,7 @@ textarea {
             }
 
             p {
-                font-size: .9rem;
+                font-size: 0.9rem;
                 line-height: 1.6;
             }
         }
@@ -3136,13 +3365,12 @@ textarea {
             gap: 18px;
 
             .header-left {
-
                 h3 {
                     font-size: 1.2rem;
                 }
 
                 p {
-                    font-size: .9rem;
+                    font-size: 0.9rem;
                 }
             }
 
@@ -3152,7 +3380,7 @@ textarea {
 
                 span,
                 small {
-                    font-size: .85rem;
+                    font-size: 0.85rem;
                 }
 
                 h4 {
@@ -3199,12 +3427,12 @@ textarea {
             }
 
             h5 {
-                font-size: .95rem;
+                font-size: 0.95rem;
                 line-height: 1.4;
             }
 
             p {
-                font-size: .85rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -3218,7 +3446,7 @@ textarea {
         }
 
         .status {
-            font-size: .75rem;
+            font-size: 0.75rem;
             padding: 5px 10px;
         }
 
@@ -3233,14 +3461,14 @@ textarea {
             }
 
             p {
-                font-size: .85rem;
+                font-size: 0.85rem;
             }
         }
 
         .btn-du {
             margin-top: 20px;
             padding: 14px;
-            font-size: .95rem;
+            font-size: 0.95rem;
             border-radius: 14px;
         }
     }
@@ -3350,5 +3578,383 @@ textarea {
                 }
             }
         }
+    }
+}
+
+
+/* =========================================================
+   FINAL RESPONSIVE CORRECTIONS
+   Only 991px and 576px are used.
+   ========================================================= */
+
+@media (max-width: 991px) {
+    /* ---------- School profile wrappers ---------- */
+    .profile-tpq,
+    .profile-smp,
+    .profile-smk {
+        .profile-wrapper {
+            grid-template-columns: 1fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .school-image {
+            width: 100%;
+            min-width: 0;
+            min-height: 320px;
+            margin: 0 auto;
+
+            img {
+                max-width: 100%;
+            }
+        }
+
+        .school-info {
+            width: 100%;
+            min-width: 0;
+        }
+    }
+
+    .profile-tpq {
+        .school-image img {
+            width: min(62%, 360px);
+            height: 320px;
+            max-height: 320px;
+        }
+    }
+
+    .profile-smp,
+    .profile-smk {
+        .school-image img {
+            width: min(72%, 360px);
+            max-height: 280px;
+        }
+    }
+
+    /* ---------- TPQ documentation: keep desktop fan/abstract shape ---------- */
+    .tpq-documentation {
+        .container {
+            grid-template-columns: 1fr;
+            gap: 38px;
+        }
+
+        .tpq-card-fan {
+            width: min(100%, 760px);
+            min-height: 430px;
+            margin: 0 auto;
+        }
+
+        figure {
+            width: min(300px, 38%);
+        }
+
+        img {
+            height: 270px;
+        }
+    }
+
+    /* ---------- SMP documentation: preserve mosaic composition ---------- */
+    .smp-documentation {
+        .smp-mosaic {
+            grid-template-columns: 1.1fr 0.9fr;
+            grid-template-rows: 180px 160px 150px;
+            gap: 14px;
+        }
+
+        .smp-mosaic img {
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+        }
+    }
+
+    /* ---------- SMK documentation: preserve studio-board composition ---------- */
+    .smk-documentation {
+        .smk-studio-board {
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 14px;
+        }
+
+        figure {
+            min-width: 0;
+            min-height: 180px;
+        }
+
+        figure.main-shot {
+            min-height: 374px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    /* ---------- Other grids: prevent uneven cards ---------- */
+    .jurusan-smk .jurusan-grid,
+    .program-tpq .program-grid-tpq,
+    .keunggulan-smp .target-grid,
+    .keunggulan-smk .target-grid,
+    .core-values .values-grid,
+    .target-madqur .target-grid {
+        grid-auto-rows: 1fr;
+        align-items: stretch;
+    }
+
+    .jurusan-smk .jurusan-card,
+    .program-tpq .program-card,
+    .keunggulan-smp .target-card,
+    .keunggulan-smk .target-card,
+    .core-values .value-card,
+    .target-madqur .target-card {
+        height: 100%;
+    }
+
+    /* ---------- Generic spacing / overflow ---------- */
+    .container > *,
+    .profile-wrapper > *,
+    .documentation-layout > *,
+    .tpq-documentation .container > *,
+    .smp-documentation .container > *,
+    .smk-documentation .container > * {
+        min-width: 0;
+    }
+
+    .section-title,
+    .section-heading {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    /* ---------- School profile wrappers ---------- */
+    .profile-tpq,
+    .profile-smp,
+    .profile-smk {
+        padding-left: 16px;
+        padding-right: 16px;
+
+        .profile-wrapper {
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .school-image {
+            min-height: 230px;
+            width: 100%;
+            border-radius: 18px;
+            padding: 16px;
+        }
+
+        .school-info {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .info-item {
+            width: 100%;
+            min-width: 0;
+        }
+    }
+
+    .profile-tpq {
+        .school-image {
+            padding: 10px;
+        }
+
+        .school-image img {
+            width: min(72%, 250px);
+            height: 230px;
+            max-height: 230px;
+        }
+    }
+
+    .profile-smp,
+    .profile-smk {
+        .school-image img {
+            width: min(78%, 270px);
+            max-height: 230px;
+        }
+
+        h2 {
+            font-size: 1.85rem;
+            line-height: 1.25;
+        }
+
+        p {
+            line-height: 1.7;
+        }
+    }
+
+    /* ---------- TPQ documentation: abstract fan is retained ---------- */
+    .tpq-documentation {
+        .container {
+            gap: 28px;
+        }
+
+        .tpq-card-fan {
+            display: block;
+            position: relative;
+            width: 100%;
+            height: 330px;
+            min-height: 330px;
+            margin: 0 auto;
+        }
+
+        figure {
+            position: absolute;
+            width: 42%;
+            max-width: 170px;
+            padding: 7px 7px 11px;
+
+            &:nth-child(1) {
+                left: 3%;
+                top: 42px;
+                transform: rotate(-9deg) !important;
+            }
+
+            &:nth-child(2) {
+                left: 29%;
+                top: 10px;
+                transform: rotate(3deg) !important;
+            }
+
+            &:nth-child(3) {
+                right: 3%;
+                top: 52px;
+                transform: rotate(10deg) !important;
+            }
+        }
+
+        img {
+            width: 100%;
+            height: 190px;
+            min-height: 0;
+        }
+
+        figcaption {
+            margin-top: 8px;
+            font-size: 0.78rem;
+            line-height: 1.25;
+        }
+    }
+
+    /* ---------- SMP documentation: keep mosaic, fix the accidental inner padding ---------- */
+    .smp-documentation {
+        .documentation-layout {
+            grid-template-columns: 1fr;
+            gap: 28px;
+
+            .documentation-copy {
+                span {
+                    margin-bottom: 9px;
+                    font-weight: 500;
+                }
+
+                h2 {
+                    font-size: 1.75rem;
+                    line-height: 1.25;
+                    margin-bottom: 12px;
+                }
+
+                p {
+                    font-size: 0.9rem;
+                    line-height: 1.7;
+                }
+            }
+        }
+
+        .smp-mosaic {
+            grid-template-columns: 1.1fr 0.9fr;
+            grid-template-rows: 125px 125px 105px;
+            gap: 9px;
+        }
+
+        .smp-mosaic img,
+        .smp-mosaic img:first-child,
+        .smp-mosaic img:last-child {
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            padding: 0;
+        }
+
+        .smp-mosaic img:first-child {
+            grid-row: span 2;
+        }
+
+        .smp-mosaic img:last-child {
+            grid-column: span 2;
+        }
+    }
+
+    /* ---------- SMK documentation: preserve studio-board shape ---------- */
+    .smk-documentation {
+
+        .smk-studio-board {
+            grid-template-columns: 1.1fr 0.9fr;
+            grid-template-rows: 145px 145px;
+            gap: 9px;
+        }
+
+        figure,
+        figure.main-shot {
+            min-width: 0;
+            min-height: 0;
+        }
+
+        figure.main-shot {
+            grid-row: span 2;
+            min-height: 299px;
+        }
+
+        figcaption {
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            padding: 8px 9px;
+            font-size: 0.76rem;
+            line-height: 1.3;
+        }
+    }
+
+    /* ---------- Other visual grids: consistent gaps and equal card height ---------- */
+    .jurusan-smk .jurusan-grid,
+    .program-tpq .program-grid-tpq,
+    .keunggulan-smp .target-grid,
+    .keunggulan-smk .target-grid,
+    .core-values .values-grid,
+    .target-madqur .target-grid {
+        gap: 12px;
+    }
+
+    .jurusan-smk .jurusan-card,
+    .program-tpq .program-card,
+    .keunggulan-smp .target-card,
+    .keunggulan-smk .target-card,
+    .core-values .value-card,
+    .target-madqur .target-card {
+        height: 100%;
+    }
+
+    /* ---------- Activity/gallery compositions ---------- */
+    .activity-gallery .gallery-grid {
+        gap: 10px;
+    }
+
+    /* ---------- Prevent text/buttons from forcing horizontal overflow ---------- */
+    .school-info,
+    .info-item,
+    .jurusan-header,
+    .tags,
+    .cta-button {
+        min-width: 0;
+    }
+
+    .info-item span,
+    .jurusan-header h3,
+    .jurusan-header span {
+        overflow-wrap: anywhere;
     }
 }

@@ -3,6 +3,17 @@
 @include('components.header')
 
 @section('content')
+    <style>
+        .tour-hero {
+                background:
+                    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                    url("{{ asset('assets/masjid.jpeg') }}");
+                    min-height: 90vh;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+            }
+    </style>
     <section class="virtual-tour">
         <div class="tour-hero">
             <div class="hero-overlay"></div>

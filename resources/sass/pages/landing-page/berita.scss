@@ -274,21 +274,3 @@
     }
 
 }
-
-
-
-@media (max-width: 992px) {
-
-    .berita .featured-news {
-        flex-direction: column;
-    }
-
-    .berita .featured-news .featured-image,
-    .berita .featured-news .featured-content {
-        width: 100%;
-    }
-
-    .berita .featured-news .featured-content h3 {
-        font-size: 2rem;
-    }
-}

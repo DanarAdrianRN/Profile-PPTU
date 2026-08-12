@@ -2,14 +2,6 @@
     background: #f4f7f9;
 
     .tour-hero {
-        min-height: 90vh;
-        position: relative;
-        background:
-            linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.6)),
-            url("http://127.0.0.1:8000/assets/masjid.jpeg") center/cover;
-        display: flex;
-        align-items: center;
-
         .hero-content {
             max-width: 700px;
             color: #fff;

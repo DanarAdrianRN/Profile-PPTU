@@ -1,6 +1,21 @@
 @extends('layout.app')
 @include('components.header')
 @section('content')
+    <style>
+        .hero {
+                background:
+                    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                    url("{{ asset('assets/masjid.jpeg') }}");
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: cover;
+                        height: 90vh;
+                        display: flex;
+                        align-items: center;
+                        color: #fff;
+            }
+    </style>
+
     <section class="hero">
         <div class="hero-content">
             <h1>Pondok Pesantren Tarbiyatul Ulum</h1>

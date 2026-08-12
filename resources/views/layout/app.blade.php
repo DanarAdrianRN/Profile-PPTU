@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('title', 'Profile-PPTU')</title>
-    {{-- <link rel="icon" type="images/icon" href="{{ asset('images/icon.png') }}"> --}}
+    <link rel="icon" type="image/png" href="{{ asset('assets/pptu.png') }}?v=2">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 

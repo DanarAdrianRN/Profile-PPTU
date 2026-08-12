@@ -315,25 +315,3 @@
         }
     }
 }
-
-
-
-@media (max-width: 992px) {
-
-    .detail-berita .detail-wrapper {
-        flex-direction: column;
-    }
-
-    .detail-berita .detail-content,
-    .detail-berita .sidebar-berita {
-        width: 100%;
-    }
-
-    .detail-berita .detail-hero .hero-content h1 {
-        font-size: 2.5rem;
-    }
-
-    .detail-berita .detail-content .article-content {
-        padding: 30px;
-    }
-}
