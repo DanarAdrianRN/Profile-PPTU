@@ -27,18 +27,12 @@
                     </div>
                 </div>
                 {{-- FILTER --}}
-                <form method="GET"
-                    action="{{ route('admin-galeri') }}"
-                    class="filter-wrapper"
-                    id="filterForm">
+                <form method="GET" action="{{ route('admin-galeri') }}" class="filter-wrapper" id="filterForm">
                     {{-- SEARCH --}}
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
 
-                        <input type="text"
-                            name="search"
-                            id="searchInput"
-                            placeholder="Cari galeri..."
+                        <input type="text" name="search" id="searchInput" placeholder="Cari galeri..."
                             value="{{ request('search') }}">
                     </div>
                     {{-- FILTER --}}
@@ -48,12 +42,10 @@
                                 <option value="">
                                     Semua Status
                                 </option>
-                                <option value="draft"
-                                    {{ request('status') == 'draft' ? 'selected' : '' }}>
+                                <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>
                                     Draft
                                 </option>
-                                <option value="publish"
-                                    {{ request('status') == 'publish' ? 'selected' : '' }}>
+                                <option value="publish" {{ request('status') == 'publish' ? 'selected' : '' }}>
                                     Publish
                                 </option>
                             </select>
@@ -61,10 +53,7 @@
                     </div>
 
                     {{-- BUTTON TAMBAH --}}
-                    <button type="button"
-                            class="btn-add"
-                            data-toggle="modal"
-                            data-target="#modalTambahGaleri">
+                    <button type="button" class="btn-add" data-toggle="modal" data-target="#modalTambahGaleri">
                         <i class="fa-solid fa-plus"></i>
                         Tambah Galeri
                     </button>
@@ -76,20 +65,23 @@
                         <div class="gallery-admin-card">
                             {{-- IMAGE --}}
                             <div class="gallery-image">
-                                <img src="{{ asset('storage/' .$galeri->thumbnail)}}" alt="Thumbnail Galeri">
+                                <img src="{{ asset('storage/' . $galeri->thumbnail) }}" alt="Thumbnail Galeri">
                                 <div class="gallery-overlay">
                                     <span class="status">
                                         {{ ucfirst($galeri->status) }}
                                     </span>
                                 </div>
                                 <div class="gallery-overlay">
-                                    <button class="action-btn" data-toggle="modal" data-target="#modalViewGaleri{{ $galeri->id }}">
+                                    <button class="action-btn" data-toggle="modal"
+                                        data-target="#modalViewGaleri{{ $galeri->id }}">
                                         <i class="fa-regular fa-eye"></i>
                                     </button>
-                                    <button class="action-btn" data-toggle="modal" data-target="#modalEditGaleri{{ $galeri->id }}">
+                                    <button class="action-btn" data-toggle="modal"
+                                        data-target="#modalEditGaleri{{ $galeri->id }}">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </button>
-                                    <button class="action-btn delete" data-toggle="modal" data-target="#modalHapusGaleri{{ $galeri->id }}">
+                                    <button class="action-btn delete" data-toggle="modal"
+                                        data-target="#modalHapusGaleri{{ $galeri->id }}">
                                         <i class="fa-regular fa-trash-can"></i>
                                     </button>
                                 </div>
@@ -118,44 +110,45 @@
                     @endforeach
                 </div>
                 <div class="table-footer">
-                        <!-- ROW -->
-                        <div class="table-row-limit">
-                            <span>
-                                Tampilkan
-                            </span>
-                            <select id="rowsPerPage" onchange="location = '?per_page=' + this.value">
-                                <option value="6" selected>6</option>
-                                <option value="12">12</option>
-                                <option value="18">18</option>
-                                <option value="30">30</option>
-                            </select>
-                            <span>
-                                data
-                            </span>
+                    <!-- ROW -->
+                    <div class="table-row-limit">
+                        <span>
+                            Tampilkan
+                        </span>
+                        <select id="rowsPerPage" onchange="location = '?per_page=' + this.value">
+                            <option value="6" selected>6</option>
+                            <option value="12">12</option>
+                            <option value="18">18</option>
+                            <option value="30">30</option>
+                        </select>
+                        <span>
+                            data
+                        </span>
+                    </div>
+                    <!-- INFO -->
+                    <div class="table-info">
+                        Menampilkan {{ $galeris->firstItem() }} - {{ $galeris->lastItem() }} dari {{ $galeris->total() }}
+                        data
+                    </div>
+                    <!-- PAGINATION -->
+                    <div class="pagination-wrapper">
+                        <a href="{{ $galeris->previousPageUrl() }}" class="pagination-btn">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                        <div class="pagination-number">
+                            {{ $galeris->currentPage() }}
                         </div>
-                        <!-- INFO -->
-                        <div class="table-info">
-                            Menampilkan {{ $galeris->firstItem() }} - {{ $galeris->lastItem() }} dari {{ $galeris->total() }} data
-                        </div>
-                        <!-- PAGINATION -->
-                        <div class="pagination-wrapper">
-                            <a href="{{ $galeris->previousPageUrl() }}" class="pagination-btn">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </a>
-                            <div class="pagination-number">
-                                {{ $galeris->currentPage() }}
-                            </div>
-                            <a href="{{ $galeris->nextPageUrl() }}" class="pagination-btn">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </a>
-                        </div>
+                        <a href="{{ $galeris->nextPageUrl() }}" class="pagination-btn">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </div>
                 </div>
             </section>
         </div>
     </div>
     @push('script')
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 const form =
                     document.getElementById("filterForm");
                 const status =
@@ -164,40 +157,41 @@
                     document.getElementById("searchInput");
                 const container =
                     document.getElementById("galleryContainer");
+
                 function loadGallery() {
                     const formData =
                         new FormData(form);
                     const params =
                         new URLSearchParams(formData);
                     fetch(form.action + '?' + params.toString(), {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser =
-                            new DOMParser();
-                        const doc =
-                            parser.parseFromString(
-                                html,
-                                'text/html'
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            const parser =
+                                new DOMParser();
+                            const doc =
+                                parser.parseFromString(
+                                    html,
+                                    'text/html'
+                                );
+                            const newContent =
+                                doc.querySelector(
+                                    '#galleryContainer'
+                                );
+                            if (newContent) {
+                                container.innerHTML =
+                                    newContent.innerHTML;
+                            }
+                        })
+                        .catch(error => {
+                            console.error(
+                                'Filter Error:',
+                                error
                             );
-                        const newContent =
-                            doc.querySelector(
-                                '#galleryContainer'
-                            );
-                        if (newContent) {
-                            container.innerHTML =
-                                newContent.innerHTML;
-                        }
-                    })
-                    .catch(error => {
-                        console.error(
-                            'Filter Error:',
-                            error
-                        );
-                    });
+                        });
                 }
                 // FILTER STATUS
                 status.addEventListener(
@@ -208,7 +202,7 @@
                 let timer;
                 search.addEventListener(
                     "keyup",
-                    function () {
+                    function() {
                         clearTimeout(timer);
                         timer =
                             setTimeout(

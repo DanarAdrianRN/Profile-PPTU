@@ -115,15 +115,16 @@
                             </select>
                         </div>
                         <div class="select-wrapper">
-                        <select id="paymentFilter">
-                            <option value="all">Semua Pembayaran</option>
-                            <option value="unpaid">Belum Lunas</option>
-                            <option value="paid">Lunas</option>
-                        </select>
+                            <select id="paymentFilter">
+                                <option value="all">Semua Pembayaran</option>
+                                <option value="unpaid">Belum Lunas</option>
+                                <option value="paid">Lunas</option>
+                            </select>
                         </div>
                     </div>
                     <div class="export-dropdown">
-                        <button class="btn-add" type="button" onclick="document.getElementById('exportMenuPendaftaran').classList.toggle('show')">
+                        <button class="btn-add" type="button"
+                            onclick="document.getElementById('exportMenuPendaftaran').classList.toggle('show')">
                             <i class="fa-solid fa-file-export"></i>
                             Export
                         </button>
@@ -166,184 +167,171 @@
                                 </tr>
                             </thead>
                             <tbody id="pendaftaranTableBody">
-                            @foreach ($pendaftarans as $key => $pendaftaran)
-                                @php
-                                    $tagihanRow = $pendaftaran->tagihanSantri;
-                                    $totalTagihanRow = $tagihanRow?->details?->count() ?? 0;
-                                    $totalLunasRow = $tagihanRow?->details
-                                        ?->where('status_pembayaran', 'lunas')
-                                        ->count() ?? 0;
-                                    $isLunasRow = $totalTagihanRow > 0 && $totalTagihanRow === $totalLunasRow;
-                                @endphp
-                                <tr
-                                    data-jenjang="{{ $pendaftaran->pendidikan->jenjang_pendidikan ?? '' }}"
-                                    data-status="{{ $pendaftaran->status }}"
-                                    data-payment="{{ $isLunasRow ? 'paid' : 'unpaid' }}"
-                                >
-                                    <td>
-                                        {{ $key + 1 }}
-                                    </td>
-                                    <td>
+                                @foreach ($pendaftarans as $key => $pendaftaran)
+                                    @php
+                                        $tagihanRow = $pendaftaran->tagihanSantri;
+                                        $totalTagihanRow = $tagihanRow?->details?->count() ?? 0;
+                                        $totalLunasRow =
+                                            $tagihanRow?->details?->where('status_pembayaran', 'lunas')->count() ?? 0;
+                                        $isLunasRow = $totalTagihanRow > 0 && $totalTagihanRow === $totalLunasRow;
+                                    @endphp
+                                    <tr data-jenjang="{{ $pendaftaran->pendidikan->jenjang_pendidikan ?? '' }}"
+                                        data-status="{{ $pendaftaran->status }}"
+                                        data-payment="{{ $isLunasRow ? 'paid' : 'unpaid' }}">
+                                        <td>
+                                            {{ $key + 1 }}
+                                        </td>
+                                        <td>
 
-                                        <div class="student-cell">
+                                            <div class="student-cell">
 
-                                            <div class="student-photo">
+                                                <div class="student-photo">
 
-                                                @php
-                                                    $foto = $pendaftaran->dokumens
-                                                        ->where('jenis_dokumen', 'Foto Warna')
-                                                        ->first();
-                                                @endphp
+                                                    @php
+                                                        $foto = $pendaftaran->dokumens
+                                                            ->where('jenis_dokumen', 'Foto Warna')
+                                                            ->first();
+                                                    @endphp
 
-                                                <img src="{{ $foto ? asset('storage/' . $foto->file) : asset('assets/galeri1.jpg') }}"
-                                                    alt="{{ $pendaftaran->nama_lengkap }}">
-
-                                            </div>
-
-                                            <div class="student-info">
-
-                                                <h5>
-                                                    {{ $pendaftaran->nama_lengkap }}
-                                                </h5>
-
-                                                <span>
-                                                    NISN :
-                                                    {{ $pendaftaran->pendidikan->nisn ?? '-' }}
-                                                </span>
-
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-                                    <td>
-
-                                        <span class="badge blue">
-                                            {{ $pendaftaran->pendidikan->jenjang_pendidikan ?? '-' }}
-                                        </span>
-
-                                    </td>
-                                    <td>
-                                        {{ $pendaftaran->pendidikan->jurusan ?? '-' }}
-                                    </td>
-                                    <td>
-
-                                        @php
-                                            $ayah = $pendaftaran->orangTuas->where('tipe', 'ayah')->first();
-                                        @endphp
-
-                                        {{ $ayah->nama ?? '-' }}
-
-                                    </td>
-                                    <td>
-                                        @php
-                                            $tagihan = $pendaftaran->tagihanSantri;
-
-                                            $totalTagihan = $tagihan?->details?->count() ?? 0;
-
-                                            $totalLunas = $tagihan?->details
-                                                ?->where('status_pembayaran', 'lunas')
-                                                ->count() ?? 0;
-
-                                            $isLunas = $totalTagihan > 0 && $totalTagihan === $totalLunas;
-                                        @endphp
-
-                                        <button
-                                            class="payment-badge {{ $isLunas ? 'paid' : 'unpaid' }}"
-                                            data-toggle="modal"
-                                            data-target="#modalBayar{{ $pendaftaran->id }}"
-                                        >
-                                            {{ $isLunas ? 'Lunas' : 'Belum Lunas' }}
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button
-                                            class="btn-action view"
-                                            data-toggle="modal"
-                                            data-target="#modalDokumen{{ $pendaftaran->id }}"
-                                            title="Lihat Dokumen ({{ $pendaftaran->dokumens->count() }})"
-                                        >
-                                            <i class="fa-solid fa-folder-open"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        {{ $pendaftaran->created_at->translatedFormat('d M Y') }}
-                                    </td>
-                                    <td>
-                                        <div class="status-dropdown">
-
-                                            @php
-                                                $statusBadgeClass = in_array($pendaftaran->status, ['belum_bayar', 'ditolak'])
-                                                    ? 'unpaid'
-                                                    : 'paid';
-                                            @endphp
-                                            <button class="payment-badge {{ $statusBadgeClass }}">
-                                                {{ ucfirst(str_replace('_', ' ', $pendaftaran->status)) }}
-                                            </button>
-
-                                            @if ($canManageSelectedPeriod)
-                                                <div class="status-dropdown-menu">
-
-                                                    <form
-                                                        action="{{ route('pendaftaran.update-status', $pendaftaran->id) }}"
-                                                        method="POST">
-
-                                                        @csrf
-                                                        @method('PATCH')
-
-                                                        <button
-                                                            type="submit"
-                                                            name="status"
-                                                            value="menunggu_verifikasi">
-
-                                                            Menunggu Verifikasi
-
-                                                        </button>
-
-                                                        <button
-                                                            type="submit"
-                                                            name="status"
-                                                            value="diterima">
-
-                                                            Diterima
-
-                                                        </button>
-
-                                                        <button
-                                                            type="submit"
-                                                            name="status"
-                                                            value="ditolak">
-
-                                                            Ditolak
-
-                                                        </button>
-
-                                                    </form>
+                                                    <img src="{{ $foto ? asset('storage/' . $foto->file) : asset('assets/pp.jpg') }}"
+                                                        alt="{{ $pendaftaran->nama_lengkap }}">
 
                                                 </div>
-                                            @endif
 
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="table-action">
-                                            <button class="btn-action view" data-toggle="modal"
-                                                data-target="#modalPrintPendaftaran{{$pendaftaran->id}}">
-                                                <i class="fa-solid fa-print"></i>
+                                                <div class="student-info">
+
+                                                    <h5>
+                                                        {{ $pendaftaran->nama_lengkap }}
+                                                    </h5>
+
+                                                    <span>
+                                                        NISN :
+                                                        {{ $pendaftaran->pendidikan->nisn ?? '-' }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+                                        <td>
+
+                                            <span class="badge blue">
+                                                {{ $pendaftaran->pendidikan->jenjang_pendidikan ?? '-' }}
+                                            </span>
+
+                                        </td>
+                                        <td>
+                                            {{ $pendaftaran->pendidikan->jurusan ?? '-' }}
+                                        </td>
+                                        <td>
+
+                                            @php
+                                                $ayah = $pendaftaran->orangTuas->where('tipe', 'ayah')->first();
+                                            @endphp
+
+                                            {{ $ayah->nama ?? '-' }}
+
+                                        </td>
+                                        <td>
+                                            @php
+                                                $tagihan = $pendaftaran->tagihanSantri;
+
+                                                $totalTagihan = $tagihan?->details?->count() ?? 0;
+
+                                                $totalLunas =
+                                                    $tagihan?->details?->where('status_pembayaran', 'lunas')->count() ??
+                                                    0;
+
+                                                $isLunas = $totalTagihan > 0 && $totalTagihan === $totalLunas;
+                                            @endphp
+
+                                            <button class="payment-badge {{ $isLunas ? 'paid' : 'unpaid' }}"
+                                                data-toggle="modal" data-target="#modalBayar{{ $pendaftaran->id }}">
+                                                {{ $isLunas ? 'Lunas' : 'Belum Lunas' }}
                                             </button>
-                                            @if ($canManageSelectedPeriod)
-                                                <button class="btn-action edit" data-toggle="modal"
-                                                    data-target="#modalEditPendaftaran{{$pendaftaran->id}}">
-                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                        </td>
+                                        <td>
+                                            <button class="btn-action view" data-toggle="modal"
+                                                data-target="#modalDokumen{{ $pendaftaran->id }}"
+                                                title="Lihat Dokumen ({{ $pendaftaran->dokumens->count() }})">
+                                                <i class="fa-solid fa-folder-open"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            {{ $pendaftaran->created_at->translatedFormat('d M Y') }}
+                                        </td>
+                                        <td>
+                                            <div class="status-dropdown">
+
+                                                @php
+                                                    $statusBadgeClass = in_array($pendaftaran->status, [
+                                                        'belum_bayar',
+                                                        'ditolak',
+                                                    ])
+                                                        ? 'unpaid'
+                                                        : 'paid';
+                                                @endphp
+                                                <button class="payment-badge {{ $statusBadgeClass }}">
+                                                    {{ ucfirst(str_replace('_', ' ', $pendaftaran->status)) }}
                                                 </button>
-                                                <button class="btn-action delete" data-toggle="modal" data-target="#modalHapusPendaftaran{{$pendaftaran->id}}">
-                                                    <i class="fa-regular fa-trash-can"></i>
+
+                                                @if ($canManageSelectedPeriod)
+                                                    <div class="status-dropdown-menu">
+
+                                                        <form
+                                                            action="{{ route('pendaftaran.update-status', $pendaftaran->id) }}"
+                                                            method="POST">
+
+                                                            @csrf
+                                                            @method('PATCH')
+
+                                                            <button type="submit" name="status"
+                                                                value="menunggu_verifikasi">
+
+                                                                Menunggu Verifikasi
+
+                                                            </button>
+
+                                                            <button type="submit" name="status" value="diterima">
+
+                                                                Diterima
+
+                                                            </button>
+
+                                                            <button type="submit" name="status" value="ditolak">
+
+                                                                Ditolak
+
+                                                            </button>
+
+                                                        </form>
+
+                                                    </div>
+                                                @endif
+
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="table-action">
+                                                <button class="btn-action view" data-toggle="modal"
+                                                    data-target="#modalPrintPendaftaran{{ $pendaftaran->id }}">
+                                                    <i class="fa-solid fa-print"></i>
                                                 </button>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                                @if ($canManageSelectedPeriod)
+                                                    <button class="btn-action edit" data-toggle="modal"
+                                                        data-target="#modalEditPendaftaran{{ $pendaftaran->id }}">
+                                                        <i class="fa-regular fa-pen-to-square"></i>
+                                                    </button>
+                                                    <button class="btn-action delete" data-toggle="modal"
+                                                        data-target="#modalHapusPendaftaran{{ $pendaftaran->id }}">
+                                                        <i class="fa-regular fa-trash-can"></i>
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -408,9 +396,9 @@
 
                 paginationNumber.innerText = currentPage;
 
-                tableInfo.innerText = totalRows > 0
-                    ? `Menampilkan ${start + 1} - ${Math.min(end, totalRows)} dari ${totalRows} data`
-                    : `Data tidak ditemukan`;
+                tableInfo.innerText = totalRows > 0 ?
+                    `Menampilkan ${start + 1} - ${Math.min(end, totalRows)} dari ${totalRows} data` :
+                    `Data tidak ditemukan`;
 
                 prevBtn.disabled = currentPage === 1;
                 nextBtn.disabled = currentPage === totalPages || totalPages === 0;

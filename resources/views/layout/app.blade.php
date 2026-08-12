@@ -2250,7 +2250,7 @@
                             <!-- PROFILE -->
                             <div class="payment-student-info">
                                 <div class="student-left">
-                                    <img src="{{ asset('assets/galeri1.jpg') }}" alt="Santri">
+                                    <img src="{{ asset('assets/pp.jpg') }}" alt="Santri">
 
                                     <div>
                                         <h4>{{ $pendaftaran->nama_lengkap }}</h4>
@@ -2376,7 +2376,7 @@
     <!-- MODAL DOCUMENT PENDAFTARAN -->
     <!-- ===================================================== -->
     @isset($pendaftarans)
-        @foreach($pendaftarans as $pendaftaran)
+        @foreach ($pendaftarans as $pendaftaran)
             @php
                 $jenisDokumenLengkap = [
                     'Akta Kelahiran',
@@ -2423,10 +2423,12 @@
 
                                         @if ($dokumen)
                                             <div class="document-action">
-                                                <a href="{{ asset('storage/' . $dokumen->file) }}" target="_blank" title="Lihat">
+                                                <a href="{{ asset('storage/' . $dokumen->file) }}" target="_blank"
+                                                    title="Lihat">
                                                     <i class="fa-solid fa-eye"></i>
                                                 </a>
-                                                <a href="{{ asset('storage/' . $dokumen->file) }}" download title="Unduh">
+                                                <a href="{{ asset('storage/' . $dokumen->file) }}" download
+                                                    title="Unduh">
                                                     <i class="fa-solid fa-download"></i>
                                                 </a>
                                             </div>
@@ -3153,12 +3155,10 @@
                                             Jenjang Pendidikan
                                         </label>
                                         <select name="jenjang" required>
-                                            <option value="SMP"
-                                                {{ $item->jenjang == 'SMP' ? 'selected' : '' }}>
+                                            <option value="SMP" {{ $item->jenjang == 'SMP' ? 'selected' : '' }}>
                                                 SMP
                                             </option>
-                                            <option value="SMK"
-                                                {{ $item->jenjang == 'SMK' ? 'selected' : '' }}>
+                                            <option value="SMK" {{ $item->jenjang == 'SMK' ? 'selected' : '' }}>
                                                 SMK
                                             </option>
                                         </select>

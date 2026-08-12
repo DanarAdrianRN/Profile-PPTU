@@ -50,9 +50,8 @@
                                 </tr>
                             </thead>
                             <tbody id="beritaTableBody">
-                                @foreach($beritas as $berita)
-                                    <tr data-category="{{ $berita->kategori }}"
-                                    data-status="{{ $berita->status }}">
+                                @foreach ($beritas as $berita)
+                                    <tr data-category="{{ $berita->kategori }}" data-status="{{ $berita->status }}">
                                         <td>
                                             <img src="{{ asset('storage/' . $berita->thumbnail) }}" alt="Thumbnail Berita"
                                                 class="thumb">
@@ -84,7 +83,7 @@
                                         <td>
                                             <div class="action-group">
                                                 <button class="btn-action view" data-toggle="modal"
-                                                    data-target="#modalViewBerita{{$berita->id}}">
+                                                    data-target="#modalViewBerita{{ $berita->id }}">
                                                     <i class="fa-regular fa-eye"></i>
                                                 </button>
                                                 <button class="btn-action edit" type="button" data-toggle="modal"

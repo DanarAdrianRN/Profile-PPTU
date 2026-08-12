@@ -8,10 +8,14 @@
                 background:
                     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
                     url("{{ asset('assets/masjid.jpeg') }}");
-                    min-height: 90vh;
-                    position: relative;
-                    display: flex;
-                    align-items: center;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                min-height: 90vh;
+                position: relative;
+                display: flex;
+                align-items: center;
+
             }
     </style>
     <section class="virtual-tour">

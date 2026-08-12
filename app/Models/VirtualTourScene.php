@@ -46,7 +46,7 @@ class VirtualTourScene extends Model
             return asset('storage/' . ltrim($this->thumbnail, '/'));
         }
 
-        return asset('assets/galeri1.jpg');
+        return asset('assets/pp.jpg');
     }
 
     public function getThumbnailIconAttribute(): ?string

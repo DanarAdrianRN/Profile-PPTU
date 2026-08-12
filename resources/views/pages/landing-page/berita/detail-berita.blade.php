@@ -4,7 +4,7 @@
     <section class="detail-berita">
         {{-- HERO --}}
         <div class="detail-hero">
-            <img src="{{ asset('storage/'. $berita->thumbnail) }}" alt="{{ $berita->judul }}">
+            <img src="{{ asset('storage/' . $berita->thumbnail) }}" alt="{{ $berita->judul }}">
             <div class="overlay"></div>
             <div class="hero-content container">
                 <span class="badge-news">
@@ -36,9 +36,7 @@
                     </div>
                     {{-- ARTICLE --}}
                     @php
-                        $paragraphs = array_filter(
-                            preg_split('/\r\n|\r|\n/', $berita->isi_berita)
-                        );
+                        $paragraphs = array_filter(preg_split('/\r\n|\r|\n/', $berita->isi_berita));
 
                         $half = ceil(count($paragraphs) / 2);
                     @endphp
@@ -62,8 +60,7 @@
                         {{-- GAMBAR DETAIL 1 --}}
                         @if ($berita->gambar_detail_1)
                             <div class="article-image">
-                                <img src="{{ asset('storage/' . $berita->gambar_detail_1) }}"
-                                    alt="{{ $berita->judul }}">
+                                <img src="{{ asset('storage/' . $berita->gambar_detail_1) }}" alt="{{ $berita->judul }}">
                             </div>
                         @endif
 
@@ -75,8 +72,7 @@
                         {{-- GAMBAR DETAIL 2 --}}
                         @if ($berita->gambar_detail_2)
                             <div class="article-image">
-                                <img src="{{ asset('storage/' . $berita->gambar_detail_2) }}"
-                                    alt="{{ $berita->judul }}">
+                                <img src="{{ asset('storage/' . $berita->gambar_detail_2) }}" alt="{{ $berita->judul }}">
                             </div>
                         @endif
 
@@ -120,19 +116,17 @@
                             Berita Lainnya
                         </h4>
                         @foreach ($relatedBeritas as $item)
-                        <a href="{{ route('detail-berita', $item->slug) }}"
-                            class="related-news">
-                            <img src="{{ asset('storage/' . $item->thumbnail) }}"
-                                alt="{{ $item->judul }}">
-                            <div class="related-content">
-                                <span>
-                                    {{ $item->tanggal_publish->format('d M Y') }}
-                                </span>
-                                <h5>
-                                    {{ Str::limit($item->judul, 45) }}
-                                </h5>
-                            </div>
-                        </a>
+                            <a href="{{ route('detail-berita', $item->slug) }}" class="related-news">
+                                <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="{{ $item->judul }}">
+                                <div class="related-content">
+                                    <span>
+                                        {{ $item->tanggal_publish->format('d M Y') }}
+                                    </span>
+                                    <h5>
+                                        {{ Str::limit($item->judul, 45) }}
+                                    </h5>
+                                </div>
+                            </a>
                         @endforeach
                     </div>
                     {{-- KATEGORI --}}

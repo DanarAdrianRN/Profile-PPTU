@@ -5,6 +5,10 @@
     RewriteCond %{REQUEST_URI} ^/build/(.*)$
     RewriteRule ^build/(.*)$ public/build/$1 [L]
 
+    # Arahkan storage Laravel ke storage/app/public
+    RewriteCond %{DOCUMENT_ROOT}/storage/app/public/$1 -f
+    RewriteRule ^storage/(.*)$ storage/app/public/$1 [L]
+
     # Arahkan file public lainnya
     RewriteCond %{REQUEST_URI} ^/(.*)$
     RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
