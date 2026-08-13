@@ -1,6 +1,6 @@
 @extends('layout.app')
-@include('components.header')
 @section('content')
+@include('components.header')
     @include('components.hero', [
         'badge' => 'Tenaga Pendidik',
         'title' => 'Guru & Ustadz',

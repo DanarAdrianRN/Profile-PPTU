@@ -1,8 +1,6 @@
 @extends('layout.app')
-
-@include('components.header')
-
 @section('content')
+@include('components.header')
     <section class="hasil-pendaftaran">
 
         <div class="container">

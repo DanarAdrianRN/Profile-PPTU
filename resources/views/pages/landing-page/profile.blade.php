@@ -1,8 +1,6 @@
 @extends('layout.app')
-
-@include('components.header')
-
 @section('content')
+@include('components.header')
     @include('components.hero', [
         'badge' => 'Pendidikan Islam Berkualitas',
         'title' => 'Pondok Pesantren',

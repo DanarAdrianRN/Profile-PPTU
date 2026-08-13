@@ -1,8 +1,6 @@
 @extends('layout.app')
-
-@include('components.header')
-
 @section('content')
+@include('components.header')
     @php
         $isBankTransfer = $transaksi->payment_type === 'bank_transfer';
         $isQris = $transaksi->payment_type === 'qris';

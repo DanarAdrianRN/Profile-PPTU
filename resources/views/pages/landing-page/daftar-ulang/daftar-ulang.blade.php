@@ -1,6 +1,5 @@
-@extends('layout.app')
 @include('components.header')
-
+@extends('layout.app')
 @section('content')
     <section class="daftar-ulang-page">
         <div class="container">

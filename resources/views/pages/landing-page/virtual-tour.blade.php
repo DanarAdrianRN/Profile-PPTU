@@ -1,8 +1,6 @@
 @extends('layout.app')
-
-@include('components.header')
-
 @section('content')
+@include('components.header')
     <style>
         .tour-hero {
                 background:
@@ -156,21 +154,77 @@
                     view.setParameters(parameters);
                 }
 
-                document.getElementById('fullscreenTourButton')?.addEventListener('click', async function() {
-                    const target = document.querySelector('.tour-viewer-wrapper');
+                const fullscreenButton = document.getElementById('fullscreenTourButton');
+                const fullscreenTarget = document.querySelector('.tour-viewer-wrapper');
 
-                    if (!target) return;
+                fullscreenButton?.addEventListener('click', async function () {
+                    if (!fullscreenTarget) return;
 
-                    if (!document.fullscreenElement) {
-                        await target.requestFullscreen?.();
-                    } else {
-                        await document.exitFullscreen?.();
-                    }
-
-                    if (viewer) {
-                        setTimeout(() => viewer.updateSize(), 150);
+                    try {
+                        if (!document.fullscreenElement) {
+                            if (fullscreenTarget.requestFullscreen) {
+                                await fullscreenTarget.requestFullscreen();
+                            } else if (fullscreenTarget.webkitRequestFullscreen) {
+                                fullscreenTarget.webkitRequestFullscreen();
+                            }
+                        } else {
+                            if (document.exitFullscreen) {
+                                await document.exitFullscreen();
+                            } else if (document.webkitExitFullscreen) {
+                                document.webkitExitFullscreen();
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Fullscreen error:', error);
                     }
                 });
+
+
+                document.addEventListener('fullscreenchange', function () {
+                    updateFullscreenState();
+                });
+
+                document.addEventListener('webkitfullscreenchange', function () {
+                    updateFullscreenState();
+                });
+
+                function updateFullscreenState() {
+                    const isFullscreen =
+                        document.fullscreenElement ||
+                        document.webkitFullscreenElement;
+
+                    const icon = fullscreenButton?.querySelector('i');
+
+                    if (isFullscreen) {
+                        icon?.classList.remove('fa-expand');
+                        icon?.classList.add('fa-compress');
+
+                        fullscreenButton?.setAttribute(
+                            'aria-label',
+                            'Keluar Fullscreen'
+                        );
+                    } else {
+                        icon?.classList.remove('fa-compress');
+                        icon?.classList.add('fa-expand');
+
+                        fullscreenButton?.setAttribute(
+                            'aria-label',
+                            'Fullscreen'
+                        );
+                    }
+
+                    // Beri waktu browser menyelesaikan perubahan ukuran
+                    // sebelum Marzipano menghitung ulang ukuran viewer.
+                    setTimeout(() => {
+                        if (viewer) {
+                            viewer.updateSize();
+
+                            requestAnimationFrame(() => {
+                                viewer.updateSize();
+                            });
+                        }
+                    }, 200);
+                }
 
                 document.getElementById('resetTourButton')?.addEventListener('click', function() {
                     setViewParameters(currentInitialView);
