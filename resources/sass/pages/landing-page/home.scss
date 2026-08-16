@@ -1,3 +1,5 @@
+﻿@use "../../components/variables" as var;
+
 .hero {
     .hero-content {
         text-align: left;
@@ -20,9 +22,9 @@
             gap: 20px;
 
             .btn {
-                background: $color-secondary;
+                background: var.$color-secondary;
                 padding: 10px 20px;
-                color: $color-primary;
+                color: var.$color-primary;
                 text-decoration: none;
                 border-radius: 10px;
                 font-weight: 600;
@@ -33,8 +35,8 @@
 
                 &.fadee {
                     background-color: transparent;
-                    border: 2px solid $color-background;
-                    color: $color-background;
+                    border: 2px solid var.$color-background;
+                    color: var.$color-background;
 
                     &:hover {
                         background-color: #ffffff39;
@@ -46,7 +48,7 @@
 }
 
 .stats {
-    background: $color-background;
+    background: var.$color-background;
     padding: 60px 20px;
 
     .container {
@@ -62,21 +64,21 @@
 
         h2 {
             font-size: 2.5rem;
-            color: $color-primary;
+            color: var.$color-primary;
             margin-bottom: 8px;
             font-weight: 700;
         }
 
         p {
             font-size: 1rem;
-            color: $color-text;
+            color: var.$color-text;
         }
 
         &::after {
             content: "";
             width: 40px;
             height: 3px;
-            background: $color-secondary;
+            background: var.$color-secondary;
             display: block;
             margin: 10px auto 0;
         }
@@ -89,7 +91,7 @@
 
     .section-title {
         text-align: center;
-        color: $color-primary;
+        color: var.$color-primary;
         margin-bottom: 10px;
     }
 
@@ -150,7 +152,7 @@
     }
 
     h3{
-        color:$color-primary;
+        color:var.$color-primary;
         font-size:18px;
         line-height:1.3;
         margin-bottom:20px;
@@ -158,7 +160,7 @@
     }
 
     .link{
-        color:$color-primary;
+        color:var.$color-primary;
         font-size:14px;
         font-weight:600;    
         transition:.3s;
@@ -172,7 +174,7 @@
 
     .section-title {
         text-align: center;
-        color: $color-primary;
+        color: var.$color-primary;
         font-size: 2.3rem;
         font-weight: 700;
         margin-bottom: 12px;
@@ -245,7 +247,7 @@
             i{
 
                 font-size:30px;
-                color:$color-primary;
+                color:var.$color-primary;
                 transition:.35s;
 
             }
@@ -255,7 +257,7 @@
         h3{
 
             font-size:1.35rem;
-            color:$color-primary;
+            color:var.$color-primary;
 
             margin-bottom:15px;
 
@@ -281,7 +283,7 @@
 
 .what {
     padding: 80px 20px;
-    background: $color-primary;
+    background: var.$color-primary;
 
     .section-title {
         text-align: center;
@@ -377,18 +379,18 @@
 }
 
 .cta {
-    background: $color-background;
+    background: var.$color-background;
     text-align: center;
     padding: 50px 20px;
 
     h2 {
         font-size: 2rem;
-        color: $color-primary;
+        color: var.$color-primary;
         margin-bottom: 10px;
     }
 
     p {
-        color: $color-text;
+        color: var.$color-text;
         margin-bottom: 20px;
     }
 
@@ -400,8 +402,8 @@
         .btn {
             margin-top: 15px;
             display: inline-block;
-            background: $color-primary;
-            color: $color-background;
+            background: var.$color-primary;
+            color: var.$color-background;
             font-weight: 600;
             padding: 10px 20px;
             border-radius: 10px;
@@ -413,12 +415,12 @@
 
             &.fadee {
                 background-color: transparent;
-                border: 2px solid $color-primary;
-                color: $color-primary;
+                border: 2px solid var.$color-primary;
+                color: var.$color-primary;
 
                 &:hover {
-                    background-color: $color-primary;
-                    color: $color-background;
+                    background-color: var.$color-primary;
+                    color: var.$color-background;
                 }
             }
         }

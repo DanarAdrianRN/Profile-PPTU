@@ -1,5 +1,8 @@
+﻿@use "sass:color";
+@use "variables" as var;
+
 .navbar-container {
-    background-color: $color-background;
+    background-color: var.$color-background;
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
@@ -25,7 +28,7 @@
         }
 
         .name {
-            color: $color-primary;
+            color: var.$color-primary;
             font-size: 20px;
             font-weight: bold;
             text-decoration: none;
@@ -41,7 +44,7 @@
         width: 44px;
         height: 44px;
         border-radius: 12px;
-        border: 1px solid rgba($color-primary, 0.16);
+        border: 1px solid rgba(var.$color-primary, 0.16);
         background: #f5fbfc;
         align-items: center;
         justify-content: center;
@@ -55,7 +58,7 @@
             width: 20px;
             height: 2px;
             border-radius: 999px;
-            background: $color-primary;
+            background: var.$color-primary;
             transition: 0.3s ease;
         }
     }
@@ -75,7 +78,7 @@
 
             > a:not(.btn),
             > .dropdown-togglle {
-                color: $color-primary;
+                color: var.$color-primary;
                 text-decoration: none;
                 font-weight: 500;
                 transition: color 0.25s ease, text-decoration-color 0.25s ease;
@@ -94,8 +97,8 @@
 
                 &:hover,
                 &:focus-visible {
-                    color: darken($color-primary, 8%);
-                    text-decoration-color: $color-secondary;
+                    color: color.adjust(var.$color-primary, $lightness: -8%);
+                    text-decoration-color: var.$color-secondary;
                 }
             }
         }
@@ -108,7 +111,7 @@
                 padding: 0;
                 border: 0;
                 background: transparent;
-                color: $color-primary;
+                color: var.$color-primary;
                 font: inherit;
                 font-weight: 500;
                 cursor: pointer;
@@ -123,7 +126,7 @@
                 position: absolute;
                 top: 100%;
                 left: 0;
-                background-color: $color-background;
+                background-color: var.$color-background;
                 border-radius: 5px;
                 padding: 10px 0;
                 min-width: 180px;
@@ -133,7 +136,7 @@
                     a {
                         display: block;
                         padding: 10px 20px;
-                        color: $color-primary;
+                        color: var.$color-primary;
                         text-decoration: none;
                         transition: 0.3s;
                     }
@@ -167,9 +170,9 @@
         .btn {
             border: none;
             border-radius: 10px;
-            color: $color-background;
+            color: var.$color-background;
             cursor: pointer;
-            background-color: $color-primary;
+            background-color: var.$color-primary;
             width: 100px;
             padding: 8px 12px;
             display: block;
@@ -178,7 +181,7 @@
 
             &:hover {
                 background-color: #095662;
-                color: $color-background;
+                color: var.$color-background;
             }
         }
     }
@@ -209,7 +212,7 @@
             max-height: calc(100vh - 92px);
             overflow-y: auto;
             background: #fff;
-            border: 1px solid rgba($color-primary, 0.12);
+            border: 1px solid rgba(var.$color-primary, 0.12);
             border-radius: 18px;
             box-shadow: 0 22px 50px rgba(15, 23, 42, 0.16);
             opacity: 0;
@@ -236,11 +239,11 @@
 
                     &:hover {
                         background: #eef8fa;
-                        text-decoration-color: $color-secondary;
+                        text-decoration-color: var.$color-secondary;
                     }
 
                     &:focus-visible {
-                        outline: 2px solid rgba($color-secondary, 0.8);
+                        outline: 2px solid rgba(var.$color-secondary, 0.8);
                         outline-offset: 2px;
                     }
                 }

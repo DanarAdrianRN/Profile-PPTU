@@ -1,3 +1,5 @@
+﻿@use "../../components/variables" as var;
+
 .profile-smk {
     padding: 0 0 50px;
     background-color: #f8f9fa;
@@ -26,7 +28,7 @@
     }
 
     .section-kicker {
-        color: $color-secondary;
+        color: var.$color-secondary;
         font-weight: 700;
         display: inline-block;
         margin-bottom: 12px;
@@ -35,7 +37,7 @@
     h2 {
         font-size: 2.8rem;
         margin-bottom: 20px;
-        color: $color-primary;
+        color: var.$color-primary;
     }
 
     p {
@@ -67,7 +69,7 @@
 
 .jurusan-smk {
     padding: 100px 0;
-    background-color: $color-gray-100;
+    background-color: var.$color-gray-100;
 
     .jurusan-grid {
         display: grid;
@@ -135,7 +137,7 @@
             h4 {
                 font-size: 1rem;
                 margin-bottom: 15px;
-                color: $color-primary;
+                color: var.$color-primary;
 
                 i {
                     margin-right: 8px;
@@ -168,19 +170,19 @@
 
         span {
             display: inline-block;
-            color: $color-secondary;
+            color: var.$color-secondary;
             font-weight: 600;
         }
 
         h2 {
-            color: $color-primary;
+            color: var.$color-primary;
             margin-bottom: 15px;
         }
 
         p {
             max-width: 700px;
             margin: auto;
-            color: $color-text;
+            color: var.$color-text;
             line-height: 1.8;
         }
     }
@@ -201,11 +203,11 @@
 
         &:hover {
             transform: translateY(-8px);
-            border-color: $color-primary;
+            border-color: var.$color-primary;
             box-shadow: 0 15px 35px rgba(17, 122, 139, .12);
 
             i {
-                background: $color-primary;
+                background: var.$color-primary;
                 color: #fff;
             }
         }
@@ -215,7 +217,7 @@
             height: 70px;
             border-radius: 50%;
             background: rgba(17, 122, 139, .08);
-            color: $color-primary;
+            color: var.$color-primary;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -225,13 +227,13 @@
         }
 
         h3 {
-            color: $color-primary;
+            color: var.$color-primary;
             margin-bottom: 15px;
             font-size: 1.25rem;
         }
 
         p {
-            color: $color-text;
+            color: var.$color-text;
             line-height: 1.8;
             font-size: .95rem;
         }
@@ -244,13 +246,13 @@
     margin: auto auto 60px;
 
     span {
-        color: $color-secondary;
+        color: var.$color-secondary;
         font-weight: 600;
     }
 
     h2 {
         font-size: 2.8rem;
-        color: $color-primary;
+        color: var.$color-primary;
         margin: 15px 0;
     }
 
@@ -299,7 +301,7 @@
         padding: 12px 14px;
         border-radius: 14px;
         background: rgba(255, 255, 255, 0.92);
-        color: $color-primary;
+        color: var.$color-primary;
         font-weight: 800;
         box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
     }

@@ -1,3 +1,6 @@
+﻿@use "sass:color";
+@use "../../components/variables" as var;
+
 .hasil-pendaftaran {
     padding: 70px 20px;
     background: #f8f9fa;
@@ -8,7 +11,7 @@
         margin-bottom: 35px;
 
         h2 {
-            color: $color-primary;
+            color: var.$color-primary;
             margin-bottom: 10px;
         }
 
@@ -96,12 +99,12 @@
         margin-bottom: 25px;
 
         i {
-            color: $color-primary;
+            color: var.$color-primary;
         }
 
         h4 {
             margin: 0;
-            color: $color-primary;
+            color: var.$color-primary;
         }
     }
 
@@ -126,7 +129,7 @@
         }
 
         strong {
-            color: $color-text;
+            color: var.$color-text;
         }
     }
 
@@ -152,7 +155,7 @@
         }
 
         strong {
-            color: $color-primary;
+            color: var.$color-primary;
             font-size: 1.4rem;
         }
     }
@@ -207,13 +210,13 @@
             justify-content: center;
 
             i {
-                color: $color-primary;
+                color: var.$color-primary;
             }
         }
 
         h5 {
             margin-bottom: 6px;
-            color: $color-text;
+            color: var.$color-text;
         }
 
         p {
@@ -261,7 +264,7 @@
             color: #222;
 
             &:hover {
-                background: darken(#ffd600, 6%);
+                background: color.adjust(#ffd600, $lightness: -6%);
             }
         }
     }

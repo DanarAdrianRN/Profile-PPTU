@@ -127,6 +127,7 @@ class BeritaController extends Controller
             'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:7680'],
             'gambar_detail_1' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:7680'],
             'gambar_detail_2' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:7680'],
+            'hapus_gambar_detail' => ['nullable', 'string'],
         ]);
 
         $slug = $validated['slug']
@@ -134,26 +135,54 @@ class BeritaController extends Controller
 
         $thumbnailPath = $berita->thumbnail;
         if ($request->hasFile('thumbnail')) {
-
-            // hapus thumbnail lama
-            if ($berita->thumbnail && Storage::disk('public')->exists($berita->thumbnail)) {
-                Storage::disk('public')->delete($berita->thumbnail);
-            }
+            $this->deleteStoredFile($berita->thumbnail);
 
             $thumbnailPath = $request->file('thumbnail')
                 ->store('berita/thumbnails', 'public');
+        }
+
+        $gambarDetail1Path = $berita->gambar_detail_1;
+        if ($request->hasFile('gambar_detail_1')) {
+            $this->deleteStoredFile($berita->gambar_detail_1);
+
+            $gambarDetail1Path = $request->file('gambar_detail_1')
+                ->store('berita/gambar_detail', 'public');
+        }
+
+        $gambarDetail2Path = $berita->gambar_detail_2;
+        if ($request->hasFile('gambar_detail_2')) {
+            $this->deleteStoredFile($berita->gambar_detail_2);
+
+            $gambarDetail2Path = $request->file('gambar_detail_2')
+                ->store('berita/gambar_detail', 'public');
+        }
+
+        $gambarDetailUntukDihapus = collect(json_decode($request->input('hapus_gambar_detail', '[]'), true))
+            ->filter(fn ($field) => in_array($field, ['gambar_detail_1', 'gambar_detail_2'], true))
+            ->unique()
+            ->all();
+
+        foreach ($gambarDetailUntukDihapus as $field) {
+            if ($request->hasFile($field)) {
+                continue;
+            }
+
+            $path = $field === 'gambar_detail_1' ? $gambarDetail1Path : $gambarDetail2Path;
+            $this->deleteStoredFile($path);
+
+            if ($field === 'gambar_detail_1') {
+                $gambarDetail1Path = null;
+            } else {
+                $gambarDetail2Path = null;
+            }
         }
 
         $berita->update([
             'judul' => $validated['judul'],
             'slug' => $this->uniqueSlug($slug, $berita->id),
             'thumbnail' => $thumbnailPath,
-                'gambar_detail_1' => $request->hasFile('gambar_detail_1')
-                    ? $request->file('gambar_detail_1')->store('berita/gambar_detail', 'public')
-                    : $berita->gambar_detail_1,
-                'gambar_detail_2' => $request->hasFile('gambar_detail_2')
-                    ? $request->file('gambar_detail_2')->store('berita/gambar_detail', 'public')
-                    : $berita->gambar_detail_2,
+            'gambar_detail_1' => $gambarDetail1Path,
+            'gambar_detail_2' => $gambarDetail2Path,
             'isi_berita' => $validated['isi_berita'],
             'blockquote' => $validated['blockquote'] ?? null,
             'penulis' => $validated['penulis'],
@@ -177,11 +206,12 @@ class BeritaController extends Controller
     {
         $judulBerita = $berita->judul;
 
-        if (
-            $berita->thumbnail &&
-            Storage::disk('public')->exists($berita->thumbnail)
-        ) {
-            Storage::disk('public')->delete($berita->thumbnail);
+        foreach ([
+            $berita->thumbnail,
+            $berita->gambar_detail_1,
+            $berita->gambar_detail_2,
+        ] as $path) {
+            $this->deleteStoredFile($path);
         }
 
         $berita->delete();
@@ -191,6 +221,13 @@ class BeritaController extends Controller
         return redirect()
             ->route('admin-berita')
             ->with('success', 'Berita berhasil dihapus');
+    }
+
+    private function deleteStoredFile(?string $path): void
+    {
+        if ($path && Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
     }
 
     private function uniqueSlug(string $slug, ?int $ignoreId = null): string

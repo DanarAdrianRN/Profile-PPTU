@@ -1,3 +1,6 @@
+﻿@use "sass:color";
+@use "../../components/variables" as var;
+
 .pembayaran-page {
     padding: 70px 20px;
     background: #f8f9fa;
@@ -7,7 +10,7 @@
         margin-bottom: 45px;
 
         h2 {
-            color: $color-primary;
+            color: var.$color-primary;
             margin-bottom: 12px;
 
             display: flex;
@@ -38,7 +41,7 @@
         margin-bottom: 25px;
 
         h4 {
-            color: $color-primary;
+            color: var.$color-primary;
         }
     }
 
@@ -50,7 +53,8 @@
         color: #555;
 
         strong {
-            color: $color-text;
+            color: var.$color-text;
+            text-wrap: nowrap;
         }
 
         &.total {
@@ -58,7 +62,7 @@
             border-top: 1px dashed #ddd;
 
             strong {
-                color: $color-primary;
+                color: var.$color-primary;
                 font-size: 1.2rem;
             }
         }
@@ -75,7 +79,7 @@
             margin-bottom: 25px;
 
             h4 {
-                color: $color-primary;
+                color: var.$color-primary;
                 margin: 0;
             }
         }
@@ -94,7 +98,7 @@
                 }
 
                 strong {
-                    color: $color-text;
+                    color: var.$color-text;
                 }
             }
         }
@@ -113,7 +117,7 @@
         transition: 0.3s;
 
         &.active {
-            border-color: $color-primary;
+            border-color: var.$color-primary;
         }
     }
 
@@ -134,12 +138,12 @@
 
         i {
             font-size: 1.7rem;
-            color: $color-primary;
+            color: var.$color-primary;
         }
 
         h5 {
             margin-bottom: 5px;
-            color: $color-text;
+            color: var.$color-text;
         }
 
         p {
@@ -157,7 +161,7 @@
 
     .badge-method {
         background: rgba(17, 122, 139, 0.08);
-        color: $color-primary;
+        color: var.$color-primary;
         padding: 10px 16px;
         border-radius: 30px;
         font-size: 0.85rem;
@@ -198,7 +202,7 @@
         }
 
         input {
-            accent-color: $color-primary;
+            accent-color: var.$color-primary;
         }
     }
 
@@ -220,7 +224,7 @@
 
     .qris-info {
         h5 {
-            color: $color-primary;
+            color: var.$color-primary;
             margin-bottom: 10px;
         }
 
@@ -249,7 +253,7 @@
         width: 100%;
         margin-top: 30px;
         border: none;
-        background: $color-primary;
+        background: var.$color-primary;
         color: #fff;
         padding: 16px;
         border-radius: 15px;
@@ -263,7 +267,7 @@
         gap: 12px;
 
         &:hover {
-            background: darken($color-primary, 8%);
+            background: color.adjust(var.$color-primary, $lightness: -8%);
         }
     }
 }

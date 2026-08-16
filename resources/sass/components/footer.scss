@@ -1,8 +1,10 @@
+﻿@use "variables" as var;
+
 .footer {
     background:
         linear-gradient(135deg, rgba(3, 64, 76, 0.98), rgba(17, 122, 139, 0.96)),
-        $color-primary;
-    color: $color-background;
+        var.$color-primary;
+    color: var.$color-background;
     padding: 64px 20px 0;
 
     .container {
@@ -46,7 +48,7 @@
         h3 {
             margin-bottom: 18px;
             font-size: 1.08rem;
-            color: $color-secondary;
+            color: var.$color-secondary;
             font-weight: 800;
         }
 
@@ -61,7 +63,7 @@
 
             i {
                 font-size: 15px;
-                color: $color-secondary;
+                color: var.$color-secondary;
             }
         }
 
@@ -125,7 +127,7 @@
                 align-items: center;
                 justify-content: center;
                 background: rgba(255, 255, 255, 0.12);
-                color: $color-secondary;
+                color: var.$color-secondary;
             }
         }
     }

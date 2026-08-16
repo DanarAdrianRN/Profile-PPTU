@@ -1,3 +1,6 @@
+﻿@use "sass:color";
+@use "variables" as var;
+
 .modal {
     z-index: 9999 !important;
     &.promosi {
@@ -7,15 +10,15 @@
             border: none;
 
             .promo-header {
-                background-color: $color-primary;
+                background-color: var.$color-primary;
                 padding: 30px;
                 color: white;
                 position: relative;
                 text-align: left;
 
                 .badge-special {
-                    background: $color-secondary;
-                    color: $color-primary;
+                    background: var.$color-secondary;
+                    color: var.$color-primary;
                     padding: 5px 15px;
                     border-radius: 50px;
                     font-size: 0.75rem;
@@ -49,7 +52,7 @@
 
                 i {
                     font-size: 40px;
-                    color: $color-secondary;
+                    color: var.$color-secondary;
                 }
 
                 .text-info {
@@ -58,27 +61,27 @@
                     h3 {
                         font-size: 1.25rem;
                         font-weight: bold;
-                        color: $color-primary;
+                        color: var.$color-primary;
                     }
 
                     p {
                         font-size: 0.875rem;
-                        color: $color-text;
+                        color: var.$color-text;
                     }
                 }
             }
 
             .promo-limit-box {
                 background-color: #fff8ed;
-                border: 2px solid $color-secondary;
+                border: 2px solid var.$color-secondary;
                 border-radius: 12px;
                 padding: 15px;
                 margin: 20px 0;
-                color: $color-primary;
+                color: var.$color-primary;
                 font-size: 1.125rem;
 
                 small {
-                    color: $color-text;
+                    color: var.$color-text;
                     font-size: 0.875rem;
                 }
             }
@@ -107,7 +110,7 @@
                 .timeline-icon {
                     width: 35px;
                     height: 35px;
-                    background: $color-primary;
+                    background: var.$color-primary;
                     color: white;
                     border-radius: 50%;
                     display: flex;
@@ -145,11 +148,11 @@
                 }
 
                 .btn-gold {
-                    background-color: $color-secondary;
-                    border-color: $color-secondary;
-                    color: $color-primary;
+                    background-color: var.$color-secondary;
+                    border-color: var.$color-secondary;
+                    color: var.$color-primary;
                     &:hover {
-                        background-color: darken($color-secondary, 10%);
+                        background-color: color.adjust(var.$color-secondary, $lightness: -10%);
                     }
                 }
             }
@@ -1513,7 +1516,7 @@
         border-radius: 999px;
 
         background: #e6f3f4;
-        color: $color-primary;
+        color: var.$color-primary;
 
         font-size: 0.9rem;
         font-weight: 700;
@@ -1562,7 +1565,7 @@
         background: #f8fafc;
 
         i {
-            color: $color-primary;
+            color: var.$color-primary;
             font-size: 1rem;
         }
 
@@ -2364,11 +2367,11 @@
             }
 
             &.active {
-                border: 2px solid $color-secondary;
+                border: 2px solid var.$color-secondary;
             }
 
             h4 {
-                color: $color-primary;
+                color: var.$color-primary;
                 margin-bottom: 15px;
             }
 
@@ -2404,7 +2407,7 @@
                 position: absolute;
                 top: -10px;
                 right: 15px;
-                background: $color-secondary;
+                background: var.$color-secondary;
                 color: #000;
                 font-size: 0.7rem;
                 padding: 5px 10px;
@@ -2476,7 +2479,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
 
             .card-header {
-                background: $color-primary;
+                background: var.$color-primary;
                 color: #fff;
                 padding: 20px;
                 display: flex;
@@ -2492,7 +2495,7 @@
                 }
 
                 .badge {
-                    background: $color-secondary;
+                    background: var.$color-secondary;
                     color: #000;
                     padding: 6px 14px;
                     border-radius: 20px;
@@ -2520,7 +2523,7 @@
                     &:last-child {
                         text-align: right;
                         font-weight: 600;
-                        color: $color-primary;
+                        color: var.$color-primary;
                     }
                 }
 
@@ -2530,7 +2533,7 @@
                     td {
                         padding: 12px;
                         font-weight: 700;
-                        color: $color-primary;
+                        color: var.$color-primary;
                     }
                 }
 
@@ -2552,7 +2555,7 @@
                         padding: 15px 12px;
                         font-size: 1rem;
                         font-weight: 700;
-                        color: $color-primary;
+                        color: var.$color-primary;
                     }
                 }
             }

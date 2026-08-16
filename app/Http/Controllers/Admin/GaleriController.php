@@ -117,25 +117,32 @@ class GaleriController extends Controller
             'tanggal_kegiatan' => 'required|date',
             'deskripsi' => 'nullable|string',
             'status' => 'nullable|in:Publish,Draft',
+            'fotos' => 'array',
+            'fotos.*' => 'required|image|max:7680',
+            'hapus_foto' => 'nullable|string',
         ]);
 
         $adminId = session('admin')['id'] ?? null;
 
         if ($request->hasFile('thumbnail')) {
-            if ($galeri->thumbnail) {
-                Storage::disk('public')->delete($galeri->thumbnail);
-            }
+            $this->deleteStoredFile($galeri->thumbnail);
 
             $galeri->thumbnail = $request->file('thumbnail')
                 ->store('galeri/thumbnail', 'public');
         }
 
         if ($request->hapus_foto) {
-            $ids = json_decode($request->hapus_foto, true);
-            $fotos = GaleriFoto::whereIn('id', $ids)->get();
+            $ids = collect(json_decode($request->hapus_foto, true))
+                ->filter(fn ($id) => is_numeric($id))
+                ->map(fn ($id) => (int) $id)
+                ->all();
+
+            $fotos = $galeri->fotos()
+                ->whereIn('id', $ids)
+                ->get();
 
             foreach ($fotos as $foto) {
-                Storage::disk('public')->delete($foto->gambar);
+                $this->deleteStoredFile($foto->gambar);
                 $foto->delete();
             }
         }
@@ -165,18 +172,26 @@ class GaleriController extends Controller
     public function destroy($id)
     {
         $galeri = Galeri::with('fotos')->findOrFail($id);
-        // hapus foto dari storage
+
         foreach ($galeri->fotos as $foto) {
-            if ($foto->gambar) {
-                Storage::disk('public')->delete($foto->gambar);
-            }
+            $this->deleteStoredFile($foto->gambar);
         }
-        if ($galeri->thumbnail) {
-            Storage::disk('public')->delete($galeri->thumbnail);
-        }
+
+        $this->deleteStoredFile($galeri->thumbnail);
+
         $judulGaleri = $galeri->judul;
+        $galeri->fotos()->delete();
         $galeri->delete();
+
         $this->catatAktivitas('delete', 'Menghapus galeri: ' . $judulGaleri);
+
         return back()->with('success', 'Galeri berhasil dihapus');
+    }
+
+    private function deleteStoredFile(?string $path): void
+    {
+        if ($path && Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
     }
 }

@@ -71,7 +71,7 @@
                     <div class="filter-title">
                         <h3>Berita & Pengumuman</h3>
                         <p>
-                            Cari dan filter informasi terbaru yayasan
+                            Cari dan filter informasi terbaru Pondok Pesantren Tarbiyatul 'Ulum Sumursongo sesuai kategori yang diinginkan.
                         </p>
                     </div>
                     <div class="filter-action">

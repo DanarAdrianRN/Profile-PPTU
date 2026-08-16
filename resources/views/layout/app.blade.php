@@ -418,21 +418,34 @@
                                             </p>
                                         </div>
                                         <!-- DETAIL PREVIEW -->
+                                        <input type="hidden" name="hapus_gambar_detail" value="[]">
                                         <div class="detail-gallery">
-                                            <div class="detail-item">
-                                                <img src="{{ asset('storage/' . $berita->gambar_detail_1) }}"
-                                                    alt="Gambar Detail 1">
-                                                <button class="remove-image">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>
-                                            </div>
+                                            @foreach (['gambar_detail_1', 'gambar_detail_2'] as $field)
+                                                @if ($berita->{$field})
+                                                    <div class="detail-item" data-detail-field="{{ $field }}">
+                                                        <img src="{{ asset('storage/' . $berita->{$field}) }}"
+                                                            alt="{{ $field === 'gambar_detail_1' ? 'Gambar Detail 1' : 'Gambar Detail 2' }}">
+                                                        <button type="button" class="remove-image"
+                                                            onclick="markDeleteDetailImage(this, '{{ $field }}')">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                @endif
+                                            @endforeach
                                         </div>
-                                        <!-- ADD IMAGE -->
+                                        <!-- ADD OR REPLACE IMAGE -->
                                         <label class="upload-area small mt-3">
                                             <input type="file" name="gambar_detail_1" accept="image/*" hidden>
                                             <div class="upload-placeholder">
                                                 <i class="fa-regular fa-images"></i>
-                                                <h5>Tambah Gambar</h5>
+                                                <h5>Tambah/Ganti Gambar Detail 1</h5>
+                                            </div>
+                                        </label>
+                                        <label class="upload-area small mt-3">
+                                            <input type="file" name="gambar_detail_2" accept="image/*" hidden>
+                                            <div class="upload-placeholder">
+                                                <i class="fa-regular fa-image"></i>
+                                                <h5>Tambah/Ganti Gambar Detail 2</h5>
                                             </div>
                                         </label>
                                     </div>
@@ -682,6 +695,7 @@
                             <form action="{{ route('galeri.update', $galeri->id) }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="hapus_foto" value="[]">
                                 <div class="form-grid">
                                     {{-- JUDUL --}}
                                     <div class="form-group full">
@@ -787,25 +801,44 @@
                     </div>
                 </div>
             </div>
-            <script>
-                let deletedPhotos = [];
-
-                function markDelete(btn, id) {
-
-                    // toggle delete
-                    if (deletedPhotos.includes(id)) {
-                        deletedPhotos = deletedPhotos.filter(x => x !== id);
-                        btn.parentElement.style.opacity = "1";
-                    } else {
-                        deletedPhotos.push(id);
-                        btn.parentElement.style.opacity = "0.4";
-                    }
-
-                    document.getElementById('hapus_foto').value = JSON.stringify(deletedPhotos);
-                }
-            </script>
         @endforeach
     @endisset
+
+    <script>
+        function markDelete(btn, id) {
+            const form = btn.closest('form');
+            const input = form.querySelector('input[name="hapus_foto"]');
+            const deletedPhotos = JSON.parse(input.value || '[]');
+            const index = deletedPhotos.indexOf(id);
+
+            if (index === -1) {
+                deletedPhotos.push(id);
+                btn.parentElement.style.opacity = '0.4';
+            } else {
+                deletedPhotos.splice(index, 1);
+                btn.parentElement.style.opacity = '1';
+            }
+
+            input.value = JSON.stringify(deletedPhotos);
+        }
+
+        function markDeleteDetailImage(btn, field) {
+            const form = btn.closest('form');
+            const input = form.querySelector('input[name="hapus_gambar_detail"]');
+            const deletedImages = JSON.parse(input.value || '[]');
+            const index = deletedImages.indexOf(field);
+
+            if (index === -1) {
+                deletedImages.push(field);
+                btn.parentElement.style.opacity = '0.4';
+            } else {
+                deletedImages.splice(index, 1);
+                btn.parentElement.style.opacity = '1';
+            }
+
+            input.value = JSON.stringify(deletedImages);
+        }
+    </script>
 
     @isset($galeris)
         {{-- MODAL VIEW GALERI --}}

@@ -20,7 +20,7 @@ class AdminLoginTest extends TestCase
             'password' => Hash::make('qwerty123'),
         ]);
 
-        $response = $this->post(route('admin-login-post'), [
+        $response = $this->from(route('admin-login'))->post(route('admin-login-post'), [
 'username_or_email' => 'adminYayasan',
             'password' => 'qwerty123',
         ]);
@@ -39,7 +39,7 @@ class AdminLoginTest extends TestCase
             'password' => Hash::make('qwerty321'),
         ]);
 
-        $response = $this->post(route('admin-login-post'), [
+        $response = $this->from(route('admin-login'))->post(route('admin-login-post'), [
 'username_or_email' => 'adminMedia',
 'password' => 'wrong-password',
         ]);

@@ -1,3 +1,5 @@
+﻿@use "variables" as var;
+
 //Statistik dan Visi Misi
 .statistik {
     position: relative;
@@ -6,7 +8,7 @@
 
      .section-title {
         text-align: center;
-        color: $color-primary;
+        color: var.$color-primary;
         margin-bottom: 10px;
         font-weight: 600;
     }
@@ -38,7 +40,7 @@
             height: 75px;
             border-radius: 50%;
             background: rgba(17, 122, 139, 0.1);
-            color: $color-primary;
+            color: var.$color-primary;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -47,7 +49,7 @@
 
         h2 {
             font-size: 2.1rem;
-            color: $color-primary;
+            color: var.$color-primary;
         }
 
         p {
@@ -58,11 +60,11 @@
 
 .visi-misi {
     padding: 60px 20px;
-    background: $color-background;
+    background: var.$color-background;
 
     .section-title {
         text-align: center;
-        color: $color-primary;
+        color: var.$color-primary;
         margin-bottom: 40px;
         font-size: 2rem;
     }
@@ -74,7 +76,7 @@
         justify-content: center;
 
         .vm-card {
-            background: $color-background;
+            background: var.$color-background;
             border-radius: 15px;
             padding: 30px;
             flex: 1 1 400px;
@@ -90,8 +92,8 @@
                 background-color: transparent;
 
                 .icon {
-                    background: rgba($color-primary, 0.1);
-                    color: $color-primary;
+                    background: rgba(var.$color-primary, 0.1);
+                    color: var.$color-primary;
                     width: 40px;
                     height: 40px;
                     border-radius: 50%;
@@ -102,13 +104,13 @@
 
                 h3 {
                     margin: 0;
-                    color: $color-primary;
+                    color: var.$color-primary;
                 }
             }
         }
 
         p {
-            color: $color-text;
+            color: var.$color-text;
             line-height: 1.7;
         }
 
@@ -121,7 +123,7 @@
                 position: relative;
                 padding-left: 30px;
                 margin-bottom: 10px;
-                color: $color-text;
+                color: var.$color-text;
 
                 &::before {
                     content: "\2022";
@@ -129,7 +131,7 @@
                     position: absolute;
                     left: 0;
                     top: 0;
-                    color: $color-primary;
+                    color: var.$color-primary;
                     font-weight: bold;
                 }
             }

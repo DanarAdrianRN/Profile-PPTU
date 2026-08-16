@@ -1,3 +1,5 @@
+﻿@use "../../components/variables" as var;
+
 .payment-success-page {
     padding: 120px 0;
     background: #f8fafc;
@@ -235,7 +237,7 @@
         }
 
         .btn-download {
-            background: $color-primary;
+            background: var.$color-primary;
             color: #fff;
         }
     }

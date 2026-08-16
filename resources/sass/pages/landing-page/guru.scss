@@ -1,6 +1,9 @@
+﻿@use "sass:color";
+@use "../../components/variables" as var;
+
 .guru-section {
     padding: 60px 0;
-    background-color: $color-gray-100;
+    background-color: var.$color-gray-100;
 
     .guru-tabs {
         display: flex;
@@ -13,20 +16,20 @@
             border: none;
             padding: 14px 25px;
             border-radius: 40px;
-            background: $color-gray-100;
+            background: var.$color-gray-100;
             color: #666;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 500;
 
             &.active {
-                background: $color-primary;
+                background: var.$color-primary;
                 color: #fff;
                 box-shadow: 0 4px 15px rgba(0, 128, 128, 0.2);
             }
 
             &:hover:not(.active) {
-                background: darken(#f3f4f6, 5%);
+                background: color.adjust(#f3f4f6, $lightness: -5%);
             }
         }
     }
@@ -71,7 +74,7 @@
 
             .label {
                 background: rgba(0, 128, 128, 0.1);
-                color: $color-primary;
+                color: var.$color-primary;
                 padding: 6px 14px;
                 border-radius: 30px;
                 font-size: 0.8rem;
@@ -104,7 +107,7 @@
                     font-size: 0.9rem;
 
                     i {
-                        color: $color-primary;
+                        color: var.$color-primary;
                         width: 16px;
                     }
                 }

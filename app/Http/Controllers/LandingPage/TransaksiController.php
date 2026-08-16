@@ -28,7 +28,7 @@ class TransaksiController extends Controller
 
     public function pembayaranPendaftaran(Transaksi $transaksi)
     {
-        $transaksi->load('pendaftaran.pendidikan', 'pembayaran');
+        $transaksi->load('pendaftaran.pendidikan', 'pembayaran', 'details.tagihanSantriDetail');
 
         return view('pages.landing-page.pembayaran.pembayaran', [
             'showModal' => false,

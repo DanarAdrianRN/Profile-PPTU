@@ -1,3 +1,6 @@
+﻿@use "sass:color";
+@use "../../components/variables" as var;
+
 .form-pendaftaran {
     padding: 70px 20px;
     background: #f8f9fa;
@@ -7,7 +10,7 @@
         margin-bottom: 40px;
 
         h2 {
-            color: $color-primary;
+            color: var.$color-primary;
             margin-bottom: 10px;
         }
 
@@ -62,12 +65,12 @@
 
             &.active {
                 .circle {
-                    background: $color-primary;
+                    background: var.$color-primary;
                     color: #fff;
                 }
 
                 span {
-                    color: $color-primary;
+                    color: var.$color-primary;
                     font-weight: 600;
                 }
             }
@@ -114,7 +117,7 @@
                 margin-bottom: 30px;
 
                 h3 {
-                    color: $color-primary;
+                    color: var.$color-primary;
                     margin-bottom: 5px;
                 }
 
@@ -156,7 +159,7 @@
                         select {
                             height: 52px;
                             border: 1px solid #e2e8f0;
-                            color: $color-text;
+                            color: var.$color-text;
                             border-radius: 14px;
                             padding: 0 50px 0 18px;
                             outline: none;
@@ -181,7 +184,7 @@
 
                     label {
                         margin-bottom: 10px;
-                        color: $color-primary;
+                        color: var.$color-primary;
                         font-weight: 600;
                     }
 
@@ -192,10 +195,10 @@
                         padding: 14px;
                         outline: none;
                         transition: 0.3s;
-                        color: $color-text;
+                        color: var.$color-text;
 
                         &:focus {
-                            border-color: $color-primary;
+                            border-color: var.$color-primary;
                             box-shadow: 0 0 0 4px rgba(17, 122, 139, 0.1);
                         }
                     }
@@ -210,7 +213,7 @@
                             align-items: center;
                             gap: 8px;
                             font-weight: normal;
-                            color: $color-text;
+                            color: var.$color-text;
                             white-space: nowrap;
                         }
                     }
@@ -221,7 +224,7 @@
                         display: block;
                         margin-bottom: 12px;
                         font-weight: 600;
-                        color: $color-primary;
+                        color: var.$color-primary;
                     }
 
                     .upload-box {
@@ -281,14 +284,14 @@
                         }
 
                         &:hover {
-                            border-color: $color-primary;
+                            border-color: var.$color-primary;
                             background: rgba(17, 122, 139, 0.03);
                             transform: translateY(-3px);
                         }
 
                         i {
                             font-size: 1.4rem;
-                            color: $color-primary;
+                            color: var.$color-primary;
                         }
 
                         p {
@@ -329,17 +332,17 @@
             gap: 10px;
 
             &.primary {
-                background: $color-primary;
+                background: var.$color-primary;
                 color: #fff;
 
                 &:hover {
-                    background: darken($color-primary, 8%);
+                    background: color.adjust(var.$color-primary, $lightness: -8%);
                 }
             }
 
             &.secondary {
                 background: #e9ecef;
-                color: $color-text;
+                color: var.$color-text;
 
                 &:hover {
                     background: #dfe3e7;

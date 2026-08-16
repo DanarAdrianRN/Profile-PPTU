@@ -8,11 +8,11 @@
             <div class="pendaftaran-header">
                 <div class="content">
                     <h2>{{ $periodeAktif?->nama_periode ?? 'Pendaftaran Santri Baru' }}</h2>
-                    <p>Yayasan Tarbiyatul Ulum Sumursongo</p>
+                    <p>Pondok Pesantren Tarbiyatul Ulum</p>
 
                     <div class="promo">
                         <i class="fa-solid fa-gift"></i>
-                        Penawaran Spesial {{ $promos?->nama_promo ?? 'Masih belum ada ' }}
+                        Penawaran Spesial {{ $promos?->nama_promo ?? 'Belum Tersedia' }}
                     </div>
                 </div>
 

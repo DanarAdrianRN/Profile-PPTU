@@ -208,7 +208,7 @@
                     @endif
 
                     <div class="payment-total">
-                        <span>Total yang harus dibayar</span>
+                        <span>Total yang dibayar</span>
 
                         <h3>
                             Rp {{ number_format($transaksi->nominal, 0, ',', '.') }}

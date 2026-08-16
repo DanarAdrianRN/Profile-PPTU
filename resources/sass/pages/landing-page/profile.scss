@@ -1,3 +1,5 @@
+﻿@use "../../components/variables" as var;
+
 .sejarah {
     padding: 60px 20px;
     background: #f8fafc;
@@ -28,7 +30,7 @@
             flex:1;
 
             h2{
-                color:$color-primary;
+                color:var.$color-primary;
                 font-size:36px;
                 margin-bottom:20px;
                 position: relative;
@@ -50,7 +52,7 @@
             p{
                 margin-top:25px;
                 line-height:2;
-                color:$color-text;
+                color:var.$color-text;
                 text-align:justify;
             }
 
@@ -127,7 +129,7 @@
 
     .section-title {
         text-align: center;
-        color: $color-primary;
+        color: var.$color-primary;
         margin-bottom: 10px;
         font-weight: 600;
     }
@@ -167,14 +169,14 @@
                 128,
                 96,
                 0.1
-            ); // bisa pakai $color-primary transparan
+            ); // bisa pakai var.$color-primary transparan
             display: flex;
             align-items: center;
             justify-content: center;
 
             i {
                 font-size: 26px;
-                color: $color-primary;
+                color: var.$color-primary;
             }
         }
 
@@ -198,7 +200,7 @@
 
     .section-title {
         text-align: center;
-        color: $color-primary;
+        color: var.$color-primary;
         margin-bottom: 10px;
         font-weight: 600;
     }
@@ -239,7 +241,7 @@
         }
 
         &.primary {
-            border-left: 5px solid $color-primary;
+            border-left: 5px solid var.$color-primary;
         }
 
         .icon {
@@ -268,7 +270,7 @@
     }
 
     .primary .icon i {
-        color: $color-primary;
+        color: var.$color-primary;
     }
 }
 
@@ -289,13 +291,13 @@
         overflow: hidden;
 
         &::before {
-            content: "﷽";
+            content: "ï·½";
             position: absolute;
             right: 40px;
             top: 10px;
             font-size: 8rem;
             opacity: 0.05;
-            color: $color-primary;
+            color: var.$color-primary;
             font-family: serif;
         }
 
@@ -303,7 +305,7 @@
             display: block;
             font-size: 3rem;
             font-weight: 700;
-            color: $color-primary;
+            color: var.$color-primary;
             margin-bottom: 20px;
             line-height: 1.8;
         }
@@ -330,12 +332,12 @@
 
     h2 {
         font-size: 2rem;
-        color: $color-primary;
+        color: var.$color-primary;
         margin-bottom: 10px;
     }
 
     p {
-        color: $color-text;
+        color: var.$color-text;
         margin-bottom: 20px;
     }
 
@@ -347,8 +349,8 @@
         .btn {
             margin-top: 15px;
             display: inline-block;
-            background: $color-primary;
-            color: $color-background;
+            background: var.$color-primary;
+            color: var.$color-background;
             font-weight: 600;
             padding: 10px 20px;
             border-radius: 10px;
@@ -360,12 +362,12 @@
 
             &.fadee {
                 background-color: transparent;
-                border: 2px solid $color-primary;
-                color: $color-primary;
+                border: 2px solid var.$color-primary;
+                color: var.$color-primary;
 
                 &:hover {
-                    background-color: $color-primary;
-                    color: $color-background;
+                    background-color: var.$color-primary;
+                    color: var.$color-background;
                 }
             }
         }

@@ -30,13 +30,27 @@
                             <h4>Detail Pembayaran</h4>
                         </div>
 
-                        <div class="payment-item">
-                            <span>Biaya Pendaftaran</span>
+                        @forelse ($transaksi->details as $detail)
+                            <div class="payment-item">
+                                <span>
+                                    {{ $detail->tagihanSantriDetail?->nama_pembayaran ?? 'Daftar Ulang' }}
+                                </span>
 
-                            <strong>
-                                Rp {{ number_format($transaksi->nominal, 0, ',', '.') }}
-                            </strong>
-                        </div>
+                                <strong>
+                                    Rp {{ number_format($detail->nominal, 0, ',', '.') }}
+                                </strong>
+                            </div>
+                        @empty
+                            <div class="payment-item">
+                                <span>
+                                    {{ $transaksi->pembayaran?->nama_pembayaran ?? 'Biaya Pendaftaran' }}
+                                </span>
+
+                                <strong>
+                                    Rp {{ number_format($transaksi->nominal, 0, ',', '.') }}
+                                </strong>
+                            </div>
+                        @endforelse
 
                         <div class="payment-item">
                             <span>Status</span>

@@ -1,3 +1,5 @@
+﻿@use "../../components/variables" as var;
+
 .virtual-tour {
     background: #f4f7f9;
 
@@ -54,7 +56,7 @@
         font-weight: 600;
 
         &.primary {
-            background: $color-primary;
+            background: var.$color-primary;
             color: #fff;
 
             &:hover {
@@ -101,7 +103,7 @@
             margin-bottom: 30px;
 
             h3 {
-                color: $color-primary;
+                color: var.$color-primary;
                 margin-bottom: 10px;
             }
 
@@ -142,7 +144,7 @@
             overflow: hidden;
             flex: 0 0 48px;
             background: rgba(17, 122, 139, 0.1);
-            color: $color-primary;
+            color: var.$color-primary;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -161,7 +163,7 @@
 
         h5 {
             margin-bottom: 5px;
-            color: $color-text;
+            color: var.$color-text;
         }
 
         span {
@@ -171,7 +173,7 @@
 
         &:hover,
         &.active {
-            background: $color-primary;
+            background: var.$color-primary;
 
             transform: translateX(4px);
 
@@ -195,7 +197,7 @@
     //         margin-bottom: 15px;
 
     //         h4 {
-    //             color: $color-primary;
+    //             color: var.$color-primary;
     //         }
     //     }
     // }
@@ -218,7 +220,7 @@
 
     //     i {
     //         font-size: 2rem;
-    //         color: $color-primary;
+    //         color: var.$color-primary;
     //     }
 
     //     span {
@@ -312,7 +314,7 @@
             margin-bottom: 25px;
 
             h3 {
-                color: $color-primary;
+                color: var.$color-primary;
                 margin-bottom: 8px;
             }
 
@@ -330,12 +332,12 @@
                     border: none;
                     border-radius: 14px;
                     background: #f4f7f9;
-                    color: $color-primary;
+                    color: var.$color-primary;
                     cursor: pointer;
                     transition: 0.3s;
 
                     &:hover {
-                        background: $color-primary;
+                        background: var.$color-primary;
                         color: #fff;
                     }
                 }
@@ -372,12 +374,12 @@
 
                 i {
                     font-size: 4rem;
-                    color: $color-primary;
+                    color: var.$color-primary;
                     margin-bottom: 18px;
                 }
 
                 h3 {
-                    color: $color-primary;
+                    color: var.$color-primary;
                     margin-bottom: 10px;
                 }
 
@@ -405,7 +407,7 @@
                     width: 85px;
                     border-radius: 16px;
                     background: rgba(17, 122, 139, 0.1);
-                    color: $color-primary;
+                    color: var.$color-primary;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -413,7 +415,7 @@
 
                 h5 {
                     margin-bottom: 8px;
-                    color: $color-text;
+                    color: var.$color-text;
                 }
 
                 p {
@@ -505,7 +507,7 @@
             height: 52px;
             border-radius: 16px;
             background: rgba(17, 122, 139, 0.1);
-            color: $color-primary;
+            color: var.$color-primary;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -513,7 +515,7 @@
 
         h5 {
             margin-bottom: 8px;
-            color: $color-text;
+            color: var.$color-text;
         }
 
         p {

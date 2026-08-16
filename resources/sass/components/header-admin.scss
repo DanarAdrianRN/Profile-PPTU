@@ -1,3 +1,5 @@
+﻿@use "variables" as var;
+
 .header-admin {
     background: #fff;
     padding: 30px;
@@ -50,7 +52,7 @@
             gap: 12px;
             padding: 0;
             border: 0;
-            background: $color-primary;
+            background: var.$color-primary;
             text-align: left;
             cursor: pointer;
             border-radius: 15px;
@@ -60,8 +62,8 @@
                 width: 42px;
                 height: 42px;
                 border-radius: 50%;
-                background: $color-secondary;
-                color: $color-text;
+                background: var.$color-secondary;
+                color: var.$color-text;
                 display: flex;
                 align-items: center;
                 justify-content: center;

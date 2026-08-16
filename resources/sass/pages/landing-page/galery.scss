@@ -1,3 +1,5 @@
+﻿@use "../../components/variables" as var;
+
 .galeri {
     background: #f8fafc;
     padding-bottom: 100px;
@@ -180,7 +182,7 @@
             border-radius: 12px;
             border: 1px solid rgba(17, 122, 139, 0.15);
             background: #fff;
-            color: $color-primary;
+            color: var.$color-primary;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -190,12 +192,12 @@
 
         &:hover:not(.disabled) .page-link {
             background: rgba(17, 122, 139, .08);
-            border-color: $color-primary;
+            border-color: var.$color-primary;
         }
 
         &.active .page-link {
-            background: $color-primary;
-            border-color: $color-primary;
+            background: var.$color-primary;
+            border-color: var.$color-primary;
             color: #fff;
             box-shadow: 0 8px 20px rgba(17, 122, 139, .25);
         }
@@ -335,10 +337,10 @@
                 letter-spacing: 1px;
                 cursor: pointer;
                 transition: 0.3s;
-                color: $color-secondary;
+                color: var.$color-secondary;
 
                 &:hover {
-                    color: $color-secondary;
+                    color: var.$color-secondary;
                     transform: translateY(-2px);
                 }
             }
