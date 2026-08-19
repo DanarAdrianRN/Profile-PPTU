@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\VirtualTourHotspot;
 use App\Models\VirtualTourScene;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -109,10 +110,16 @@ class VirtualTourController extends Controller
     {
         $namaScene = $scene->nama_lokasi;
 
-        $this->deleteFile($scene->thumbnail);
-        $this->deleteFile($scene->panorama);
+        DB::transaction(function () use ($scene) {
+            // Hapus hotspot dari scene lain yang menjadikan scene ini sebagai tujuan.
+            VirtualTourHotspot::where('target_scene_id', $scene->id)->delete();
 
-        $scene->delete();
+            $this->deleteFile($scene->thumbnail);
+            $this->deleteFile($scene->panorama);
+
+            // Hotspot milik scene ini juga dihapus oleh foreign key cascade.
+            $scene->delete();
+        });
 
         $this->catatAktivitas(
             'delete',

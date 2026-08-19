@@ -2556,7 +2556,7 @@
                             <button type="button" class="btn-cancel" data-dismiss="modal">
                                 Batal
                             </button>
-                            <button type="button" class="btn-delete-confirm" data-dismiss="modal">
+                            <button type="submit" class="btn-delete-confirm" data-dismiss="modal">
                                 <i class="fa-solid fa-trash"></i>
                                 Hapus Data
                             </button>
@@ -2973,72 +2973,47 @@
             </div>
         @endforeach
     @endisset
-
+    
     @isset($gelombangs)
         <!-- HAPUS MODAL GELOMBANG -->
         @foreach ($gelombangs as $item)
             <div class="modal fade delete-modal" id="modalHapusGelombang{{ $item->id }}" tabindex="-1"
                 aria-hidden="true">
-
                 <div class="modal-dialog modal-dialog-centered">
-
                     <div class="modal-content">
-
                         <!-- ICON -->
                         <div class="delete-icon">
-
                             <i class="fa-regular fa-trash-can"></i>
-
                         </div>
-
                         <!-- CONTENT -->
                         <div class="delete-content">
-
                             <span class="delete-label">
                                 Konfirmasi Penghapusan
                             </span>
-
                             <h3>
                                 Yakin ingin menghapus data ini?
                             </h3>
-
                             <p>
                                 Data yang sudah dihapus tidak dapat dikembalikan lagi.
                                 Pastikan tindakan ini sudah benar.
                             </p>
-
                         </div>
-
                         <!-- ACTION -->
                         <div class="delete-action">
-
                             <button type="button" class="btn-cancel" data-dismiss="modal">
-
                                 Batal
-
                             </button>
-
                             <form action="{{ route('gelombang.destroy', $item->id) }}" method="POST">
-
                                 @csrf
                                 @method('DELETE')
-
                                 <button type="submit" class="btn-delete-confirm">
-
                                     <i class="fa-solid fa-trash"></i>
-
                                     Hapus Data
-
                                 </button>
-
                             </form>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
         @endforeach
     @endisset
@@ -3408,7 +3383,7 @@
                     <button type="button" class="btn-cancel" data-dismiss="modal">
                         Batal
                     </button>
-                    <button type="button" class="btn-delete-confirm" data-dismiss="modal">
+                    <button type="submit" class="btn-delete-confirm" data-dismiss="modal">
                         <i class="fa-solid fa-trash"></i>
                         Hapus Data
                     </button>
@@ -3924,6 +3899,37 @@
                 </div>
             </div>
 
+            <div class="modal fade delete-modal" id="modalHapusScene" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="delete-icon">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </div>
+                        <div class="delete-content">
+                            <span class="delete-label">Konfirmasi Penghapusan</span>
+                            <h3>Yakin ingin menghapus scene ini?</h3>
+                            <p>
+                                Scene <strong id="deleteSceneName">{{ $activeScene->nama_lokasi }}</strong>, seluruh hotspot di dalamnya,
+                                dan hotspot dari scene lain yang mengarah ke scene ini akan dihapus.
+                            </p>
+                        </div>
+                        <div class="delete-action">
+                            <button type="button" class="btn-cancel" data-dismiss="modal">Batal</button>
+                            <form method="POST" action="{{ route('virtual-tour.scene.destroy', $activeScene->id) }}"
+                                id="deleteSceneForm">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete-confirm">
+                                    <i class="fa-solid fa-trash"></i>
+                                    Hapus Data
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="modal fade admin-modal virtual-tour-modal" id="modalTambahHotspot" tabindex="-1"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -3995,17 +4001,6 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <form method="POST"
-                                        action="{{ route('virtual-tour.hotspot.destroy', $hotspot->id) }}"
-                                        class="virtual-tour-delete">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete"
-                                            onclick="return confirm('Hapus hotspot ini?')">
-                                            <i class="fa-solid fa-trash"></i>
-                                            Hapus Hotspot
-                                        </button>
-                                    </form>
                                     <button type="button" class="btn-cancel" data-dismiss="modal">Batal</button>
                                     <button type="submit" form="formEditHotspotVirtualTour{{ $hotspot->id }}"
                                         class="btn-save">
@@ -4017,6 +4012,35 @@
                         </div>
                     </div>
                 @endforeach
+            </div>
+
+            <div class="modal fade delete-modal" id="modalHapusHotspot" tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="delete-icon">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </div>
+                        <div class="delete-content">
+                            <span class="delete-label">Konfirmasi Penghapusan</span>
+                            <h3>Yakin ingin menghapus hotspot ini?</h3>
+                            <p>
+                                Hotspot <strong id="deleteHotspotName">ini</strong> akan dihapus dan tidak dapat dikembalikan lagi.
+                            </p>
+                        </div>
+                        <div class="delete-action">
+                            <button type="button" class="btn-cancel" data-dismiss="modal">Batal</button>
+                            <form method="POST" action="#" id="deleteHotspotForm">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete-confirm">
+                                    <i class="fa-solid fa-trash"></i>
+                                    Hapus Data
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         @endif
     @endif

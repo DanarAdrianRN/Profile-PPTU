@@ -36,7 +36,7 @@
 
             <div class="scene-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="sceneSearch" placeholder="Cari lokasi...">
+                <input type="text" id="sceneSearch" placeholder="Cari Scane...">
             </div>
 
             <div class="scene-list" id="sceneList">
@@ -77,18 +77,6 @@
                     </div>
                 @endforelse
             </div>
-
-            <div class="tour-map-card">
-                <div class="map-head">
-                    <h4>Mini Map</h4>
-                    <span>Denah Lokasi</span>
-                </div>
-
-                <div class="map-placeholder">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <p>Interactive Map</p>
-                </div>
-            </div>
         </aside>
 
         <div class="tour-admin-main">
@@ -101,11 +89,6 @@
 
                 <div class="topbar-action">
                     @if ($activeScene)
-                        <button class="tour-btn secondary" data-toggle="modal" data-target="#modalEditScene">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                            Edit Scene
-                        </button>
-
                         <form method="POST" action="{{ route('virtual-tour.scene.update', $activeScene->id) }}"
                             id="publishSceneForm">
                             @csrf
@@ -242,16 +225,11 @@
                                 </button>
                             </form>
 
-                            <form method="POST" action="{{ route('virtual-tour.scene.destroy', $activeScene->id) }}"
-                                class="mt-3" id="deleteSceneForm">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="danger-btn"
-                                    onclick="return confirm('Hapus scene ini beserta semua hotspotnya?')">
-                                    <i class="fa-solid fa-trash"></i>
-                                    Hapus Scene
-                                </button>
-                            </form>
+                            <button type="button" class="danger-btn mt-3" data-toggle="modal"
+                                data-target="#modalHapusScene">
+                                <i class="fa-solid fa-trash"></i>
+                                Hapus Scene
+                            </button>
                         @else
                             <button class="tour-btn primary w-100" data-toggle="modal" data-target="#modalTambahScene">
                                 <i class="fa-solid fa-plus"></i>
@@ -297,10 +275,18 @@
                                             <span>{{ $hotspot->judul ?? ($hotspot->targetScene?->nama_lokasi ?? '-') }}</span>
                                         </div>
 
-                                        <button type="button" class="hotspot-btn" data-toggle="modal"
-                                            data-target="#modalEditHotspot{{ $hotspot->id }}">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </button>
+                                        <div class="hotspot-actions">
+                                            <button type="button" class="hotspot-btn" data-toggle="modal"
+                                                data-target="#modalEditHotspot{{ $hotspot->id }}">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                            <button type="button" class="hotspot-btn delete" data-toggle="modal"
+                                                data-target="#modalHapusHotspot"
+                                                data-delete-hotspot-url="{{ route('virtual-tour.hotspot.destroy', $hotspot->id) }}"
+                                                data-hotspot-label="{{ $hotspot->judul ?? ($hotspot->targetScene?->nama_lokasi ?? ucfirst($hotspot->tipe)) }}">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 @empty
                                     <div class="hotspot-item">
@@ -419,6 +405,9 @@
                 const sceneSettingsForm = document.getElementById('sceneSettingsForm');
                 const editSceneForm = document.getElementById('formEditSceneVirtualTour');
                 const deleteSceneForm = document.getElementById('deleteSceneForm');
+                const deleteSceneName = document.getElementById('deleteSceneName');
+                const deleteHotspotForm = document.getElementById('deleteHotspotForm');
+                const deleteHotspotName = document.getElementById('deleteHotspotName');
                 const publishSceneForm = document.getElementById('publishSceneForm');
                 const addHotspotForm = document.getElementById('formTambahHotspotVirtualTour');
                 const hotspotModalContainer = document.getElementById('adminHotspotModals');
@@ -807,14 +796,6 @@
                                         </div>
 
                                         <div class="modal-footer">
-                                            <form method="POST" action="${escapeHtml(hotspot.destroyUrl)}" class="virtual-tour-delete">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="btn-delete" onclick="return confirm('Hapus hotspot ini?')">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                    Hapus Hotspot
-                                                </button>
-                                            </form>
                                             <button type="button" class="btn-cancel" data-dismiss="modal">Batal</button>
                                             <button type="submit" form="formEditHotspotVirtualTour${hotspot.id}" class="btn-save">
                                                 <i class="fa-solid fa-pen-to-square"></i>
@@ -881,9 +862,16 @@
                                     <span>${escapeHtml(hotspot.label)}</span>
                                 </div>
 
-                                <button type="button" class="hotspot-btn" ${buttonAttrs}>
-                                    <i class="fa-solid fa-pen"></i>
-                                </button>
+                                <div class="hotspot-actions">
+                                    <button type="button" class="hotspot-btn" ${buttonAttrs}>
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+                                    <button type="button" class="hotspot-btn delete" data-toggle="modal"
+                                        data-target="#modalHapusHotspot" data-delete-hotspot-url="${escapeHtml(hotspot.destroyUrl)}"
+                                        data-hotspot-label="${escapeHtml(hotspot.label)}">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
                         `;
                         }).join('');
@@ -904,7 +892,25 @@
                         if (deleteSceneForm) {
                             deleteSceneForm.action = sceneData.destroyUrl;
                         }
+
+                        if (deleteSceneName) {
+                            deleteSceneName.textContent = sceneData.namaLokasi || 'scene ini';
+                        }
                     }
+
+                    document.addEventListener('click', function(event) {
+                        const deleteButton = event.target.closest('[data-delete-hotspot-url]');
+
+                        if (!deleteButton) return;
+
+                        if (deleteHotspotForm) {
+                            deleteHotspotForm.action = deleteButton.dataset.deleteHotspotUrl;
+                        }
+
+                        if (deleteHotspotName) {
+                            deleteHotspotName.textContent = deleteButton.dataset.hotspotLabel || 'hotspot ini';
+                        }
+                    });
 
                     function updateSceneChrome(sceneData, sceneId, shouldPushState, arrivalView) {
                         setActiveSceneItem(sceneId);

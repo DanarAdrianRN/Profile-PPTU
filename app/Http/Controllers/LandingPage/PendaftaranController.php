@@ -117,6 +117,8 @@ class PendaftaranController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge(['nisn' => trim((string) $request->input('nisn'))]);
+
         $gelombangAktif = GelombangPendaftaran::aktif()
             ->orderBy('urutan')
             ->first();
@@ -132,6 +134,7 @@ class PendaftaranController extends Controller
             'nama_lengkap' => 'required',
             'jenis_kelamin' => 'required',
             'agama' => 'required',
+            'nisn' => 'nullable|string|max:20|unique:pendaftaran_pendidikans,nisn',
 
             'akta_kelahiran' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
             'ktp_ortu'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',

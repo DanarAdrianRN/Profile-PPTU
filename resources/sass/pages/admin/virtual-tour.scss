@@ -836,6 +836,17 @@
         }
     }
 
+    .hotspot-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+    }
+
+    .hotspot-btn.delete {
+        color: #dc2626;
+        border-color: rgba(220, 38, 38, 0.2);
+    }
+
     h5 {
         color: #fff;
         margin-bottom: 4px;
