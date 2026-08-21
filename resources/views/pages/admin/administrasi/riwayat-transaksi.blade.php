@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                {{-- TABLE --}}
+            <div class="table-card">
                 <div class="table-wrapper">
                     <table id="riwayatTable">
                         <thead>
@@ -122,7 +122,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="table-footer">
                     <div class="table-row-limit">
                         <span>Tampilkan</span>
@@ -141,7 +140,7 @@
                         <button class="pagination-btn" id="nextPage"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                 </div>
-
+            </div>
             </div>
         </div>
     </div>

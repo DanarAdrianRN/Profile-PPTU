@@ -136,7 +136,7 @@
 
                             <span class="line"></span>
 
-                            <span>Pembayaran</span>
+                            <span>Master Biaya</span>
 
                         </a>
 

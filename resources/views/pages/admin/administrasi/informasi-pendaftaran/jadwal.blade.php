@@ -33,94 +33,94 @@
                         Tambah Jadwal
                     </button>
                 </div>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Jadwal</th>
-                                <th>Periode</th>
-                                <th>Tanggal</th>
-                                <th>Urutan</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="jadwalTableBody">
-                            @forelse ($jadwals as $jadwal)
-                                <tr data-status="{{ $jadwal->is_publish ? 'publish' : 'draft' }}">
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        <div class="gelombang-info">
-                                            <h5>
-                                                {{ $jadwal->nama_jadwal }}
-                                            </h5>
-                                            <span>Jadwal alur pendaftaran</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {{ $jadwal->periode?->nama_periode ?? 'Semua periode' }}
-                                    </td>
-                                    <td>
-                                        {{ $jadwal->tanggal->translatedFormat('d F Y') }}
-                                    </td>
-                                    <td>{{ $jadwal->urutan }}</td>
-                                    <td>
-                                        <span class="status {{ $jadwal->is_publish ? 'active' : 'warning' }}">
-                                            {{ $jadwal->is_publish ? 'Publish' : 'Draft' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="table-action">
-                                            <button class="btn-action edit"
-                                                data-toggle="modal"
-                                                data-target="#modalEditJadwal{{ $jadwal->id }}">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </button>
-
-                                            <button class="btn-action delete"
-                                                data-toggle="modal"
-                                                data-target="#modalHapusJadwal{{ $jadwal->id }}">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
+                <div class="table-card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td colspan="7">
-                                        Belum ada data jadwal pendaftaran
-                                    </td>
+                                    <th>No</th>
+                                    <th>Jadwal</th>
+                                    <th>Periode</th>
+                                    <th>Tanggal</th>
+                                    <th>Urutan</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="table-footer">
-                    <div class="table-row-limit">
-                        <span>Tampilkan</span>
-                        <select id="rowsPerPage">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
-                        <span>data</span>
+                            </thead>
+    
+                            <tbody id="jadwalTableBody">
+                                @forelse ($jadwals as $jadwal)
+                                    <tr data-status="{{ $jadwal->is_publish ? 'publish' : 'draft' }}">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="gelombang-info">
+                                                <h5>
+                                                    {{ $jadwal->nama_jadwal }}
+                                                </h5>
+                                                <span>Jadwal alur pendaftaran</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{ $jadwal->periode?->nama_periode ?? 'Semua periode' }}
+                                        </td>
+                                        <td>
+                                            {{ $jadwal->tanggal->translatedFormat('d F Y') }}
+                                        </td>
+                                        <td>{{ $jadwal->urutan }}</td>
+                                        <td>
+                                            <span class="status {{ $jadwal->is_publish ? 'active' : 'warning' }}">
+                                                {{ $jadwal->is_publish ? 'Publish' : 'Draft' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="table-action">
+                                                <button class="btn-action edit"
+                                                    data-toggle="modal"
+                                                    data-target="#modalEditJadwal{{ $jadwal->id }}">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </button>
+    
+                                                <button class="btn-action delete"
+                                                    data-toggle="modal"
+                                                    data-target="#modalHapusJadwal{{ $jadwal->id }}">
+                                                    <i class="fa-regular fa-trash-can"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">
+                                            Belum ada data jadwal pendaftaran
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="table-info" id="tableInfo">
-                        Menampilkan data
-                    </div>
-                    <div class="pagination-wrapper">
-                        <button class="pagination-btn" id="prevPage">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        <div class="pagination-number" id="paginationNumber">1</div>
-                        <button class="pagination-btn" id="nextPage">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
+                    <div class="table-footer">
+                        <div class="table-row-limit">
+                            <span>Tampilkan</span>
+                            <select id="rowsPerPage">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                            <span>data</span>
+                        </div>
+                        <div class="table-info" id="tableInfo">
+                            Menampilkan data
+                        </div>
+                        <div class="pagination-wrapper">
+                            <button class="pagination-btn" id="prevPage">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div class="pagination-number" id="paginationNumber">1</div>
+                            <button class="pagination-btn" id="nextPage">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>

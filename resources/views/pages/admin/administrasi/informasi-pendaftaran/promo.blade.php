@@ -41,119 +41,120 @@
                         Tambah Promo
                     </button>
                 </div>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Promo</th>
-                                <th>Gelombang</th>
-                                <th>Jenjang</th>
-                                <th>Biaya</th>
-                                <th>Nilai</th>
-                                <th>Kuota</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="promoTableBody">
-                            @forelse ($promos as $promo)
-                                @php
-                                    $nilaiPromo = match ($promo->tipe) {
-                                        'persentase' => $promo->nilai . '%',
-                                        'gratis_biaya' => 'Gratis Biaya',
-                                        default => 'Rp ' . number_format($promo->nilai, 0, ',', '.'),
-                                    };
-                                @endphp
-
-                                <tr data-jenjang="{{ $promo->jenjang ?? 'all' }}"
-                                    data-status="{{ $promo->is_active ? 'aktif' : 'nonaktif' }}">
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        <div class="gelombang-info">
-                                            <h5>{{ $promo->nama_promo }}</h5>
-                                            <span>{{ $promo->keterangan ?? 'Tidak ada deskripsi' }}</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {{ $promo->gelombangPendaftaran?->nama_gelombang ?? 'Semua gelombang akan datang' }}
-                                    </td>
-                                    <td>{{ $promo->jenjang ?? 'Semua' }}</td>
-                                    <td>
-                                        @if ($promo->pembayarans->count())
-                                            {{ $promo->pembayarans->pluck('nama_pembayaran')->join(', ') }}
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <span class="diskon-badge">
-                                            {{ $nilaiPromo }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {{ $promo->kuota ? $promo->kuota . ' pendaftar' : 'Tanpa batas' }}
-                                    </td>
-                                    <td>
-                                        <span class="status {{ $promo->is_active ? 'active' : 'danger' }}">
-                                            {{ $promo->is_active ? 'Aktif' : 'Nonaktif' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="table-action">
-                                            <button class="btn-action detail"
-                                                data-toggle="modal"
-                                                data-target="#modalViewPromo{{ $promo->id }}">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </button>
-                                            <button class="btn-action edit"
-                                                data-toggle="modal"
-                                                data-target="#modalEditPromo{{ $promo->id }}">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </button>
-                                            <button class="btn-action delete"
-                                                data-toggle="modal"
-                                                data-target="#modalHapusPromo{{ $promo->id }}">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
+                <div class="table-card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td colspan="9">Belum ada data promo</td>
+                                    <th>No</th>
+                                    <th>Promo</th>
+                                    <th>Gelombang</th>
+                                    <th>Jenjang</th>
+                                    <th>Biaya</th>
+                                    <th>Nilai</th>
+                                    <th>Kuota</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="table-footer">
-                    <div class="table-row-limit">
-                        <span>Tampilkan</span>
-                        <select id="rowsPerPage">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
-                        <span>data</span>
+                            </thead>
+    
+                            <tbody id="promoTableBody">
+                                @forelse ($promos as $promo)
+                                    @php
+                                        $nilaiPromo = match ($promo->tipe) {
+                                            'persentase' => $promo->nilai . '%',
+                                            'gratis_biaya' => 'Gratis Biaya',
+                                            default => 'Rp ' . number_format($promo->nilai, 0, ',', '.'),
+                                        };
+                                    @endphp
+    
+                                    <tr data-jenjang="{{ $promo->jenjang ?? 'all' }}"
+                                        data-status="{{ $promo->is_active ? 'aktif' : 'nonaktif' }}">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="gelombang-info">
+                                                <h5>{{ $promo->nama_promo }}</h5>
+                                                <span>{{ $promo->keterangan ?? 'Tidak ada deskripsi' }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{ $promo->gelombangPendaftaran?->nama_gelombang ?? 'Semua gelombang akan datang' }}
+                                        </td>
+                                        <td>{{ $promo->jenjang ?? 'Semua' }}</td>
+                                        <td>
+                                            @if ($promo->pembayarans->count())
+                                                {{ $promo->pembayarans->pluck('nama_pembayaran')->join(', ') }}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <span class="diskon-badge">
+                                                {{ $nilaiPromo }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{ $promo->kuota ? $promo->kuota . ' pendaftar' : 'Tanpa batas' }}
+                                        </td>
+                                        <td>
+                                            <span class="status {{ $promo->is_active ? 'active' : 'danger' }}">
+                                                {{ $promo->is_active ? 'Aktif' : 'Nonaktif' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="table-action">
+                                                <button class="btn-action detail"
+                                                    data-toggle="modal"
+                                                    data-target="#modalViewPromo{{ $promo->id }}">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </button>
+                                                <button class="btn-action edit"
+                                                    data-toggle="modal"
+                                                    data-target="#modalEditPromo{{ $promo->id }}">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </button>
+                                                <button class="btn-action delete"
+                                                    data-toggle="modal"
+                                                    data-target="#modalHapusPromo{{ $promo->id }}">
+                                                    <i class="fa-regular fa-trash-can"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="9">Belum ada data promo</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-
-                    <div class="table-info" id="tableInfo">
-                        Menampilkan data promo
-                    </div>
-
-                    <div class="pagination-wrapper">
-                        <button class="pagination-btn" id="prevPage">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        <div class="pagination-number" id="paginationNumber">1</div>
-                        <button class="pagination-btn" id="nextPage">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
+    
+                    <div class="table-footer">
+                        <div class="table-row-limit">
+                            <span>Tampilkan</span>
+                            <select id="rowsPerPage">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                            <span>data</span>
+                        </div>
+    
+                        <div class="table-info" id="tableInfo">
+                            Menampilkan data promo
+                        </div>
+    
+                        <div class="pagination-wrapper">
+                            <button class="pagination-btn" id="prevPage">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div class="pagination-number" id="paginationNumber">1</div>
+                            <button class="pagination-btn" id="nextPage">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>

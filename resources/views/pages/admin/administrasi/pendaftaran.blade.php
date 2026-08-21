@@ -18,7 +18,7 @@
                         </div>
                         <div class="info">
                             <span>
-                                Total Pendaftar
+                                Total
                             </span>
                             <h3>
                                 {{ $jumlahPendaftaran }}
@@ -31,7 +31,7 @@
                         </div>
                         <div class="info">
                             <span>
-                                Menunggu Verifikasi
+                                Pending
                             </span>
                             <h3>
                                 {{ $menungguVerifikasi }}
@@ -66,7 +66,7 @@
                     </div>
                     <div class="stat-card">
                         <div class="icon teal">
-                            <i class="fa-money-bill-wave"></i>
+                            <i class="fa-solid fa-money-bill-1-wave"></i>
                         </div>
                         <div class="info">
                             <span>
@@ -79,11 +79,11 @@
                     </div>
                     <div class="stat-card">
                         <div class="icon orange">
-                            <i class="fa-money-bill-wave"></i>
+                            <i class="fa-solid fa-money-bill-wave"></i>
                         </div>
                         <div class="info">
                             <span>
-                                Belum Lunas
+                                Nyicil
                             </span>
                             <h3>
                                 {{ $belumLunas }}
@@ -335,8 +335,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-
                 <div class="table-footer">
                     <div class="table-row-limit">
                         <span>Tampilkan</span>
@@ -360,6 +358,7 @@
                             <i class="fa-solid fa-chevron-right"></i>
                         </button>
                     </div>
+                </div>
                 </div>
             </section>
         </div>

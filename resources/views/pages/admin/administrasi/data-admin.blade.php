@@ -6,34 +6,18 @@
 
         <div class="admin-main">
             @include('components.header-admin', ['title' => 'Data Admin'])
-
             <section class="guru-admin">
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        {{ $errors->first() }}
-                    </div>
-                @endif
-
+                @include('components.archive-banner')
                 <div class="filter-wrapper">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" placeholder="Cari admin..." id="searchInput">
                     </div>
-
                     <button class="btn-add" data-toggle="modal" data-target="#modalTambahAdmin">
                         <i class="fa-solid fa-plus"></i>
                         Tambah Admin
                     </button>
                 </div>
-
                 <div class="table-card">
                     <div class="table-responsive">
                         <table class="table-guru" id="adminTable">
@@ -78,8 +62,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-
                 <div class="table-footer">
                     <div class="table-row-limit">
                         <span>Tampilkan</span>
@@ -103,6 +85,7 @@
                             <i class="fa-solid fa-chevron-right"></i>
                         </button>
                     </div>
+                </div>
                 </div>
             </section>
         </div>

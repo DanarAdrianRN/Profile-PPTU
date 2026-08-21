@@ -23,99 +23,99 @@
                         Tambah Periode
                     </button>
                 </div>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Periode</th>
-                                <th>Pendaftar</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="periodeTableBody">
-                            @forelse ($periodes as $periode)
+                <div class="table-card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        <div class="gelombang-info">
-                                            <h5>{{ $periode->nama_periode }}</h5>
-                                            <span>
-                                                {{ $periode->is_active ? 'Periode yang sedang menerima perubahan data' : 'Periode arsip' }}
+                                    <th>No</th>
+                                    <th>Nama Periode</th>
+                                    <th>Pendaftar</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+    
+                            <tbody id="periodeTableBody">
+                                @forelse ($periodes as $periode)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="gelombang-info">
+                                                <h5>{{ $periode->nama_periode }}</h5>
+                                                <span>
+                                                    {{ $periode->is_active ? 'Periode yang sedang menerima perubahan data' : 'Periode arsip' }}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>{{ $periode->pendaftarans_count }} data</td>
+                                        <td>
+                                            <span class="status {{ $periode->is_active ? 'active' : 'danger' }}">
+                                                {{ $periode->is_active ? 'Aktif' : 'Nonaktif' }}
                                             </span>
-                                        </div>
-                                    </td>
-                                    <td>{{ $periode->pendaftarans_count }} data</td>
-                                    <td>
-                                        <span class="status {{ $periode->is_active ? 'active' : 'danger' }}">
-                                            {{ $periode->is_active ? 'Aktif' : 'Nonaktif' }}
-                                        </span>
-                                        @if (session('viewing_periode_id') == $periode->id)
-                                            <span class="status active" style="margin-left: 6px;">
-                                                Sedang Dilihat
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="table-action">
-                                            <a class="btn-action view"
-                                                href="{{ route('periode.lihat-data', $periode->id) }}"
-                                                title="Lihat Data Periode Ini">
-                                                <i class="fa-solid fa-folder-open"></i>
-                                            </a>
-
-                                            <button class="btn-action edit"
-                                                data-toggle="modal"
-                                                data-target="#modalEditPeriode{{ $periode->id }}">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </button>
-
-                                            @if (! $periode->is_active)
-                                                <button class="btn-action delete"
-                                                    data-toggle="modal"
-                                                    data-target="#modalHapusPeriode{{ $periode->id }}">
-                                                    <i class="fa-regular fa-trash-can"></i>
-                                                </button>
+                                            @if (session('viewing_periode_id') == $periode->id)
+                                                <span class="status active" style="margin-left: 6px;">
+                                                    Sedang Dilihat
+                                                </span>
                                             @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5">
-                                        Belum ada data periode
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="table-footer">
-                    <div class="table-row-limit">
-                        <span>Tampilkan</span>
-                        <select id="rowsPerPage">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
-                        <span>data</span>
+                                        </td>
+                                        <td>
+                                            <div class="table-action">
+                                                <a class="btn-action view"
+                                                    href="{{ route('periode.lihat-data', $periode->id) }}"
+                                                    title="Lihat Data Periode Ini">
+                                                    <i class="fa-solid fa-folder-open"></i>
+                                                </a>
+    
+                                                <button class="btn-action edit"
+                                                    data-toggle="modal"
+                                                    data-target="#modalEditPeriode{{ $periode->id }}">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </button>
+    
+                                                @if (! $periode->is_active)
+                                                    <button class="btn-action delete"
+                                                        data-toggle="modal"
+                                                        data-target="#modalHapusPeriode{{ $periode->id }}">
+                                                        <i class="fa-regular fa-trash-can"></i>
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5">
+                                            Belum ada data periode
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="table-info" id="tableInfo">
-                        Menampilkan data
-                    </div>
-                    <div class="pagination-wrapper">
-                        <button class="pagination-btn" id="prevPage">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        <div class="pagination-number" id="paginationNumber">1</div>
-                        <button class="pagination-btn" id="nextPage">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
+                    <div class="table-footer">
+                        <div class="table-row-limit">
+                            <span>Tampilkan</span>
+                            <select id="rowsPerPage">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                            <span>data</span>
+                        </div>
+                        <div class="table-info" id="tableInfo">
+                            Menampilkan data
+                        </div>
+                        <div class="pagination-wrapper">
+                            <button class="pagination-btn" id="prevPage">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div class="pagination-number" id="paginationNumber">1</div>
+                            <button class="pagination-btn" id="nextPage">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>

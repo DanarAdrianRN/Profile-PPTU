@@ -14,6 +14,7 @@ use App\Models\PendaftaranPendidikan;
 use App\Models\PendaftaranOrangTua;
 use App\Models\PendaftaranDokumen;
 use App\Models\Periode;
+use App\Models\Transaksi;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -731,20 +732,21 @@ class PendaftaranController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        if ($pendaftaran->pendidikan) {
-            $pendaftaran->pendidikan->delete();
-        }
+        DB::transaction(function () use ($pendaftaran) {
+            // Detail transaksi akan ikut terhapus melalui foreign key cascade.
+            Transaksi::where('pendaftaran_id', $pendaftaran->id)->delete();
 
-        $pendaftaran->orangTuas()->delete();
-        $pendaftaran->dokumens()->delete();
+            if ($pendaftaran->pendidikan) {
+                $pendaftaran->pendidikan->delete();
+            }
 
-        /*
-        |--------------------------------------------------------------------------
-        | HAPUS PENDAFTARAN
-        |--------------------------------------------------------------------------
-        */
+            $pendaftaran->orangTuas()->delete();
+            $pendaftaran->dokumens()->delete();
 
-        $pendaftaran->delete();
+            // Hasil tes serta tagihan dan seluruh rincian tagihannya ikut terhapus
+            // melalui foreign key cascade pada database.
+            $pendaftaran->delete();
+        });
 
         return redirect()
             ->back()

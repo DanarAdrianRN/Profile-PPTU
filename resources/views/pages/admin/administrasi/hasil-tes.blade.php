@@ -9,19 +9,6 @@
 
             <section class="hasil-tes">
                 @include('components.archive-banner')
-
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        {{ $errors->first() }}
-                    </div>
-                @endif
-
                 <div class="filter-wrapper">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>

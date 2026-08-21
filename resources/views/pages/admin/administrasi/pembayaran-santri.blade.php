@@ -59,91 +59,90 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- TABLE --}}
-                <div class="table-wrapper">
-                    <table id="biayaTable">
-                        <thead>
-                            <tr>
-                                <th width="5%">No</th>
-                                <th>Santri</th>
-                                <th>Jenjang</th>
-                                <th>Total Tagihan</th>
-                                <th>Sisa Tagihan</th>
-                                <th>Status</th>
-                                <th width="10%">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="biayaTableBody">
-                            @forelse ($tagihans as $tagihan)
-                                <tr data-status="{{ $tagihan->status_pembayaran }}" data-jenjang="{{ $tagihan->jenjang }}">
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        <div class="biaya-info">
-                                            <h5>{{ $tagihan->pendaftaran->nama_lengkap ?? '-' }}</h5>
-                                            <span>NISN: {{ $tagihan->pendaftaran->pendidikan->nisn ?? '-' }}</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="jenjang-badge {{ strtolower($tagihan->jenjang) }}">
-                                            {{ $tagihan->jenjang }}
-                                        </div>
-                                    </td>
-                                    <td class="biaya-nominal">
-                                        Rp {{ number_format($tagihan->nominal_akhir, 0, ',', '.') }}
-                                    </td>
-                                    <td>
-                                        Rp {{ number_format($tagihan->sisa_tagihan, 0, ',', '.') }}
-                                    </td>
-                                    <td>
-                                        <span class="payment-badge {{ $tagihan->status_pembayaran === 'lunas' ? 'paid' : 'unpaid' }}">
-                                            {{ ucfirst(str_replace('_', ' ', $tagihan->status_pembayaran)) }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="table-action">
-                                            <button class="btn-action view" data-toggle="modal"
-                                                data-target="#modalCatatBayar{{ $tagihan->id }}" title="Kelola Pembayaran">
-                                                <i class="fa-solid fa-money-bill-wave"></i>
-                                            </button>
-                                            <a class="btn-action view" href="{{ route('pembayaran-santri.cetak', $tagihan->id) }}" title="Cetak Rincian Tagihan">
-                                                <i class="fa-solid fa-print"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
+                <div class="table-card">
+                    <div class="table-wrapper">
+                        <table id="biayaTable">
+                            <thead>
                                 <tr>
-                                    <td colspan="7" class="text-center">Belum ada data tagihan.</td>
+                                    <th width="5%">No</th>
+                                    <th>Santri</th>
+                                    <th>Jenjang</th>
+                                    <th>Total Tagihan</th>
+                                    <th>Sisa Tagihan</th>
+                                    <th>Status</th>
+                                    <th width="10%">Aksi</th>
                                 </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                {{-- FOOTER: ROW LIMIT + INFO + PAGINATION (client-side, sama seperti menu lain) --}}
-                <div class="table-footer">
-                    <div class="table-row-limit">
-                        <span>Tampilkan</span>
-                        <select id="rowsPerPage">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
-                        <span>data</span>
+                            </thead>
+                            <tbody id="biayaTableBody">
+                                @forelse ($tagihans as $tagihan)
+                                    <tr data-status="{{ $tagihan->status_pembayaran }}" data-jenjang="{{ $tagihan->jenjang }}">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="biaya-info">
+                                                <h5>{{ $tagihan->pendaftaran->nama_lengkap ?? '-' }}</h5>
+                                                <span>NISN: {{ $tagihan->pendaftaran->pendidikan->nisn ?? '-' }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="jenjang-badge {{ strtolower($tagihan->jenjang) }}">
+                                                {{ $tagihan->jenjang }}
+                                            </div>
+                                        </td>
+                                        <td class="biaya-nominal">
+                                            Rp {{ number_format($tagihan->nominal_akhir, 0, ',', '.') }}
+                                        </td>
+                                        <td>
+                                            Rp {{ number_format($tagihan->sisa_tagihan, 0, ',', '.') }}
+                                        </td>
+                                        <td>
+                                            <span class="payment-badge {{ $tagihan->status_pembayaran === 'lunas' ? 'paid' : 'unpaid' }}">
+                                                {{ ucfirst(str_replace('_', ' ', $tagihan->status_pembayaran)) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="table-action">
+                                                <button class="btn-action view" data-toggle="modal"
+                                                    data-target="#modalCatatBayar{{ $tagihan->id }}" title="Kelola Pembayaran">
+                                                    <i class="fa-solid fa-money-bill-wave"></i>
+                                                </button>
+                                                <a class="btn-action view" href="{{ route('pembayaran-santri.cetak', $tagihan->id) }}" title="Cetak Rincian Tagihan">
+                                                    <i class="fa-solid fa-print"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">Belum ada data tagihan.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="table-info" id="tableInfo">
-                        Menampilkan 1 - 10 dari {{ $tagihans->count() }} data
-                    </div>
-                    <div class="pagination-wrapper">
-                        <button class="pagination-btn" id="prevPage">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        <div class="pagination-number" id="paginationNumber">1</div>
-                        <button class="pagination-btn" id="nextPage">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
+    
+                    <div class="table-footer">
+                        <div class="table-row-limit">
+                            <span>Tampilkan</span>
+                            <select id="rowsPerPage">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                            <span>data</span>
+                        </div>
+                        <div class="table-info" id="tableInfo">
+                            Menampilkan 1 - 10 dari {{ $tagihans->count() }} data
+                        </div>
+                        <div class="pagination-wrapper">
+                            <button class="pagination-btn" id="prevPage">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div class="pagination-number" id="paginationNumber">1</div>
+                            <button class="pagination-btn" id="nextPage">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

@@ -927,7 +927,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <form class="modal-content" action="{{ route('galeri.destroy', $galeri->id) }}" method="POST">
                         @csrf
-                        @method('DELETE')>
+                        @method('DELETE')
                         <!-- ICON -->
                         <div class="delete-icon">
                             <i class="fa-regular fa-trash-can"></i>
@@ -1269,7 +1269,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <form class="modal-content" action="{{ route('guru.destroy', $guru->id) }}" method="POST">
                         @csrf
-                        @method('DELETE')>
+                        @method('DELETE')
                         <!-- ICON -->
                         <div class="delete-icon">
                             <i class="fa-regular fa-trash-can"></i>
@@ -2533,7 +2533,7 @@
                     <form class="modal-content" action="{{ route('pendaftaran.destroy', $pendaftaran->id) }}"
                         method="POST">
                         @csrf
-                        @method('DELETE')>
+                        @method('DELETE')
                         <!-- ICON -->
                         <div class="delete-icon">
                             <i class="fa-regular fa-trash-can"></i>
@@ -2556,7 +2556,7 @@
                             <button type="button" class="btn-cancel" data-dismiss="modal">
                                 Batal
                             </button>
-                            <button type="submit" class="btn-delete-confirm" data-dismiss="modal">
+                            <button type="submit" class="btn-delete-confirm">
                                 <i class="fa-solid fa-trash"></i>
                                 Hapus Data
                             </button>
@@ -2973,7 +2973,7 @@
             </div>
         @endforeach
     @endisset
-    
+
     @isset($gelombangs)
         <!-- HAPUS MODAL GELOMBANG -->
         @foreach ($gelombangs as $item)
@@ -3226,171 +3226,114 @@
         <!-- MODAL VIEW BIAYA -->
         @foreach ($pembayarans as $item)
             <div class="modal fade admin-modal" id="modalViewBiaya{{ $item->id }}" tabindex="-1">
-
                 <div class="modal-dialog modal-xl modal-dialog-centered">
-
                     <div class="modal-content">
-
                         <!-- HEADER -->
                         <div class="modal-header">
-
                             <div class="modal-title-wrap">
-
                                 <h3>
                                     View Informasi Pembayaran
                                 </h3>
-
                                 <span>
                                     Lihat rincian biaya pendaftaran santri
                                 </span>
-
                             </div>
-
                             <button type="button" class="close-modal" data-dismiss="modal">
-
                                 <i class="fa-solid fa-xmark"></i>
-
                             </button>
-
                         </div>
-
                         <!-- BODY -->
                         <div class="modal-body">
-
                             <div class="biaya-grid">
-
                                 <div class="biaya-card">
-
                                     <div class="card-header">
-
                                         <h3>
-
                                             @if ($item->jenjang == 'SMP')
                                                 <i class="fa-solid fa-school"></i>
-
                                                 SMP Ma'arif Darus Sholihin
                                             @else
                                                 <i class="fa-solid fa-laptop-code"></i>
-
                                                 SMK Ma'arif Darus Sholihin
                                             @endif
-
                                         </h3>
-
                                         <span class="badge">
-
                                             {{ $item->kategori }}
-
                                         </span>
-
                                     </div>
-
                                     <div class="table-wrapper">
-
                                         <table>
-
                                             <tbody>
-
                                                 <tr class="category">
-
                                                     <td colspan="2">
-
                                                         {{ $item->kategori }}
-
                                                     </td>
-
                                                 </tr>
-
                                                 <tr>
-
                                                     <td>
-
                                                         {{ $item->nama_pembayaran }}
-
                                                     </td>
-
                                                     <td>
-
                                                         Rp {{ number_format($item->nominal, 0, ',', '.') }}
-
                                                     </td>
-
                                                 </tr>
-
                                             </tbody>
-
                                         </table>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                         <!-- FOOTER -->
                         <div class="modal-footer">
-
                             <button class="btn-cancel" data-dismiss="modal">
-
                                 Batal
-
                             </button>
-
                             <button class="btn-save" data-dismiss="modal" data-toggle="modal"
                                 data-target="#modalEditBiaya{{ $item->id }}">
-
                                 <i class="fa-solid fa-floppy-disk"></i>
-
                                 Edit Pembayaran
-
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
-
+            </div>
+            <!-- HAPUS MODAL BIAYA -->
+            <div class="modal fade delete-modal" id="modalHapusBiaya{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <form action="{{ route('pembayaran.destroy', $item->id) }}" method="POST" class="modal-content">
+                            @csrf
+                            @method('DELETE')
+                        <!-- ICON -->
+                        <div class="delete-icon">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </div>
+                        <!-- CONTENT -->
+                        <div class="delete-content">
+                            <span class="delete-label">
+                                Konfirmasi Penghapusan
+                            </span>
+                            <h3>
+                                Yakin ingin menghapus data ini?
+                            </h3>
+                            <p>
+                                Data yang sudah dihapus tidak dapat dikembalikan lagi.
+                                Pastikan tindakan ini sudah benar.
+                            </p>
+                        </div>
+                        <!-- ACTION -->
+                        <div class="delete-action">
+                            <button type="button" class="btn-cancel" data-dismiss="modal">
+                                Batal
+                            </button>
+                            <button type="submit" class="btn-delete-confirm">
+                                <i class="fa-solid fa-trash"></i>
+                                Hapus Data
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         @endforeach
     @endisset
-
-    <!-- HAPUS MODAL BIAYA -->
-    <div class="modal fade delete-modal" id="modalHapusBiaya" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <!-- ICON -->
-                <div class="delete-icon">
-                    <i class="fa-regular fa-trash-can"></i>
-                </div>
-                <!-- CONTENT -->
-                <div class="delete-content">
-                    <span class="delete-label">
-                        Konfirmasi Penghapusan
-                    </span>
-                    <h3>
-                        Yakin ingin menghapus data ini?
-                    </h3>
-                    <p>
-                        Data yang sudah dihapus tidak dapat dikembalikan lagi.
-                        Pastikan tindakan ini sudah benar.
-                    </p>
-                </div>
-                <!-- ACTION -->
-                <div class="delete-action">
-                    <button type="button" class="btn-cancel" data-dismiss="modal">
-                        Batal
-                    </button>
-                    <button type="submit" class="btn-delete-confirm" data-dismiss="modal">
-                        <i class="fa-solid fa-trash"></i>
-                        Hapus Data
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         const editNominalInputs =
@@ -3784,7 +3727,8 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="modalHapusHasil{{ $hasil->id }}" tabindex="-1" role="dialog">
+            <div class="modal fade delete-modal" id="modalHapusHasil{{ $hasil->id }}" tabindex="-1"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <!-- ICON -->

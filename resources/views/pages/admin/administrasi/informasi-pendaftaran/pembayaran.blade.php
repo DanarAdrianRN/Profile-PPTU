@@ -35,122 +35,123 @@
                         Tambah Biaya
                     </button>
                 </div>
-                {{-- TABLE --}}
-                <div class="table-wrapper">
-                    <table id="biayaTable">
-                        <thead>
-                            <tr>
-                                <th width="5%">No</th>
-                                <th>Jenjang</th>
-                                <th>Nama Biaya</th>
-                                <th>Kategori</th>
-                                <th>Total</th>
-                                <th width="15%">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="biayaTableBody">
-                            @forelse ($pembayarans as $item)
-                                <tr data-category="{{ $item->kategori }}"
-                                    data-jenjang="{{ $item->jenjang }}">
-                                    {{-- NOMOR --}}
-                                    <td>
-                                        {{ $loop->iteration }}
-                                    </td>
-                                    {{-- JENJANG --}}
-                                    <td>
-                                        <div class="jenjang-badge 
-                                            {{ strtolower($item->jenjang) }}">
-                                            {{ $item->jenjang }}
-                                        </div>
-                                    </td>
-                                    {{-- NAMA BIAYA --}}
-                                    <td>
-                                        <div class="biaya-info">
-                                            <h5>
-                                                {{ $item->nama_pembayaran }}
-                                            </h5>
-                                        </div>
-                                    </td>
-                                    {{-- KATEGORI --}}
-                                    <td>
-                                        <span class="kategori
-                                            {{ $item->kategori == 'Biaya Tahunan' ? 'awal' : 'bulanan' }}">
-                                            {{ $item->kategori }}
-                                        </span>
-                                    </td>
-                                    {{-- NOMINAL --}}
-                                    <td class="biaya-nominal">
-                                        Rp {{ number_format($item->nominal, 0, ',', '.') }}
-                                    </td>
-                                    {{-- AKSI --}}
-                                    <td>
-                                        <div class="table-action">
-                                            {{-- VIEW --}}
-                                            <button
-                                                class="btn-action view"
-                                                data-toggle="modal"
-                                                data-target="#modalViewBiaya{{ $item->id }}">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </button>
-                                            {{-- EDIT --}}
-                                            <button
-                                                class="btn-action edit"
-                                                data-toggle="modal"
-                                                data-target="#modalEditBiaya{{ $item->id }}">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </button>
-                                            {{-- DELETE --}}
-                                            <button
-                                                class="btn-action delete"
-                                                data-toggle="modal"
-                                                data-target="#modalHapus">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
+                <div class="table-card">
+                    <div class="table-wrapper">
+                        <table id="biayaTable">
+                            <thead>
                                 <tr>
-                                    <td colspan="6" class="text-center">
-                                        Data pembayaran belum tersedia
-                                    </td>
+                                    <th width="5%">No</th>
+                                    <th>Jenjang</th>
+                                    <th>Nama Biaya</th>
+                                    <th>Kategori</th>
+                                    <th>Total</th>
+                                    <th width="15%">Aksi</th>
                                 </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="table-footer">
-                        <!-- ROW -->
-                        <div class="table-row-limit">
-                            <span>
-                                Tampilkan
-                            </span>
-                            <select id="rowsPerPage">
-                                <option value="5">5</option>
-                                <option value="10" selected>10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                            </select>
-                            <span>
-                                data
-                            </span>
-                        </div>
-                        <!-- INFO -->
-                        <div class="table-info" id="tableInfo">
-                            Menampilkan 1 - 10 dari 20 data
-                        </div>
-                        <!-- PAGINATION -->
-                        <div class="pagination-wrapper">
-                            <button class="pagination-btn" id="prevPage">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
-                            <div class="pagination-number" id="paginationNumber">
-                                1
+                            </thead>
+                            <tbody id="biayaTableBody">
+                                @forelse ($pembayarans as $item)
+                                    <tr data-category="{{ $item->kategori }}"
+                                        data-jenjang="{{ $item->jenjang }}">
+                                        {{-- NOMOR --}}
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
+                                        {{-- JENJANG --}}
+                                        <td>
+                                            <div class="jenjang-badge 
+                                                {{ strtolower($item->jenjang) }}">
+                                                {{ $item->jenjang }}
+                                            </div>
+                                        </td>
+                                        {{-- NAMA BIAYA --}}
+                                        <td>
+                                            <div class="biaya-info">
+                                                <h5>
+                                                    {{ $item->nama_pembayaran }}
+                                                </h5>
+                                            </div>
+                                        </td>
+                                        {{-- KATEGORI --}}
+                                        <td>
+                                            <span class="kategori
+                                                {{ $item->kategori == 'Biaya Tahunan' ? 'awal' : 'bulanan' }}">
+                                                {{ $item->kategori }}
+                                            </span>
+                                        </td>
+                                        {{-- NOMINAL --}}
+                                        <td class="biaya-nominal">
+                                            Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                                        </td>
+                                        {{-- AKSI --}}
+                                        <td>
+                                            <div class="table-action">
+                                                {{-- VIEW --}}
+                                                <button
+                                                    class="btn-action view"
+                                                    data-toggle="modal"
+                                                    data-target="#modalViewBiaya{{ $item->id }}">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </button>
+                                                {{-- EDIT --}}
+                                                <button
+                                                    class="btn-action edit"
+                                                    data-toggle="modal"
+                                                    data-target="#modalEditBiaya{{ $item->id }}">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </button>
+                                                {{-- DELETE --}}
+                                                <button
+                                                    class="btn-action delete"
+                                                    data-toggle="modal"
+                                                    data-target="#modalHapusBiaya{{ $item->id }}">
+                                                    <i class="fa-regular fa-trash-can"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center">
+                                            Data pembayaran belum tersedia
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                            <!-- ROW -->
+                            <div class="table-row-limit">
+                                <span>
+                                    Tampilkan
+                                </span>
+                                <select id="rowsPerPage">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                </select>
+                                <span>
+                                    data
+                                </span>
                             </div>
-                            <button class="pagination-btn" id="nextPage">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                        </div>
+                            <!-- INFO -->
+                            <div class="table-info" id="tableInfo">
+                                Menampilkan 1 - 10 dari 20 data
+                            </div>
+                            <!-- PAGINATION -->
+                            <div class="pagination-wrapper">
+                                <button class="pagination-btn" id="prevPage">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <div class="pagination-number" id="paginationNumber">
+                                    1
+                                </div>
+                                <button class="pagination-btn" id="nextPage">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                    </div>
                 </div>
             </div>
         </div>

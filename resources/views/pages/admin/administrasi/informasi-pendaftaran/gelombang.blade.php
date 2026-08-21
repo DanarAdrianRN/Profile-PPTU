@@ -63,203 +63,202 @@
                     </button>
                 </div>
 
-                {{-- TABLE --}}
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Gelombang</th>
-                                <th>Periode</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="biayaTableBody">
-
-                            @forelse ($gelombangs as $gelombang)
-                                <tr data-category="{{ $gelombang->is_publish ? $gelombang->status : 'draft' }}"
-                                    data-jenjang="{{ \Carbon\Carbon::parse($gelombang->tanggal_mulai)->format('Y') }}">
-
-                                    <td>
-
-                                        {{ $loop->iteration }}
-
-                                    </td>
-
-                                    <td>
-
-                                        <div class="gelombang-info">
-
-                                            <h5>
-                                                {{ $gelombang->nama_gelombang }}
-                                            </h5>
-
-                                            <span>
-
-                                                Tahun Ajaran
-                                                {{ \Carbon\Carbon::parse($gelombang->tanggal_mulai)->format('Y') }}/{{ \Carbon\Carbon::parse($gelombang->tanggal_selesai)->format('Y') }}
-
-                                            </span>
-
-                                        </div>
-
-                                    </td>
-
-                                    <td>
-
-                                        {{ \Carbon\Carbon::parse($gelombang->tanggal_mulai)->translatedFormat('d F Y') }}
-
-                                        <br>
-
-                                        -
-
-                                        {{ \Carbon\Carbon::parse($gelombang->tanggal_selesai)->translatedFormat('d F Y') }}
-
-                                    </td>
-
-                                    <td>
-
-                                        @if (! $gelombang->is_publish)
-
-                                            <span class="status warning">
-                                                Draft
-                                            </span>
-
-                                        @elseif ($gelombang->status == 'aktif')
-
-                                            <span class="status active">
-                                                Aktif
-                                            </span>
-
-                                        @elseif ($gelombang->status == 'akan_datang')
-
-                                            <span class="status warning">
-                                                Akan Datang
-                                            </span>
-
-                                        @else
-
-                                            <span class="status danger">
-                                                Ditutup
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-
-                                    <td>
-
-                                        <div class="table-action">
-
-                                            {{-- DETAIL --}}
-                                            <button class="btn-action detail"
-                                                    data-toggle="modal"
-                                                    data-target="#modalViewGelombang{{$gelombang->id}}">
-                                                <i class="fa-regular fa-eye"></i>
-                                            </button>
-
-                                            {{-- EDIT --}}
-                                            <button class="btn-action edit"
-                                                    data-toggle="modal"
-                                                    data-target="#modalEditGelombang{{$gelombang->id}}">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </button>
-                                            <button class="btn-action delete"
-                                                    data-toggle="modal"
-                                                    data-target="#modalHapusGelombang{{$gelombang->id}}">
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </button>
-
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                            @empty
-
+                <div class="table-card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
                                 <tr>
-
-                                    <td colspan="6">
-
-                                        Belum ada data gelombang
-
-                                    </td>
-
+                                    <th>No</th>
+                                    <th>Gelombang</th>
+                                    <th>Periode</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+    
                                 </tr>
-
-                            @endforelse
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-                <div class="table-footer">
-
-                    <!-- ROW -->
-                    <div class="table-row-limit">
-
-                        <span>
-                            Tampilkan
-                        </span>
-
-                        <select id="rowsPerPage">
-
-                            <option value="5">5</option>
-
-                            <option value="10" selected>10</option>
-
-                            <option value="15">15</option>
-
-                            <option value="20">20</option>
-
-                        </select>
-
-                        <span>
-                            data
-                        </span>
-
+    
+                            </thead>
+    
+                            <tbody id="biayaTableBody">
+    
+                                @forelse ($gelombangs as $gelombang)
+                                    <tr data-category="{{ $gelombang->is_publish ? $gelombang->status : 'draft' }}"
+                                        data-jenjang="{{ \Carbon\Carbon::parse($gelombang->tanggal_mulai)->format('Y') }}">
+    
+                                        <td>
+    
+                                            {{ $loop->iteration }}
+    
+                                        </td>
+    
+                                        <td>
+    
+                                            <div class="gelombang-info">
+    
+                                                <h5>
+                                                    {{ $gelombang->nama_gelombang }}
+                                                </h5>
+    
+                                                <span>
+    
+                                                    Tahun Ajaran
+                                                    {{ \Carbon\Carbon::parse($gelombang->tanggal_mulai)->format('Y') }}/{{ \Carbon\Carbon::parse($gelombang->tanggal_selesai)->format('Y') }}
+    
+                                                </span>
+    
+                                            </div>
+    
+                                        </td>
+    
+                                        <td>
+    
+                                            {{ \Carbon\Carbon::parse($gelombang->tanggal_mulai)->translatedFormat('d F Y') }}
+    
+                                            <br>
+    
+                                            -
+    
+                                            {{ \Carbon\Carbon::parse($gelombang->tanggal_selesai)->translatedFormat('d F Y') }}
+    
+                                        </td>
+    
+                                        <td>
+    
+                                            @if (! $gelombang->is_publish)
+    
+                                                <span class="status warning">
+                                                    Draft
+                                                </span>
+    
+                                            @elseif ($gelombang->status == 'aktif')
+    
+                                                <span class="status active">
+                                                    Aktif
+                                                </span>
+    
+                                            @elseif ($gelombang->status == 'akan_datang')
+    
+                                                <span class="status warning">
+                                                    Akan Datang
+                                                </span>
+    
+                                            @else
+    
+                                                <span class="status danger">
+                                                    Ditutup
+                                                </span>
+    
+                                            @endif
+    
+                                        </td>
+    
+                                        <td>
+    
+                                            <div class="table-action">
+    
+                                                {{-- DETAIL --}}
+                                                <button class="btn-action detail"
+                                                        data-toggle="modal"
+                                                        data-target="#modalViewGelombang{{$gelombang->id}}">
+                                                    <i class="fa-regular fa-eye"></i>
+                                                </button>
+    
+                                                {{-- EDIT --}}
+                                                <button class="btn-action edit"
+                                                        data-toggle="modal"
+                                                        data-target="#modalEditGelombang{{$gelombang->id}}">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </button>
+                                                <button class="btn-action delete"
+                                                        data-toggle="modal"
+                                                        data-target="#modalHapusGelombang{{$gelombang->id}}">
+                                                    <i class="fa-regular fa-trash-can"></i>
+                                                </button>
+    
+    
+                                            </div>
+    
+                                        </td>
+    
+                                    </tr>
+    
+                                @empty
+    
+                                    <tr>
+    
+                                        <td colspan="6">
+    
+                                            Belum ada data gelombang
+    
+                                        </td>
+    
+                                    </tr>
+    
+                                @endforelse
+    
+                            </tbody>
+    
+                        </table>
+    
                     </div>
-
-                    <!-- INFO -->
-                    <div class="table-info" id="tableInfo">
-
-                        Menampilkan 1 - 10 dari 20 data
-
-                    </div>
-
-                    <!-- PAGINATION -->
-                    <div class="pagination-wrapper">
-
-                        <button class="pagination-btn" id="prevPage">
-
-                            <i class="fa-solid fa-chevron-left"></i>
-
-                        </button>
-
-                        <div class="pagination-number" id="paginationNumber">
-
-                            1
-
+                    <div class="table-footer">
+    
+                        <!-- ROW -->
+                        <div class="table-row-limit">
+    
+                            <span>
+                                Tampilkan
+                            </span>
+    
+                            <select id="rowsPerPage">
+    
+                                <option value="5">5</option>
+    
+                                <option value="10" selected>10</option>
+    
+                                <option value="15">15</option>
+    
+                                <option value="20">20</option>
+    
+                            </select>
+    
+                            <span>
+                                data
+                            </span>
+    
                         </div>
-
-                        <button class="pagination-btn" id="nextPage">
-
-                            <i class="fa-solid fa-chevron-right"></i>
-
-                        </button>
-
+    
+                        <!-- INFO -->
+                        <div class="table-info" id="tableInfo">
+    
+                            Menampilkan 1 - 10 dari 20 data
+    
+                        </div>
+    
+                        <!-- PAGINATION -->
+                        <div class="pagination-wrapper">
+    
+                            <button class="pagination-btn" id="prevPage">
+    
+                                <i class="fa-solid fa-chevron-left"></i>
+    
+                            </button>
+    
+                            <div class="pagination-number" id="paginationNumber">
+    
+                                1
+    
+                            </div>
+    
+                            <button class="pagination-btn" id="nextPage">
+    
+                                <i class="fa-solid fa-chevron-right"></i>
+    
+                            </button>
+    
+                        </div>
+    
                     </div>
-
                 </div>
-
             </section>
 @push('script')
     <script>
