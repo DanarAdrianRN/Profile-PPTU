@@ -82,6 +82,7 @@ jobs:
           server-dir: /pptusumursongo.web.id/htdocs/
           protocol: ftp
           port: 21
+          log-level: verbose
           exclude: |
             **/.git*
             **/.git*/**
