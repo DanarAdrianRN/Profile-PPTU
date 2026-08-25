@@ -35,6 +35,13 @@ jobs:
       - name: Build frontend
         run: npm run build
 
+      - name: Verify Vite build
+        run: |
+          echo "=== public ==="
+          ls -lah public/
+          echo "=== public/build ==="
+          ls -lah public/build/
+
       - name: Create production .env
         run: |
           cat > .env <<EOF
