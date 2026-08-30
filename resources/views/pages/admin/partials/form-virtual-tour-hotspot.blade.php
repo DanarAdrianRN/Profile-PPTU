@@ -60,13 +60,13 @@
 <div class="form-group">
     <label>Yaw Position</label>
     <input type="number" step="0.0001" name="yaw" value="{{ old('yaw', $hotspot?->yaw_degree ?? 0) }}" required>
-    <small>Gunakan derajat (-360 sampai 360). Data tetap disimpan sebagai radian.</small>
+    <small>Gunakan derajat (-360 sampai 360).</small>
 </div>
 
 <div class="form-group">
     <label>Pitch Position</label>
     <input type="number" step="0.0001" name="pitch" value="{{ old('pitch', $hotspot?->pitch_degree ?? 0) }}" required>
-    <small>Gunakan derajat (-90 sampai 90). Data tetap disimpan sebagai radian.</small>
+    <small>Gunakan derajat (-90 sampai 90).</small>
 </div>
 
 <div class="form-group">

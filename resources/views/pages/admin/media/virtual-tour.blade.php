@@ -180,6 +180,57 @@
 
                     <div class="tour-panorama-viewer">
                         <div id="adminPanoramaViewer"></div>
+
+                        <div class="view-coordinate-panel" id="viewCoordinatePanel">
+                            <div class="coordinate-header">
+                                <div class="coordinate-heading">
+                                    <div class="coordinate-icon">
+                                        <i class="fa-solid fa-crosshairs"></i>
+                                    </div>
+
+                                    <div>
+                                        <h5>Sudut Pandang</h5>
+                                        <span>Posisi kamera saat ini</span>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="coordinate-copy-btn"
+                                    id="copyViewCoordinates"
+                                    title="Salin koordinat"
+                                >
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+
+                            <div class="coordinate-values">
+                                <div class="coordinate-value">
+                                    <span>Pitch</span>
+                                    <strong id="currentViewPitch">0.00°</strong>
+                                </div>
+
+                                <div class="coordinate-divider"></div>
+
+                                <div class="coordinate-value">
+                                    <span>Yaw</span>
+                                    <strong id="currentViewYaw">0.00°</strong>
+                                </div>
+
+                                <div class="coordinate-divider"></div>
+
+                                <div class="coordinate-value">
+                                    <span>FOV</span>
+                                    <strong id="currentViewFov">90.00°</strong>
+                                </div>
+                            </div>
+
+                            <div class="coordinate-footer">
+                                <span class="coordinate-live-dot"></span>
+                                Bergerak mengikuti panorama
+                            </div>
+                        </div>
+
                         <div class="empty-panorama" id="adminEmptyPanorama"
                             style="{{ $activeScene?->panorama_url ? 'display: none;' : '' }}">
                             <i class="fa-solid fa-panorama"></i>
@@ -201,7 +252,7 @@
                         </div>
 
                         @if ($activeScene)
-                            <div class="scene-preview" id="sceneSettingsPreview">
+                            {{-- <div class="scene-preview" id="sceneSettingsPreview">
                                 @if ($activeScene->thumbnail_icon)
                                     <div class="scene-preview-icon">
                                         <i class="fa-solid {{ $activeScene->thumbnail_icon }}"></i>
@@ -209,7 +260,7 @@
                                 @else
                                     <img src="{{ $activeScene->thumbnail_url }}" alt="{{ $activeScene->nama_lokasi }}">
                                 @endif
-                            </div>
+                            </div> --}}
 
                             <form method="POST" action="{{ route('virtual-tour.scene.update', $activeScene->id) }}"
                                 enctype="multipart/form-data" id="sceneSettingsForm">
@@ -413,6 +464,16 @@
                 const hotspotModalContainer = document.getElementById('adminHotspotModals');
                 const addHotspotTitle = document.querySelector('#modalTambahHotspot .modal-title-wrap span');
                 const hotspotList = document.getElementById('adminHotspotList');
+                const currentViewPitch = document.getElementById('currentViewPitch');
+                const currentViewYaw = document.getElementById('currentViewYaw');
+                const currentViewFov = document.getElementById('currentViewFov');
+                const copyViewCoordinates = document.getElementById('copyViewCoordinates');
+
+                let currentViewDegrees = {
+                    pitch: 0,
+                    yaw: 0,
+                    fov: 90
+                };
 
                 document.querySelectorAll('[data-fullscreen-target]').forEach(button => {
                     button.addEventListener('click', async function() {
@@ -527,6 +588,65 @@
                         return element;
                     }
 
+                    function radiansToDegrees(value) {
+                        return Number(value) * 180 / Math.PI;
+                    }
+
+                    function updateViewCoordinateDisplay(view) {
+                        if (!view) return;
+
+                        const parameters = view.parameters();
+
+                        currentViewDegrees = {
+                            pitch: radiansToDegrees(parameters.pitch),
+                            yaw: radiansToDegrees(parameters.yaw),
+                            fov: radiansToDegrees(parameters.fov)
+                        };
+
+                        if (currentViewPitch) {
+                            currentViewPitch.textContent =
+                                `${currentViewDegrees.pitch.toFixed(2)}°`;
+                        }
+
+                        if (currentViewYaw) {
+                            currentViewYaw.textContent =
+                                `${currentViewDegrees.yaw.toFixed(2)}°`;
+                        }
+
+                        if (currentViewFov) {
+                            currentViewFov.textContent =
+                                `${currentViewDegrees.fov.toFixed(2)}°`;
+                        }
+                    }
+
+                    copyViewCoordinates?.addEventListener('click', async function() {
+                        const text =
+                            `Pitch: ${currentViewDegrees.pitch.toFixed(2)}\n` +
+                            `Yaw: ${currentViewDegrees.yaw.toFixed(2)}\n` +
+                            `FOV: ${currentViewDegrees.fov.toFixed(2)}`;
+
+                        try {
+                            await navigator.clipboard.writeText(text);
+
+                            const icon = this.querySelector('i');
+
+                            icon?.classList.remove('fa-copy');
+                            icon?.classList.add('fa-check');
+
+                            this.classList.add('copied');
+
+                            setTimeout(() => {
+                                icon?.classList.remove('fa-check');
+                                icon?.classList.add('fa-copy');
+
+                                this.classList.remove('copied');
+                            }, 1200);
+
+                        } catch (error) {
+                            console.error('Gagal menyalin koordinat:', error);
+                        }
+                    });
+
                     function buildAdminScene(sceneData) {
                         if (!sceneData?.panoramaUrl) return null;
 
@@ -538,6 +658,11 @@
 
                         const source = Marzipano.ImageUrlSource.fromString(sceneData.panoramaUrl);
                         const view = new Marzipano.RectilinearView(null, limiter);
+
+                        view.addEventListener('change', function() {
+                            updateViewCoordinateDisplay(view);
+                        });
+
                         const scene = viewer.createScene({
                             source,
                             geometry,
@@ -954,7 +1079,12 @@
 
                         if (emptyPanorama) emptyPanorama.style.display = 'none';
 
-                        nextScene.view().setParameters(resolveView(sceneData, arrivalView));
+                        nextScene.view().setParameters(
+                            resolveView(sceneData, arrivalView)
+                        );
+
+                        updateViewCoordinateDisplay(nextScene.view());
+
                         nextScene.switchTo({
                             transitionDuration: 450
                         });

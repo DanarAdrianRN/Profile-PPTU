@@ -11,6 +11,40 @@
 @endphp
 
 <div class="form-group">
+    <label>Icon Lokasi</label>
+
+    <div class="location-icon-select">
+        <div class="location-icon-preview">
+            <i
+                class="fa-solid {{ $thumbnailIcons[$selectedThumbnail]['icon'] }}"
+                data-location-icon-preview
+            ></i>
+        </div>
+
+        <div class="location-icon-field">
+            <select
+                name="thumbnail"
+                class="location-icon-input"
+                data-location-icon-select
+                required
+            >
+                @foreach ($thumbnailIcons as $value => $item)
+                    <option
+                        value="{{ $value }}"
+                        data-icon="{{ $item['icon'] }}"
+                        {{ $selectedThumbnail === $value ? 'selected' : '' }}
+                    >
+                        {{ $item['label'] }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <small>Pilih icon yang mewakili lokasi pada Virtual Tour.</small>
+</div>
+
+<div class="form-group">
     <label>Nama Lokasi</label>
     <input type="text" name="nama_lokasi" value="{{ old('nama_lokasi', $scene->nama_lokasi ?? '') }}" required>
 </div>
@@ -44,14 +78,14 @@
     <label>Yaw Tampilan Awal</label>
     <input type="number" step="0.0001" name="initial_yaw"
         value="{{ old('initial_yaw', $scene?->initial_yaw_degree ?? 0) }}">
-    <small>Gunakan derajat (-360 sampai 360). Data tetap disimpan sebagai radian.</small>
+    <small>Gunakan derajat (-360 sampai 360).</small>
 </div>
 
 <div class="form-group">
     <label>Pitch Tampilan Awal</label>
     <input type="number" step="0.0001" name="initial_pitch"
         value="{{ old('initial_pitch', $scene?->initial_pitch_degree ?? 0) }}">
-    <small>Gunakan derajat (-90 sampai 90). Data tetap disimpan sebagai radian.</small>
+    <small>Gunakan derajat (-90 sampai 90).</small>
 </div>
 
 <div class="form-group">
@@ -89,3 +123,30 @@
 
     <p>Jadikan sebagai menu lokasi di landing page</p>
 </div>
+
+@push('script')
+    <script>
+        document.querySelectorAll('[data-location-icon-select]').forEach(select => {
+            const wrapper = select.closest('.location-icon-select');
+
+            if (!wrapper) return;
+
+            const preview = wrapper.querySelector('[data-location-icon-preview]');
+
+            function updateLocationIcon() {
+                if (!preview) return;
+
+                const selectedOption = select.options[select.selectedIndex];
+                const icon = selectedOption?.dataset.icon;
+
+                if (!icon) return;
+
+                preview.className = `fa-solid ${icon}`;
+            }
+
+            select.addEventListener('change', updateLocationIcon);
+
+            updateLocationIcon();
+        });
+    </script>
+@endpush
