@@ -13,8 +13,6 @@ class Guru extends Model
         'nama_lengkap',
         'kategori',
         'mapel_bidang',
-        'pendidikan',
         'status',
-        'alamat',
     ];
 }

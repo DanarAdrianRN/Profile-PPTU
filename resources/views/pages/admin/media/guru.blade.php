@@ -102,9 +102,7 @@
                                     <th>Nama Guru</th>
                                     <th>Kategori</th>
                                     <th>Mapel / Bidang</th>
-                                    <th>Pendidikan</th>
                                     <th>Status</th>
-                                    <th>Alamat</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -132,16 +130,10 @@
                                         <td class="guru-mapel">
                                             {{$guru->mapel_bidang}}
                                         </td>
-                                        <td class="guru-pendidikan">
-                                            {{$guru->pendidikan}}
-                                        </td>
                                         <td>
                                             <span class="badge-status active">
                                                 {{$guru->status}}
                                             </span>
-                                        </td>
-                                        <td class="guru-alamat">
-                                            {{$guru->alamat}}
                                         </td>
                                         <td>
                                             <div class="table-action">
@@ -264,16 +256,6 @@
                         .innerText
                         .toLowerCase();
 
-                    const pendidikan =
-                        row.querySelector('.guru-pendidikan')
-                        .innerText
-                        .toLowerCase();
-
-                    const alamat =
-                        row.querySelector('.guru-alamat')
-                        .innerText
-                        .toLowerCase();
-
                     const category =
                         row.dataset.category;
 
@@ -283,9 +265,7 @@
                     // SEARCH MULTI KOLOM
                     const matchSearch =
                         nama.includes(searchValue) ||
-                        mapel.includes(searchValue) ||
-                        pendidikan.includes(searchValue) ||
-                        alamat.includes(searchValue);
+                        mapel.includes(searchValue);
 
                     // FILTER KATEGORI
                     const matchCategory =

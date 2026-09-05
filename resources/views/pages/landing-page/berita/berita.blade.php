@@ -38,11 +38,6 @@
                                 {{ $featuredBerita->tanggal_publish->format('d M Y') }}
                             </span>
 
-                            <span>
-                                <i class="fa-solid fa-user"></i>
-                                {{ $featuredBerita->penulis }}
-                            </span>
-
                         </div>
 
                         <h3>
@@ -65,7 +60,7 @@
                 </div>
             @endif
             {{-- BERITA LIST --}}
-            <div class="news-wrapper">
+            <div class="news-wrapper" id="daftar-berita">
                 {{-- FILTER --}}
                 <div class="news-filter">
                     <div class="filter-title">
@@ -76,24 +71,28 @@
                     </div>
                     <div class="filter-action">
                         {{-- SEARCH --}}
-                        <div class="search-box">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="searchInput" placeholder="Cari berita...">
-                        </div>
+                        <form class="search-box" action="{{ route('berita') }}" method="GET">
+                            @if ($kategori !== '')
+                                <input type="hidden" name="kategori" value="{{ $kategori }}">
+                            @endif
+                            <button type="submit" aria-label="Cari berita">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                            <input type="search" name="q" value="{{ $pencarian }}" placeholder="Cari berita..." aria-label="Cari judul berita">
+                        </form>
                         {{-- FILTER --}}
                         <div class="filter-group">
-                            <button class="filter-btn active" data-filter="all">
+                            <a href="{{ route('berita', array_filter(['q' => $pencarian])) }}#daftar-berita"
+                                class="filter-btn {{ $kategori === '' ? 'active' : '' }}">
                                 Semua
-                            </button>
-                            <button class="filter-btn" data-filter="prestasi">
-                                Prestasi
-                            </button>
-                            <button class="filter-btn" data-filter="pengumuman">
-                                Pengumuman
-                            </button>
-                            <button class="filter-btn" data-filter="kegiatan">
-                                Kegiatan
-                            </button>
+                            </a>
+                            @foreach ($kategoriCounts as $namaKategori => $total)
+                                <a href="{{ route('berita', array_filter(['kategori' => $namaKategori, 'q' => $pencarian])) }}#daftar-berita"
+                                    class="filter-btn {{ $kategori === $namaKategori ? 'active' : '' }}">
+                                    {{ $namaKategori }}
+                                    <span>{{ $total }}</span>
+                                </a>
+                            @endforeach
 
                         </div>
 
@@ -127,11 +126,6 @@
                                         {{ $berita->tanggal_publish->format('d M Y') }}
                                     </span>
 
-                                    <span>
-                                        <i class="fa-solid fa-user"></i>
-                                        {{ $berita->penulis }}
-                                    </span>
-
                                 </div>
 
                                 <h4>
@@ -156,46 +150,22 @@
 
                 </div>
 
+                @if ($beritas->isEmpty())
+                    <div class="news-empty">
+                        <i class="fa-regular fa-newspaper"></i>
+                        <h4>Berita tidak ditemukan</h4>
+                        <p>Coba gunakan kata kunci atau kategori lain.</p>
+                    </div>
+                @endif
+
+                @if ($beritas->hasPages())
+                    <div class="news-pagination">
+                        {{ $beritas->links('pagination::bootstrap-5') }}
+                    </div>
+                @endif
+
             </div>
         </div>
     </section>
-    @push('script')
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const filterBtns = document.querySelectorAll(".filter-btn");
-                const newsCards = document.querySelectorAll(".news-card");
-                const searchInput = document.getElementById("searchInput");
-
-                // FILTER
-                filterBtns.forEach(btn => {
-                    btn.addEventListener("click", function() {
-                        filterBtns.forEach(b => b.classList.remove("active"));
-                        this.classList.add("active");
-                        const filter = this.dataset.filter;
-                        newsCards.forEach(card => {
-                            if (filter === "all" || card.dataset.category === filter) {
-                                card.style.display = "block";
-                            } else {
-                                card.style.display = "none";
-                            }
-                        });
-                    });
-                });
-                // SEARCH
-                searchInput.addEventListener("keyup", function() {
-                    const keyword = this.value.toLowerCase();
-                    newsCards.forEach(card => {
-                        const title = card.querySelector("h4")
-                            .innerText.toLowerCase();
-                        if (title.includes(keyword)) {
-                            card.style.display = "block";
-                        } else {
-                            card.style.display = "none";
-                        }
-                    });
-                });
-            });
-        </script>
-    @endpush
     @include('components.footer')
 @endsection

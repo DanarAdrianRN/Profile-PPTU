@@ -20,6 +20,12 @@ class HomeController extends Controller
             ->where('is_active', true)
             ->first();
 
+        $jadwalPendaftarans = $periodeAktif?->jadwalPendaftarans()
+            ->publish()
+            ->orderBy('urutan')
+            ->orderBy('tanggal')
+            ->get() ?? collect();
+
         $showModal = !is_null($gelombangAktif);
 
         return view(
@@ -28,6 +34,7 @@ class HomeController extends Controller
                 'periodeAktif',
                 'gelombangAktif',
                 'promos',
+                'jadwalPendaftarans',
                 'showModal'
             )
         );

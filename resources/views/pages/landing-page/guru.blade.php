@@ -119,10 +119,6 @@
                                     </h3>
                                     <div class="meta">
                                         <span>
-                                            <i class="fa-solid fa-graduation-cap"></i>
-                                            {{ $guru->pendidikan }}
-                                        </span>
-                                        <span>
                                             <i class="fa-solid fa-book"></i>
                                             {{ $guru->mapel_bidang }}
                                         </span>
@@ -149,10 +145,6 @@
                                         {{ $guru->nama_lengkap }}
                                     </h3>
                                     <div class="meta">
-                                        <span>
-                                            <i class="fa-solid fa-school"></i>
-                                            {{ $guru->pendidikan }}
-                                        </span>
                                         <span>
                                             <i class="fa-solid fa-book-open"></i>
                                             {{ $guru->mapel_bidang }}
@@ -181,10 +173,6 @@
                                     </h3>
                                     <div class="meta">
                                         <span>
-                                            <i class="fa-solid fa-school"></i>
-                                            {{ $guru->pendidikan }}
-                                        </span>
-                                        <span>
                                             <i class="fa-solid fa-book-open"></i>
                                             {{ $guru->mapel_bidang }}
                                         </span>
@@ -212,10 +200,6 @@
                                     </h3>
                                     <div class="meta">
                                         <span>
-                                            <i class="fa-solid fa-graduation-cap"></i>
-                                            {{ $guru->pendidikan }}
-                                        </span>
-                                        <span>
                                             <i class="fa-solid fa-book-quran"></i>
                                             {{ $guru->mapel_bidang }}
                                         </span>
@@ -242,10 +226,6 @@
                                         {{ $guru->nama_lengkap }}
                                     </h3>
                                     <div class="meta">
-                                        <span>
-                                            <i class="fa-solid fa-graduation-cap"></i>
-                                            {{ $guru->pendidikan }}
-                                        </span>
                                         <span>
                                             <i class="fa-solid fa-book-open-reader"></i>
                                             {{ $guru->mapel_bidang }}

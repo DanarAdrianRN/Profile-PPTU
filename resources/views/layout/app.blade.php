@@ -86,39 +86,26 @@
                             <small>Segera daftarkan putra putri Anda dan nikmati keuntungan promo yang tersedia.</small>
                         </div>
                         <div class="row mt-4 g-0 timeline-container">
-                            <div class="col-3 timeline-item">
+                            <div class="col timeline-item">
                                 <div class="timeline-icon">1</div>
                                 <div class="item-card-timeline">
-                                    <strong>Pendaaftaran</strong>
-                                    <span>13 Mei - 30 Juni</span>
+                                    <strong>{{ $gelombangAktif->nama_gelombang }}</strong>
+                                    <span>{{ $gelombangAktif->tanggal_mulai->translatedFormat('d F') }} - {{ $gelombangAktif->tanggal_selesai->translatedFormat('d F Y') }}</span>
                                 </div>
                             </div>
-                            <div class="col-3 timeline-item">
-                                <div class="timeline-icon">2</div>
-                                <div class="item-card-timeline">
-                                    <strong>Tes Seleksi</strong>
-                                    <span>20 Juni</span>
+                            @foreach ($jadwalPendaftarans as $jadwal)
+                                <div class="col timeline-item">
+                                    <div class="timeline-icon">{{ $loop->iteration + 1 }}</div>
+                                    <div class="item-card-timeline">
+                                        <strong>{{ $jadwal->nama_jadwal }}</strong>
+                                        <span>{{ $jadwal->tanggal->translatedFormat('d F Y') }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-3 timeline-item">
-                                <div class="timeline-icon">3</div>
-                                <div class="item-card-timeline">
-                                    <strong>Pengumuman</strong>
-                                    <span>25 Juni</span>
-                                </div>
-                            </div>
-                            <div class="col-3 timeline-item">
-                                <div class="timeline-icon">3</div>
-                                <div class="item-card-timeline">
-                                    <strong>Daftar Ulang</strong>
-                                    <span>26 Juni</span>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                     <div class="promo-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Nanti
-                            Saja</button>
+                        <button type="button" class="btn btn-outline-secondary" data-share data-share-title="{{ $promos?->nama_promo ?? 'Pendaftaran Santri Baru' }}">Bagikan</button>
                         <a href="{{ route('informasi-pendaftaran') }}" class="btn btn-gold">Lihat Info Pendaftaran</a>
                     </div>
                 </div>
@@ -1053,18 +1040,6 @@
                                 </label>
                                 <input type="text" placeholder="Contoh: Nahwu & Fiqih" name="mapel_bidang">
                             </div>
-                            <div class="form-group">
-                                <label>
-                                    Pendidikan
-                                </label>
-                                <input type="text" placeholder="Contoh: Alumni Sidogiri" name="pendidikan">
-                            </div>
-                            <div class="form-group">
-                                <label>
-                                    Alanat
-                                </label>
-                                <textarea row="5" type="text" placeholder="Contoh: RT/RW Desa Kesamatan Kabupaten" name="alamat"></textarea>
-                            </div>
                         </div>
                         {{-- FOOTER --}}
                         <div class="modal-footer">
@@ -1169,20 +1144,6 @@
                                             </option>
                                         </select>
                                     </div>
-                                    {{-- PENDIDIKAN --}}
-                                    <div class="form-group">
-                                        <label>
-                                            Pendidikan
-                                        </label>
-                                        <input type="text" name="pendidikan" value="{{ $guru->pendidikan }}">
-                                    </div>
-                                    {{-- ALAMAT --}}
-                                    <div class="form-group full">
-                                        <label>
-                                            Alamat
-                                        </label>
-                                        <textarea name="alamat" rows="4">{{ $guru->alamat }}</textarea>
-                                    </div>
                                 </div>
                                 {{-- FOOTER --}}
                                 <div class="modal-footer">
@@ -1230,12 +1191,6 @@
                             </p>
                             {{-- META --}}
                             <div class="guru-meta">
-                                <div class="meta-item">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                    <span>
-                                        {{ $guru->pendidikan }}
-                                    </span>
-                                </div>
                                 <div class="meta-item">
                                     <i class="fa-solid fa-book-open"></i>
                                     <span>

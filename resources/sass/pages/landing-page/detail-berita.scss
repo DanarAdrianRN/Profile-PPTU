@@ -308,7 +308,8 @@
                         font-size: 0.8rem;
                     }
 
-                    &:hover {
+                    &:hover,
+                    &.active {
                         background: var.$color-primary;
                         color: #fff;
                     }

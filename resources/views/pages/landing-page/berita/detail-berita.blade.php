@@ -15,10 +15,6 @@
                         <i class="fa-solid fa-calendar-days"></i>
                         {{ $berita->tanggal_publish->format('d M Y') }}
                     </span>
-                    <span>
-                        <i class="fa-solid fa-user"></i>
-                        {{ $berita->penulis }}
-                    </span>
                 </div>
                 <h1>
                     {{ $berita->judul }}
@@ -81,35 +77,23 @@
                     <div class="share-box">
                         <span>Bagikan Berita :</span>
                         <div class="share-btns">
-                            <a href="#">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Facebook">
                                 <i class="fa-brands fa-facebook-f"></i>
                             </a>
-                            <a href="#">
+                            <a href="#" data-share data-share-title="{{ $berita->judul }}" aria-label="Bagikan melalui aplikasi">
                                 <i class="fa-brands fa-instagram"></i>
                             </a>
-                            <a href="#">
+                            <a href="https://wa.me/?text={{ urlencode($berita->judul . ' ' . request()->fullUrl()) }}" target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke WhatsApp">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </a>
-                            <a href="#">
-                                <i class="fa-brands fa-x-twitter"></i>
+                            <a href="#" data-share data-share-title="{{ $berita->judul }}" aria-label="Bagikan ke TikTok" title="Bagikan ke TikTok melalui menu berbagi">
+                                <i class="fa-brands fa-tiktok"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 {{-- SIDEBAR --}}
                 <aside class="sidebar-berita">
-                    {{-- PENULIS --}}
-                    <div class="sidebar-card">
-                        <h4>
-                            Penulis
-                        </h4>
-                        <div class="author-box">
-                            <img src="{{ asset('assets/pptu.png') }}" alt="">
-                            <div>
-                                <h5>{{ $berita->penulis }}</h5>
-                            </div>
-                        </div>
-                    </div>
                     {{-- BERITA LAIN --}}
                     <div class="sidebar-card">
                         <h4>
@@ -135,22 +119,14 @@
                             Kategori
                         </h4>
                         <div class="category-list">
-                            <a href="#">
-                                Pendaftaran
-                                <span>{{ $kategoriCounts['Pendaftaran'] ?? 0 }}</span>
-                            </a>
-                            <a href="#">
-                                Prestasi
-                                <span>{{ $kategoriCounts['Prestasi'] ?? 0 }}</span>
-                            </a>
-                            <a href="#">
-                                Pengumuman
-                                <span>{{ $kategoriCounts['Pengumuman'] ?? 0 }}</span>
-                            </a>
-                            <a href="#">
-                                Kegiatan
-                                <span>{{ $kategoriCounts['Kegiatan'] ?? 0 }}</span>
-                            </a>
+                            @foreach ($kategoriCounts as $namaKategori => $total)
+                                <a href="{{ route('berita', ['kategori' => $namaKategori]) }}#daftar-berita"
+                                    class="{{ $berita->kategori === $namaKategori ? 'active' : '' }}"
+                                    @if ($berita->kategori === $namaKategori) aria-current="true" @endif>
+                                    {{ $namaKategori }}
+                                    <span>{{ $total }}</span>
+                                </a>
+                            @endforeach
                         </div>
                     </div>
                 </aside>

@@ -51,9 +51,7 @@ class GuruController extends Controller
             'nama_lengkap' => 'required',
             'kategori' => 'required|in:' . implode(',', self::KATEGORI_GURU),
             'mapel_bidang' => 'required',
-            'pendidikan' => 'required',
             'status' => 'required',
-            'alamat' => 'required',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -75,9 +73,7 @@ class GuruController extends Controller
             'nama_lengkap' => 'required',
             'kategori' => 'required|in:' . implode(',', self::KATEGORI_GURU),
             'mapel_bidang' => 'required',
-            'pendidikan' => 'required',
             'status' => 'required',
-            'alamat' => 'required',
         ]);
 
         // UPDATE FOTO

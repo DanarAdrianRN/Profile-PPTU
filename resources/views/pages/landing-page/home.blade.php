@@ -309,7 +309,7 @@
         <p>Daftar sekarang dan berikan pendidikan terbaik untuk buah hati Anda</p>
         <div class="cta-button">
             <a href="{{ route('informasi-pendaftaran') }}" class="btn">Daftar Sekarang</a>
-            <a href="{{ route('profile') }}" class="btn fadee">Bagikan Informasi</a>
+            <button type="button" class="btn fadee" data-share data-share-title="Pondok Pesantren Tarbiyatul Ulum">Bagikan Informasi</button>
         </div>
     </section>
     @include('components.footer')

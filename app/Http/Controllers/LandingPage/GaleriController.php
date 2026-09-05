@@ -13,7 +13,7 @@ class GaleriController extends Controller
         $galeris = Galeri::with('fotos')
             ->where('status', 'Publish')
             ->latest('tanggal_kegiatan')
-            ->paginate(3);
+            ->paginate(12);
 
         return view(
             'pages.landing-page.galeri',
