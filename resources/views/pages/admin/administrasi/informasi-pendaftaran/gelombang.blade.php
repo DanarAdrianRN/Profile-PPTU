@@ -70,7 +70,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Gelombang</th>
-                                    <th>Periode</th>
+                                    <th>Jadwal Pendaftaran</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
     
@@ -100,8 +100,8 @@
     
                                                 <span>
     
-                                                    Tahun Ajaran
-                                                    {{ \Carbon\Carbon::parse($gelombang->tanggal_mulai)->format('Y') }}/{{ \Carbon\Carbon::parse($gelombang->tanggal_selesai)->format('Y') }}
+                                                    Periode:
+                                                    {{ $gelombang->periode?->nama_periode ?? 'Semua periode' }}
     
                                                 </span>
     
@@ -260,10 +260,12 @@
                     </div>
                 </div>
             </section>
+        </div>
+    </div>
 @push('script')
     <script>
         const tableBody = document.getElementById('biayaTableBody');
-        const allRows = tableBody.querySelectorAll('tr');
+        const allRows = tableBody.querySelectorAll('tr[data-category]');
         const rowsPerPageSelect =
             document.getElementById('rowsPerPage');
         const prevBtn =

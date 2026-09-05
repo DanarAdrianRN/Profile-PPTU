@@ -174,6 +174,11 @@
         }
 
         .pagination-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            flex-shrink: 0;
             width: 42px;
             height: 42px;
             border: none;
@@ -191,7 +196,8 @@
                 background: #f1f5f9;
             }
 
-            &:disabled {
+            &:disabled,
+            &[aria-disabled="true"] {
                 opacity: 0.4;
                 cursor: not-allowed;
             }
@@ -306,4 +312,9 @@
             background: #78350f;
         }
     }
+}
+// Keep admin pagination consistent with the registration table.
+.admin-main .table-footer {
+    background: #fff;
+    border-radius: 0 0 28px 28px;
 }

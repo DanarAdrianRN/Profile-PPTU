@@ -25,6 +25,11 @@ class Periode extends Model
         return $this->hasMany(Pendaftaran::class);
     }
 
+    public function gelombangPendaftarans()
+    {
+        return $this->hasMany(GelombangPendaftaran::class);
+    }
+
     public function jadwalPendaftarans()
     {
         return $this->hasMany(JadwalPendaftaran::class);

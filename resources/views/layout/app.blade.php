@@ -2567,6 +2567,18 @@
                                         </small>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label>Periode</label>
+                                    <select name="periode_id">
+                                        <option value="">Semua periode</option>
+                                        @foreach (($periodes ?? []) as $periode)
+                                            <option value="{{ $periode->id }}" @selected(old('periode_id', null) == $periode->id)>{{ $periode->nama_periode }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('periode_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                                 <!-- STATUS -->
                                 <div class="form-group">
                                     <label>
@@ -2705,7 +2717,19 @@
 
                                         </div>
 
-                                        <!-- STATUS -->
+                                        <div class="form-group">
+                                    <label>Periode</label>
+                                    <select name="periode_id">
+                                        <option value="">Semua periode</option>
+                                        @foreach (($periodes ?? []) as $periode)
+                                            <option value="{{ $periode->id }}" @selected(old('periode_id', $item->periode_id) == $periode->id)>{{ $periode->nama_periode }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('periode_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <!-- STATUS -->
                                         <div class="form-group">
 
                                             <label>
@@ -2900,6 +2924,7 @@
 
                                 {{-- KETERANGAN --}}
                                 <p>
+                                    Periode: {{ $item->periode?->nama_periode ?? 'Semua periode' }}<br>
                                     Urutan tampil: {{ $item->urutan }}
 
                                 </p>

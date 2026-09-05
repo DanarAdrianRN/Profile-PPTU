@@ -9,6 +9,7 @@ class GelombangPendaftaran extends Model
 {
     protected $fillable = [
         'nama_gelombang',
+        'periode_id',
         'tanggal_mulai',
         'tanggal_selesai',
         'urutan',
@@ -59,6 +60,11 @@ class GelombangPendaftaran extends Model
             ->where('is_publish', true)
             ->whereDate('tanggal_mulai', '<=', now())
             ->whereDate('tanggal_selesai', '>=', now());
+    }
+
+    public function periode()
+    {
+        return $this->belongsTo(Periode::class);
     }
 
     public function pendaftarans()

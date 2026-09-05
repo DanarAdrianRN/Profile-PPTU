@@ -28,6 +28,7 @@
                 </div>
                 {{-- FILTER --}}
                 <form method="GET" action="{{ route('admin-galeri') }}" class="filter-wrapper" id="filterForm">
+                    <input type="hidden" name="per_page" value="{{ $galeris->perPage() }}">
                     {{-- SEARCH --}}
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -115,11 +116,10 @@
                         <span>
                             Tampilkan
                         </span>
-                        <select id="rowsPerPage" onchange="location = '?per_page=' + this.value">
-                            <option value="6" selected>6</option>
-                            <option value="12">12</option>
-                            <option value="18">18</option>
-                            <option value="30">30</option>
+                        <select id="rowsPerPage" onchange="const url = new URL(window.location.href); url.searchParams.set('per_page', this.value); url.searchParams.delete('page'); window.location.href = url.toString();">
+                            @foreach ([5, 10, 15, 20] as $limit)
+                                <option value="{{ $limit }}" @selected($galeris->perPage() == $limit)>{{ $limit }}</option>
+                            @endforeach
                         </select>
                         <span>
                             data
@@ -127,18 +127,18 @@
                     </div>
                     <!-- INFO -->
                     <div class="table-info">
-                        Menampilkan {{ $galeris->firstItem() }} - {{ $galeris->lastItem() }} dari {{ $galeris->total() }}
+                        Menampilkan {{ $galeris->firstItem() ?? 0 }} - {{ $galeris->lastItem() ?? 0 }} dari {{ $galeris->total() }}
                         data
                     </div>
                     <!-- PAGINATION -->
                     <div class="pagination-wrapper">
-                        <a href="{{ $galeris->previousPageUrl() }}" class="pagination-btn">
+                        <a @if ($galeris->previousPageUrl()) href="{{ $galeris->previousPageUrl() }}" @else aria-disabled="true" tabindex="-1" @endif class="pagination-btn" aria-label="Halaman sebelumnya">
                             <i class="fa-solid fa-chevron-left"></i>
                         </a>
                         <div class="pagination-number">
                             {{ $galeris->currentPage() }}
                         </div>
-                        <a href="{{ $galeris->nextPageUrl() }}" class="pagination-btn">
+                        <a @if ($galeris->nextPageUrl()) href="{{ $galeris->nextPageUrl() }}" @else aria-disabled="true" tabindex="-1" @endif class="pagination-btn" aria-label="Halaman berikutnya">
                             <i class="fa-solid fa-chevron-right"></i>
                         </a>
                     </div>

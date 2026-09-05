@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\GelombangPendaftaran;
+use App\Models\Periode;
 use Illuminate\Http\Request;
 
 class GelombangPendaftaranController extends Controller
@@ -16,15 +17,17 @@ class GelombangPendaftaranController extends Controller
      */
     public function index()
     {
-        $gelombangs = GelombangPendaftaran::with('promos')
+        $gelombangs = GelombangPendaftaran::with(['promos', 'periode'])
             ->withCount('pendaftarans')
             ->orderBy('urutan')
             ->latest()
             ->get();
 
+        $periodes = Periode::orderByDesc('nama_periode')->get();
+
         return view(
             'pages.admin.administrasi.informasi-pendaftaran.gelombang',
-            compact('gelombangs')
+            compact('gelombangs', 'periodes')
         );
     }
 
@@ -35,6 +38,7 @@ class GelombangPendaftaranController extends Controller
     {
         $request->validate([
             'nama_gelombang' => 'required|max:255',
+            'periode_id' => 'nullable|exists:periodes,id',
 
             'tanggal_mulai' => 'required|date',
 
@@ -49,6 +53,7 @@ class GelombangPendaftaranController extends Controller
 
         $gelombang = GelombangPendaftaran::create([
             'nama_gelombang' => $request->nama_gelombang,
+            'periode_id' => $request->input('periode_id'),
 
             'tanggal_mulai' => $request->tanggal_mulai,
 
@@ -76,6 +81,7 @@ class GelombangPendaftaranController extends Controller
 
         $request->validate([
             'nama_gelombang' => 'required|max:255',
+            'periode_id' => 'nullable|exists:periodes,id',
 
             'tanggal_mulai' => 'required|date',
 
@@ -90,6 +96,7 @@ class GelombangPendaftaranController extends Controller
 
         $gelombang->update([
             'nama_gelombang' => $request->nama_gelombang,
+            'periode_id' => $request->input('periode_id'),
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
             'urutan' => $request->urutan ?? 1,

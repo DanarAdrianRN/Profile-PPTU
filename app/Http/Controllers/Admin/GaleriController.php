@@ -47,7 +47,10 @@ class GaleriController extends Controller
             );
         }
 
-        $perPage = 6;
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [5, 10, 15, 20], true)) {
+            $perPage = 10;
+        }
 
         $galeris = $query
             ->latest()
