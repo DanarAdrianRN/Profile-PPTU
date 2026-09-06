@@ -60,6 +60,13 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content promo-content">
                     <div class="promo-header">
+                        <button
+                            type="button"
+                            class="promo-close"
+                            data-dismiss="modal"
+                            aria-label="Tutup">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                         <span class="badge-special">PENAWARAN SPESIAL!</span>
                         <h2 class="promo-title">{{ $periodeAktif?->nama_periode ?? 'Pendaftaran Santri Baru' }} Telah
                             Dibuka</h2>

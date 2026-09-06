@@ -1018,14 +1018,41 @@ textarea {
     }
 
     .stats {
+        padding: 40px 12px;
+
         .container {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 14px;
+            gap: 24px 12px;
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            text-align: center;
         }
 
         .stat-item {
+            width: 100%;
+            min-width: 0;
             margin: 0;
+
+            h2 {
+                font-size: 2rem;
+                line-height: 1.2;
+                margin-bottom: 6px;
+            }
+
+            p {
+                font-size: 0.85rem;
+                line-height: 1.4;
+                margin-bottom: 0;
+            }
+
+            &::after {
+                width: 32px;
+                height: 3px;
+                margin-top: 8px;
+            }
         }
     }
 

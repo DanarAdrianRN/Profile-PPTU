@@ -227,13 +227,6 @@
                             <p>
                                 "Belajar di sini sangat menyenangkan dan lingkungan pesantrennya sangat nyaman."
                             </p>
-                            <div class="user">
-                                <img src="{{ asset('assets/pp.jpg') }}" alt="">
-                                <div>
-                                    <h4>Dukha Fahri</h4>
-                                    <span>Santri</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="swiper-slide">
@@ -242,13 +235,6 @@
                             <p>
                                 "Guru-guru membimbing dengan sabar sehingga anak menjadi lebih disiplin."
                             </p>
-                            <div class="user">
-                                <img src="{{ asset('assets/pp.jpg') }}" alt="">
-                                <div>
-                                    <h4>Munirul Ikhwan</h4>
-                                    <span>Alumni</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="swiper-slide">
@@ -257,13 +243,6 @@
                             <p>
                                 "Lingkungan belajar nyaman dan pendidikan agama serta umum berjalan seimbang."
                             </p>
-                            <div class="user">
-                                <img src="{{ asset('assets/pp.jpg') }}" alt="">
-                                <div>
-                                    <h4>Siti Munawaroh</h4>
-                                    <span>Wali Santri</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="swiper-slide">
@@ -272,13 +251,6 @@
                             <p>
                                 "Program pendidikan membuat saya lebih percaya diri dan memiliki bekal ilmu agama."
                             </p>
-                            <div class="user">
-                                <img src="{{ asset('assets/pp.jpg') }}" alt="">
-                                <div>
-                                    <h4>Muhammad Riski</h4>
-                                    <span>Alumni</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="swiper-slide">
@@ -287,13 +259,6 @@
                             <p>
                                 "Pesantren ini menjadi tempat terbaik untuk membentuk akhlak dan kedisiplinan anak."
                             </p>
-                            <div class="user">
-                                <img src="{{ asset('assets/pp.jpg') }}" alt="">
-                                <div>
-                                    <h4>Abdullah</h4>
-                                    <span>Wali Santri</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
