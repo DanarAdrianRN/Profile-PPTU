@@ -8,6 +8,7 @@
             {{-- HEADER --}}
             @include('components.header-admin', ['title' => 'Manajemen Gelombang Pendaftaran'])
             <section class="admin-gelombang-table">
+                @include('components.registration-period')
 
                 {{-- STATISTIK --}}
                 <div class="gelombang-stats">
@@ -101,7 +102,7 @@
                                                 <span>
     
                                                     Periode:
-                                                    {{ $gelombang->periode?->nama_periode ?? 'Semua periode' }}
+                                                    {{ $gelombang->periode?->nama_periode ?? 'Belum ditentukan' }}
     
                                                 </span>
     

@@ -19,7 +19,7 @@ class MasterPembayaranController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $pembayarans = Pembayaran::all();
+        $pembayarans = Pembayaran::periodeAktif()->get();
 
         /*
         |--------------------------------------------------------------------------
@@ -27,12 +27,12 @@ class MasterPembayaranController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $smpTahunan = Pembayaran::where('jenjang', 'SMP')
+        $smpTahunan = Pembayaran::periodeAktif()->where('jenjang', 'SMP')
             ->where('kategori', 'Biaya Tahunan')
             ->where('is_active', true)
             ->get();
 
-        $smpBulanan = Pembayaran::where('jenjang', 'SMP')
+        $smpBulanan = Pembayaran::periodeAktif()->where('jenjang', 'SMP')
             ->where('kategori', 'Biaya Bulanan')
             ->where('is_active', true)
             ->get();
@@ -43,12 +43,12 @@ class MasterPembayaranController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $smkTahunan = Pembayaran::where('jenjang', 'SMK')
+        $smkTahunan = Pembayaran::periodeAktif()->where('jenjang', 'SMK')
             ->where('kategori', 'Biaya Tahunan')
             ->where('is_active', true)
             ->get();
 
-        $smkBulanan = Pembayaran::where('jenjang', 'SMK')
+        $smkBulanan = Pembayaran::periodeAktif()->where('jenjang', 'SMK')
             ->where('kategori', 'Biaya Bulanan')
             ->where('is_active', true)
             ->get();
@@ -73,7 +73,7 @@ class MasterPembayaranController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $gelombangs = GelombangPendaftaran::with('promos')
+        $gelombangs = GelombangPendaftaran::periodeAktif()->with(['promos' => fn ($query) => $query->periodeAktif()->where('is_active', true)])
             ->where('is_publish', true)
             ->orderBy('urutan')
             ->get();
@@ -86,13 +86,7 @@ class MasterPembayaranController extends Controller
 
         $periodeAktif = Periode::aktif()->first();
 
-        $jadwalPendaftarans = JadwalPendaftaran::publish()
-            ->when($periodeAktif, function ($query) use ($periodeAktif) {
-                $query->where(function ($query) use ($periodeAktif) {
-                    $query->where('periode_id', $periodeAktif->id)
-                        ->orWhereNull('periode_id');
-                });
-            })
+        $jadwalPendaftarans = JadwalPendaftaran::periodeAktif()->publish()
             ->orderBy('urutan')
             ->orderBy('tanggal')
             ->get();

@@ -45,6 +45,10 @@ class PeriodeController extends Controller
             ]);
         });
 
+        if ($periode->is_active) {
+            session()->forget('viewing_periode_id');
+        }
+
         $this->catatAktivitas('create', 'Menambahkan periode: ' . $periode->nama_periode, $periode);
 
         return back()->with(
@@ -92,6 +96,7 @@ class PeriodeController extends Controller
         // Mengaktifkan periode itu aksi penting (ikut mengubah tampilan
         // landing page), jadi dicatat lebih spesifik daripada update biasa.
         if ($statusAktifBerubah && $periode->is_active) {
+            session()->forget('viewing_periode_id');
             $this->catatAktivitas('update', 'Mengaktifkan periode: ' . $periode->nama_periode, $periode);
         } else {
             $this->catatAktivitas('update', 'Memperbarui periode: ' . $periode->nama_periode, $periode);
@@ -109,6 +114,12 @@ class PeriodeController extends Controller
             return back()->withErrors([
                 'periode' => 'Periode aktif tidak bisa dihapus.',
             ]);
+        }
+
+        foreach (['gelombang_pendaftarans', 'jadwal_pendaftarans', 'pembayarans', 'promos'] as $table) {
+            if (DB::table($table)->where('periode_id', $periode->id)->exists()) {
+                return back()->withErrors(['periode' => 'Periode masih memiliki data informasi pendaftaran. Simpan periode ini sebagai arsip.']);
+            }
         }
 
         $namaPeriode = $periode->nama_periode;

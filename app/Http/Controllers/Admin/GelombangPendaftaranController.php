@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\FilterByPeriode;
 use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\GelombangPendaftaran;
 use App\Models\Periode;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 
 class GelombangPendaftaranController extends Controller
 {
+    use FilterByPeriode;
+
     use LogsAdminActivity;
 
     /**
@@ -17,7 +20,11 @@ class GelombangPendaftaranController extends Controller
      */
     public function index()
     {
-        $gelombangs = GelombangPendaftaran::with(['promos', 'periode'])
+        $selectedPeriode = $this->resolvePeriode();
+        $selectedPeriodeId = $selectedPeriode?->id;
+        $isArsip = $selectedPeriode && ! $selectedPeriode->is_active;
+
+        $gelombangs = GelombangPendaftaran::untukPeriode($selectedPeriodeId)->with(['promos', 'periode'])
             ->withCount('pendaftarans')
             ->orderBy('urutan')
             ->latest()
@@ -27,7 +34,7 @@ class GelombangPendaftaranController extends Controller
 
         return view(
             'pages.admin.administrasi.informasi-pendaftaran.gelombang',
-            compact('gelombangs', 'periodes')
+            compact('gelombangs', 'periodes', 'selectedPeriode', 'selectedPeriodeId', 'isArsip')
         );
     }
 
@@ -38,7 +45,7 @@ class GelombangPendaftaranController extends Controller
     {
         $request->validate([
             'nama_gelombang' => 'required|max:255',
-            'periode_id' => 'nullable|exists:periodes,id',
+            'periode_id' => 'required|exists:periodes,id',
 
             'tanggal_mulai' => 'required|date',
 
@@ -81,7 +88,7 @@ class GelombangPendaftaranController extends Controller
 
         $request->validate([
             'nama_gelombang' => 'required|max:255',
-            'periode_id' => 'nullable|exists:periodes,id',
+            'periode_id' => 'required|exists:periodes,id',
 
             'tanggal_mulai' => 'required|date',
 

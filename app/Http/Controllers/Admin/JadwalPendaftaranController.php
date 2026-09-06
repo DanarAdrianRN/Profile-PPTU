@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\FilterByPeriode;
 use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\JadwalPendaftaran;
 use App\Models\Periode;
@@ -10,11 +11,17 @@ use Illuminate\Http\Request;
 
 class JadwalPendaftaranController extends Controller
 {
+    use FilterByPeriode;
+
     use LogsAdminActivity;
 
     public function index()
     {
-        $jadwals = JadwalPendaftaran::with('periode')
+        $selectedPeriode = $this->resolvePeriode();
+        $selectedPeriodeId = $selectedPeriode?->id;
+        $isArsip = $selectedPeriode && ! $selectedPeriode->is_active;
+
+        $jadwals = JadwalPendaftaran::untukPeriode($selectedPeriodeId)->with('periode')
             ->orderBy('urutan')
             ->orderBy('tanggal')
             ->get();
@@ -23,14 +30,14 @@ class JadwalPendaftaranController extends Controller
 
         return view(
             'pages.admin.administrasi.informasi-pendaftaran.jadwal',
-            compact('jadwals', 'periodes')
+            compact('jadwals', 'periodes', 'selectedPeriode', 'selectedPeriodeId', 'isArsip')
         );
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'periode_id' => 'nullable|exists:periodes,id',
+            'periode_id' => 'required|exists:periodes,id',
             'nama_jadwal' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'urutan' => 'nullable|integer|min:1',
@@ -56,7 +63,7 @@ class JadwalPendaftaranController extends Controller
     public function update(Request $request, JadwalPendaftaran $jadwal)
     {
         $validated = $request->validate([
-            'periode_id' => 'nullable|exists:periodes,id',
+            'periode_id' => 'required|exists:periodes,id',
             'nama_jadwal' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'urutan' => 'nullable|integer|min:1',

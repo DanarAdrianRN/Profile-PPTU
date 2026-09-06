@@ -3,26 +3,34 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\FilterByPeriode;
 use App\Http\Controllers\Admin\Concerns\LogsAdminActivity;
 use App\Models\GelombangPendaftaran;
 use App\Models\Pembayaran;
 use App\Models\Promo;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PromoController extends Controller
 {
+    use FilterByPeriode;
+
     use LogsAdminActivity;
 
     public function index()
     {
-        $promos = Promo::with([
+        $selectedPeriode = $this->resolvePeriode();
+        $selectedPeriodeId = $selectedPeriode?->id;
+        $isArsip = $selectedPeriode && ! $selectedPeriode->is_active;
+
+        $promos = Promo::untukPeriode($selectedPeriodeId)->with([
             'gelombangPendaftaran',
             'pembayarans',
         ])
             ->latest()
             ->get();
 
-        $promoGelombangs = GelombangPendaftaran::whereDate(
+        $promoGelombangs = GelombangPendaftaran::untukPeriode($selectedPeriodeId)->whereDate(
             'tanggal_mulai',
             '>',
             now()
@@ -30,7 +38,7 @@ class PromoController extends Controller
             ->orderBy('urutan')
             ->get();
 
-        $promoPembayarans = Pembayaran::where('is_active', true)
+        $promoPembayarans = Pembayaran::untukPeriode($selectedPeriodeId)->where('is_active', true)
             ->orderBy('jenjang')
             ->orderBy('kategori')
             ->orderBy('nama_pembayaran')
@@ -38,7 +46,7 @@ class PromoController extends Controller
 
         return view(
             'pages.admin.administrasi.informasi-pendaftaran.promo',
-            compact('promos', 'promoGelombangs', 'promoPembayarans')
+            compact('promos', 'promoGelombangs', 'promoPembayarans', 'selectedPeriode', 'selectedPeriodeId', 'isArsip')
         );
     }
 
@@ -62,7 +70,7 @@ class PromoController extends Controller
 
     public function update(Request $request, Promo $promo)
     {
-        $validated = $this->validatedData($request);
+        $validated = $this->validatedData($request, $promo);
 
         $promo->update($this->payload($validated));
 
@@ -92,15 +100,19 @@ class PromoController extends Controller
         );
     }
 
-    private function validatedData(Request $request): array
+    private function validatedData(Request $request, ?Promo $promo = null): array
     {
+        $periodeId = $promo?->periode_id ?? $request->input('periode_id', $this->resolvePeriode()?->id);
+        $request->merge(['periode_id' => $periodeId]);
+
         return $request->validate([
+            'periode_id' => 'required|exists:periodes,id',
             'cakupan_gelombang' => 'required|in:semua,satu',
-            'gelombang_pendaftaran_id' => 'nullable|required_if:cakupan_gelombang,satu|exists:gelombang_pendaftarans,id',
+            'gelombang_pendaftaran_id' => ['nullable', 'required_if:cakupan_gelombang,satu', Rule::exists('gelombang_pendaftarans', 'id')->where('periode_id', $periodeId)],
             'jenjang' => 'nullable|in:SMP,SMK',
             'cakupan_biaya' => 'required|in:semua,satu',
             'pembayaran_ids' => 'nullable|array|required_if:cakupan_biaya,satu',
-            'pembayaran_ids.*' => 'exists:pembayarans,id',
+            'pembayaran_ids.*' => [Rule::exists('pembayarans', 'id')->where('periode_id', $periodeId)],
             'tipe' => 'required|in:nominal,persentase,gratis_biaya',
             'nilai' => 'nullable|required_unless:tipe,gratis_biaya|integer|min:0',
             'kuota' => 'nullable|integer|min:1',
@@ -121,6 +133,7 @@ class PromoController extends Controller
         }
 
         return [
+            'periode_id' => $data['periode_id'],
             'gelombang_pendaftaran_id' => $gelombang?->id,
             'nama_promo' => $data['nama_promo'],
             'tipe' => $data['tipe'],
@@ -145,7 +158,7 @@ class PromoController extends Controller
             return $data['pembayaran_ids'] ?? [];
         }
 
-        return Pembayaran::where('is_active', true)
+        return Pembayaran::untukPeriode($data['periode_id'])->where('is_active', true)
             ->when($data['jenjang'] ?? null, function ($query, $jenjang) {
                 $query->where('jenjang', $jenjang);
             })

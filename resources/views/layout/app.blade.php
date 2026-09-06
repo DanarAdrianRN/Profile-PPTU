@@ -2569,10 +2569,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Periode</label>
-                                    <select name="periode_id">
-                                        <option value="">Semua periode</option>
+                                    <select name="periode_id" required>
+                                        <option value="">Pilih periode</option>
                                         @foreach (($periodes ?? []) as $periode)
-                                            <option value="{{ $periode->id }}" @selected(old('periode_id', null) == $periode->id)>{{ $periode->nama_periode }}</option>
+                                            <option value="{{ $periode->id }}" @selected(old('periode_id', $selectedPeriodeId ?? null) == $periode->id)>{{ $periode->nama_periode }}</option>
                                         @endforeach
                                     </select>
                                     @error('periode_id')
@@ -2719,8 +2719,8 @@
 
                                         <div class="form-group">
                                     <label>Periode</label>
-                                    <select name="periode_id">
-                                        <option value="">Semua periode</option>
+                                    <select name="periode_id" required>
+                                        <option value="">Pilih periode</option>
                                         @foreach (($periodes ?? []) as $periode)
                                             <option value="{{ $periode->id }}" @selected(old('periode_id', $item->periode_id) == $periode->id)>{{ $periode->nama_periode }}</option>
                                         @endforeach
@@ -2924,7 +2924,7 @@
 
                                 {{-- KETERANGAN --}}
                                 <p>
-                                    Periode: {{ $item->periode?->nama_periode ?? 'Semua periode' }}<br>
+                                    Periode: {{ $item->periode?->nama_periode ?? 'Belum ditentukan' }}<br>
                                     Urutan tampil: {{ $item->urutan }}
 
                                 </p>
@@ -3005,6 +3005,7 @@
                 <!-- FORM -->
                 <form action="{{ route('pembayaran.store') }}" method="POST" id="formTambahPembayaran">
                     @csrf
+                    <input type="hidden" name="periode_id" value="{{ $selectedPeriodeId ?? '' }}">
                     <!-- HEADER -->
                     <div class="modal-header">
                         <div class="modal-title-wrap">

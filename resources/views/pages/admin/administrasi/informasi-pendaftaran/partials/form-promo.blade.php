@@ -8,6 +8,8 @@
         : 'semua';
 @endphp
 
+<input type="hidden" name="periode_id" value="{{ $promo?->periode_id ?? $selectedPeriodeId }}">
+
 <div class="form-section">
     <div class="section-title">
         <h4>Informasi Promo</h4>
@@ -18,7 +20,7 @@
             <label>Cakupan Gelombang</label>
             <select name="cakupan_gelombang">
                 <option value="semua" @selected(! $promo?->gelombang_pendaftaran_id)>
-                    Semua gelombang akan datang
+                    Semua gelombang pada periode ini
                 </option>
                 <option value="satu" @selected($promo?->gelombang_pendaftaran_id)>
                     Salah satu gelombang

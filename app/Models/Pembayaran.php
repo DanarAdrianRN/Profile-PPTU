@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToPeriode;
 
 class Pembayaran extends Model
 {
+    use BelongsToPeriode;
+
     protected $fillable = [
 
+        'periode_id',
         'jenjang',
         'kategori',
         'nama_pembayaran',

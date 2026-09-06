@@ -15,7 +15,7 @@ class GelombangPeriodeTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_period_can_be_saved_changed_and_cleared(): void
+    public function test_period_can_be_saved_and_changed_but_not_cleared(): void
     {
         $period = Periode::create(['nama_periode' => '2026/2027', 'is_active' => true]);
         $data = ['nama_gelombang' => 'Gelombang 1', 'tanggal_mulai' => '2026-01-01',
@@ -30,8 +30,8 @@ class GelombangPeriodeTest extends TestCase
         $controller->update(Request::create('/', 'POST', $data), $wave->id);
         $this->assertEquals($other->id, $wave->fresh()->periode_id);
         $data['periode_id'] = null;
+        $this->expectException(ValidationException::class);
         $controller->update(Request::create('/', 'POST', $data), $wave->id);
-        $this->assertNull($wave->fresh()->periode_id);
     }
 
     public function test_nonexistent_period_is_rejected(): void

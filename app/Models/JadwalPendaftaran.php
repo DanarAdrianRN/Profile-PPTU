@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToPeriode;
 
 class JadwalPendaftaran extends Model
 {
+    use BelongsToPeriode;
+
     protected $fillable = [
         'periode_id',
         'nama_jadwal',
@@ -19,11 +22,6 @@ class JadwalPendaftaran extends Model
         'urutan' => 'integer',
         'is_publish' => 'boolean',
     ];
-
-    public function periode()
-    {
-        return $this->belongsTo(Periode::class);
-    }
 
     public function scopePublish($query)
     {

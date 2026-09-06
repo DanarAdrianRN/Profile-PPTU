@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToPeriode;
 
 class GelombangPendaftaran extends Model
 {
+    use BelongsToPeriode;
+
     protected $fillable = [
         'nama_gelombang',
         'periode_id',
@@ -57,14 +60,10 @@ class GelombangPendaftaran extends Model
     public function scopeAktif($query)
     {
         return $query
+            ->periodeAktif()
             ->where('is_publish', true)
             ->whereDate('tanggal_mulai', '<=', now())
             ->whereDate('tanggal_selesai', '>=', now());
-    }
-
-    public function periode()
-    {
-        return $this->belongsTo(Periode::class);
     }
 
     public function pendaftarans()

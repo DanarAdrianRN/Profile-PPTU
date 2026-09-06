@@ -3,21 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\FilterByPeriode;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 
 class MasterPembayaranController extends Controller
 {
+    use FilterByPeriode;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $pembayarans = Pembayaran::latest()->get();
+        $selectedPeriode = $this->resolvePeriode();
+        $selectedPeriodeId = $selectedPeriode?->id;
+        $isArsip = $selectedPeriode && ! $selectedPeriode->is_active;
+
+        $pembayarans = Pembayaran::untukPeriode($selectedPeriodeId)->latest()->get();
 
         return view(
             'pages.admin.administrasi.informasi-pendaftaran.pembayaran',
-            compact('pembayarans')
+            compact('pembayarans', 'selectedPeriode', 'selectedPeriodeId', 'isArsip')
         );
     }
 
@@ -34,7 +41,11 @@ class MasterPembayaranController extends Controller
             'nominal' => 'required',
         ]);
 
+        $periodeId = $request->input('periode_id', $this->resolvePeriode()?->id);
+        validator(['periode_id' => $periodeId], ['periode_id' => 'required|exists:periodes,id'])->validate();
+
         Pembayaran::create([
+            'periode_id' => $periodeId,
 
             'jenjang' => $request->jenjang,
             'kategori' => $request->kategori,

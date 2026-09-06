@@ -8,6 +8,7 @@
             {{-- HEADER --}}
             @include('components.header-admin', ['title' => 'Manajemen Biaya Pendaftaran'])
             <div class="admin-biaya-pendaftaran">
+                @include('components.registration-period')
                 {{-- FILTER --}}
                 <div class="filter-wrapper">
                     <div class="search-box">
@@ -159,7 +160,7 @@
     @push('script')
         <script>
             const tableBody = document.getElementById('biayaTableBody');
-            const allRows = tableBody.querySelectorAll('tr');
+            const allRows = tableBody.querySelectorAll('tr[data-category]');
             const rowsPerPageSelect = document.getElementById('rowsPerPage');
             const prevBtn = document.getElementById('prevPage');
             const nextBtn = document.getElementById('nextPage');

@@ -8,6 +8,7 @@
             @include('components.header-admin', ['title' => 'Manajemen Promo Pendaftaran'])
 
             <section class="admin-gelombang-table">
+                @include('components.registration-period')
                 <div class="filter-wrapper">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -360,7 +361,7 @@
     @push('script')
         <script>
             const tableBody = document.getElementById('promoTableBody');
-            const allRows = tableBody.querySelectorAll('tr');
+            const allRows = tableBody.querySelectorAll('tr[data-jenjang]');
             const rowsPerPageSelect = document.getElementById('rowsPerPage');
             const prevBtn = document.getElementById('prevPage');
             const nextBtn = document.getElementById('nextPage');

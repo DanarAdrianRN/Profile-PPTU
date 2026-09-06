@@ -8,6 +8,7 @@
             @include('components.header-admin', ['title' => 'Manajemen Jadwal Pendaftaran'])
 
             <section class="admin-gelombang-table">
+                @include('components.registration-period')
                 <div class="filter-wrapper">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -61,7 +62,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            {{ $jadwal->periode?->nama_periode ?? 'Semua periode' }}
+                                            {{ $jadwal->periode?->nama_periode ?? 'Belum ditentukan' }}
                                         </td>
                                         <td>
                                             {{ $jadwal->tanggal->translatedFormat('d F Y') }}
@@ -168,11 +169,11 @@
 
                                 <div class="form-group">
                                     <label>Periode</label>
-                                    <select name="periode_id">
-                                        <option value="">Semua periode</option>
+                                    <select name="periode_id" required>
+                                        <option value="">Pilih periode</option>
                                         @foreach ($periodes as $periode)
                                             <option value="{{ $periode->id }}"
-                                                @selected(old('periode_id') == $periode->id)>
+                                                @selected(old('periode_id', $selectedPeriodeId) == $periode->id)>
                                                 {{ $periode->nama_periode }}
                                             </option>
                                         @endforeach
@@ -264,8 +265,8 @@
 
                                     <div class="form-group">
                                         <label>Periode</label>
-                                        <select name="periode_id">
-                                            <option value="">Semua periode</option>
+                                        <select name="periode_id" required>
+                                            <option value="">Pilih periode</option>
                                             @foreach ($periodes as $periode)
                                                 <option value="{{ $periode->id }}"
                                                     @selected(old('periode_id', $jadwal->periode_id) == $periode->id)>
@@ -360,7 +361,7 @@
             const searchInput = document.getElementById('searchInput');
             const statusFilter = document.getElementById('statusFilter');
             const tableBody = document.getElementById('jadwalTableBody');
-            const allRows = tableBody.querySelectorAll('tr');
+            const allRows = tableBody.querySelectorAll('tr[data-status]');
             const rowsPerPageSelect = document.getElementById('rowsPerPage');
             const prevBtn = document.getElementById('prevPage');
             const nextBtn = document.getElementById('nextPage');

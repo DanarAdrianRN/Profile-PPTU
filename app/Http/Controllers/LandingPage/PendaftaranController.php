@@ -393,7 +393,7 @@ class PendaftaranController extends Controller
         }
         
         
-        $pembayaran = Pembayaran::where(
+        $pembayaran = Pembayaran::untukPeriode($pendaftaran->periode_id)->where(
             'jenjang',
             $request->jenjang_pendidikan
         )
@@ -418,11 +418,7 @@ class PendaftaranController extends Controller
         // pendaftaran) — di titik ini pasti belum ada, jadi dibuat sekalian
         // supaya biaya Pendaftaran Pondok tercatat sebagai item tagihan yang
         // sah, bukan cuma transaksi lepas tanpa rincian.
-        $gelombangId = GelombangPendaftaran::whereDate('tanggal_mulai', '<=', now())
-            ->whereDate('tanggal_selesai', '>=', now())
-            ->orderBy('urutan')
-            ->value('id')
-            ?? GelombangPendaftaran::aktif()->orderBy('urutan')->value('id');
+        $gelombangId = $pendaftaran->gelombang_pendaftaran_id;
 
         $tagihan = TagihanSantri::firstOrCreate(
             ['pendaftaran_id' => $pendaftaran->id],

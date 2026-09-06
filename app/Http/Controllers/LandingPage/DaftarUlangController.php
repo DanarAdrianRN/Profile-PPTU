@@ -127,7 +127,7 @@ class DaftarUlangController extends Controller
                 ->pluck('pembayaran_id')
                 ->all();
 
-            $pembayarans = Pembayaran::where('jenjang', $jenjang)
+            $pembayarans = Pembayaran::untukPeriode($pendaftaran->periode_id)->where('jenjang', $jenjang)
                 ->where('is_active', true)
                 ->orderByRaw("FIELD(kategori, 'Biaya Tahunan', 'Biaya Bulanan')")
                 ->orderBy('id')
@@ -177,15 +177,12 @@ class DaftarUlangController extends Controller
             return $pendaftaran->gelombang_pendaftaran_id;
         }
 
-        $gelombangId = GelombangPendaftaran::whereDate('tanggal_mulai', '<=', $pendaftaran->created_at)
+        $gelombangId = GelombangPendaftaran::untukPeriode($pendaftaran->periode_id)->where('is_publish', true)->whereDate('tanggal_mulai', '<=', $pendaftaran->created_at)
             ->whereDate('tanggal_selesai', '>=', $pendaftaran->created_at)
             ->orderBy('urutan')
             ->value('id');
 
-        return $gelombangId
-            ?? GelombangPendaftaran::aktif()
-                ->orderBy('urutan')
-                ->value('id');
+        return $gelombangId;
     }
 
     private function applyPromoToDetail($detail, Pembayaran $pembayaran, string $jenjang, ?int $gelombangId, $tanggalPromo): void
@@ -207,7 +204,7 @@ class DaftarUlangController extends Controller
 
     private function promoFor(Pembayaran $pembayaran, string $jenjang, ?int $gelombangId, $tanggalPromo): ?Promo
     {
-        return Promo::where('is_active', true)
+        return Promo::untukPeriode($pembayaran->periode_id)->where('is_active', true)
             ->where(function ($query) use ($gelombangId) {
                 $query->whereNull('gelombang_pendaftaran_id')
                     ->orWhere('gelombang_pendaftaran_id', $gelombangId);
