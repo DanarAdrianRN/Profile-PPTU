@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class VirtualTourController extends Controller
 {
@@ -53,7 +54,8 @@ class VirtualTourController extends Controller
 
     public function storeScene(Request $request)
     {
-        $validated = $this->validateScene($request);
+        $request->session()->flash('virtual_tour_form', 'create_scene');
+        $validated = $this->validateScene($request, true);
         $validated = $this->prepareSceneData($validated);
         $validated['slug'] = $this->uniqueSlug($validated['nama_lokasi']);
         $validated['is_start_scene'] = false;
@@ -133,7 +135,8 @@ class VirtualTourController extends Controller
 
     public function storeHotspot(Request $request, VirtualTourScene $scene)
     {
-        $validated = $this->validateHotspot($request);
+        $request->session()->flash('virtual_tour_form', 'create_hotspot');
+        $validated = $this->validateHotspot($request, $scene->id);
         $validated = $this->prepareHotspotData($validated);
         $validated['virtual_tour_scene_id'] = $scene->id;
         $validated['is_active'] = $request->boolean('is_active');
@@ -153,7 +156,7 @@ class VirtualTourController extends Controller
 
     public function updateHotspot(Request $request, VirtualTourHotspot $hotspot)
     {
-        $validated = $this->validateHotspot($request);
+        $validated = $this->validateHotspot($request, $hotspot->virtual_tour_scene_id);
         $validated = $this->prepareHotspotData($validated);
         $validated['is_active'] = $request->boolean('is_active');
 
@@ -186,7 +189,7 @@ class VirtualTourController extends Controller
             ->with('success', 'Hotspot berhasil dihapus');
     }
 
-    private function validateScene(Request $request): array
+    private function validateScene(Request $request, bool $panoramaRequired = false): array
     {
         return $request->validate([
             'nama_lokasi' => 'required|string|max:255',
@@ -194,18 +197,35 @@ class VirtualTourController extends Controller
             'status' => 'required|in:published,draft,hidden',
             'urutan' => 'nullable|integer|min:0',
             'thumbnail' => 'required|in:building,mosque,road,field,home',
-            'panorama' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'panorama' => [
+                $panoramaRequired ? 'required' : 'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:20480',
+                'dimensions:ratio=2/1',
+            ],
             'initial_yaw' => 'nullable|numeric|between:-360,360',
             'initial_pitch' => 'nullable|numeric|between:-90,90',
             'initial_fov' => 'nullable|numeric|between:20,160',
+        ], [
+            'panorama.required' => 'Panorama wajib dipilih. Scene tidak dapat ditambahkan tanpa gambar panorama 360 derajat.',
+            'panorama.image' => 'File panorama harus berupa gambar yang valid.',
+            'panorama.mimes' => 'Format panorama harus JPG, JPEG, PNG, atau WEBP.',
+            'panorama.max' => 'Ukuran panorama maksimal 20 MB.',
+            'panorama.dimensions' => 'Gambar tidak sesuai kriteria panorama 360 derajat. Gunakan gambar equirectangular dengan rasio lebar dan tinggi 2:1.',
         ]);
     }
 
-    private function validateHotspot(Request $request): array
+    private function validateHotspot(Request $request, int $sourceSceneId): array
     {
         return $request->validate([
             'tipe' => 'required|in:navigation,information',
-            'target_scene_id' => 'nullable|exists:virtual_tour_scenes,id',
+            'target_scene_id' => [
+                Rule::requiredIf($request->input('tipe') === 'navigation'),
+                'nullable',
+                'exists:virtual_tour_scenes,id',
+                Rule::notIn([$sourceSceneId]),
+            ],
             'icon' => 'required|in:arrow,arrow-right,arrow-up,arrow-down,arrow-left,info,door,camera',
             'judul' => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string',
@@ -214,6 +234,10 @@ class VirtualTourController extends Controller
             'target_yaw' => 'nullable|numeric|between:-360,360',
             'target_pitch' => 'nullable|numeric|between:-90,90',
             'target_fov' => 'nullable|numeric|between:20,160',
+        ], [
+            'target_scene_id.required' => 'Tujuan hotspot wajib dipilih untuk hotspot navigasi.',
+            'target_scene_id.exists' => 'Scene tujuan hotspot tidak ditemukan.',
+            'target_scene_id.not_in' => 'Tujuan hotspot harus berbeda dari scene saat ini.',
         ]);
     }
 

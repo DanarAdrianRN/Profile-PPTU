@@ -96,6 +96,7 @@
                 }
 
                 &:hover,
+                &.active,
                 &:focus-visible {
                     color: color.adjust(var.$color-primary, $lightness: -8%);
                     text-decoration-color: var.$color-secondary;
@@ -153,6 +154,7 @@
                         border: 1px solid rgba(0, 0, 0, 0.05);
 
                         a {
+                            &.active,
                             &:hover {
                                 background-color: #dfdfdf;
                                 border-radius: 5px;
@@ -179,7 +181,8 @@
             right: 0;
             transition: 0.3s;
 
-            &:hover {
+            &:hover,
+            &.active {
                 background-color: #095662;
                 color: var.$color-background;
             }

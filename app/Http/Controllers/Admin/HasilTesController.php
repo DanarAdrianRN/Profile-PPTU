@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Concerns\FilterByPeriode;
 use App\Models\Pendaftaran;
 use App\Models\PendaftaranHasilTes;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class HasilTesController extends Controller
 {
@@ -30,6 +31,7 @@ class HasilTesController extends Controller
             ->get();
 
         $pendaftarans = Pendaftaran::with('pendidikan')
+            ->where('status', 'diterima')
             ->whereDoesntHave('hasilTes')
             ->when($selectedPeriodeId, function ($query) use ($selectedPeriodeId) {
                 $query->where('periode_id', $selectedPeriodeId);
@@ -85,7 +87,7 @@ class HasilTesController extends Controller
         return $request->validate([
             'pendaftaran_id' => [
                 'required',
-                'exists:pendaftarans,id',
+                Rule::exists('pendaftarans', 'id')->where('status', 'diterima'),
                 $uniqueRule,
             ],
             'baca_tulis_pegon' => 'nullable|integer|min:0|max:100',

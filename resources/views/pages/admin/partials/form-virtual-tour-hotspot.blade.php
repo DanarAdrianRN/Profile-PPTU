@@ -4,7 +4,7 @@
 
 <div class="form-group">
     <label>Jenis Hotspot</label>
-    <select name="tipe" required>
+    <select name="tipe" required data-hotspot-type>
         <option value="navigation" {{ old('tipe', $hotspot->tipe ?? 'navigation') === 'navigation' ? 'selected' : '' }}>
             Navigation Hotspot
         </option>
@@ -15,9 +15,9 @@
 </div>
 
 <div class="form-group">
-    <label>Target Lokasi</label>
-    <select name="target_scene_id">
-        <option value="">Tidak ada target</option>
+    <label>Tujuan Hotspot</label>
+    <select name="target_scene_id" data-hotspot-target>
+        <option value="">Pilih scene tujuan</option>
         @foreach ($allScenes as $sceneOption)
             @if ($sceneOption->id !== $activeScene->id)
                 <option value="{{ $sceneOption->id }}"
@@ -27,7 +27,31 @@
             @endif
         @endforeach
     </select>
+    <small>Wajib dipilih untuk hotspot navigasi.</small>
+    @error('target_scene_id')
+        <small class="text-danger">{{ $message }}</small>
+    @enderror
 </div>
+
+@push('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.virtual-tour-form').forEach(form => {
+                const type = form.querySelector('[data-hotspot-type]');
+                const target = form.querySelector('[data-hotspot-target]');
+
+                if (!type || !target) return;
+
+                const syncTargetRequirement = () => {
+                    target.required = type.value === 'navigation';
+                };
+
+                type.addEventListener('change', syncTargetRequirement);
+                syncTargetRequirement();
+            });
+        });
+    </script>
+@endpush
 
 <div class="form-group">
     <label>Icon Hotspot</label>

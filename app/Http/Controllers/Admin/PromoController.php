@@ -112,7 +112,12 @@ class PromoController extends Controller
             'jenjang' => 'nullable|in:SMP,SMK',
             'cakupan_biaya' => 'required|in:semua,satu',
             'pembayaran_ids' => 'nullable|array|required_if:cakupan_biaya,satu',
-            'pembayaran_ids.*' => [Rule::exists('pembayarans', 'id')->where('periode_id', $periodeId)],
+            'pembayaran_ids.*' => [Rule::exists('pembayarans', 'id')->where(function ($query) use ($periodeId, $request) {
+                $query->where('periode_id', $periodeId)->where('is_active', true);
+                if ($request->filled('jenjang')) {
+                    $query->where('jenjang', $request->input('jenjang'));
+                }
+            })],
             'tipe' => 'required|in:nominal,persentase,gratis_biaya',
             'nilai' => 'nullable|required_unless:tipe,gratis_biaya|integer|min:0',
             'kuota' => 'nullable|integer|min:1',

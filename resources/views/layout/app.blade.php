@@ -3397,24 +3397,31 @@
                             <div class="form-grid">
 
                                 <div class="form-group full">
-                                    <label>
-                                        Pilih Santri
-                                    </label>
-
-                                    <select name="pendaftaran_id" required>
-                                        <option value="">
-                                            Pilih Santri
-                                        </option>
-                                        @isset($pendaftarans)
-                                            @foreach ($pendaftarans as $pendaftaran)
-                                                <option value="{{ $pendaftaran->id }}">
-                                                    {{ $pendaftaran->nama_lengkap }}
-                                                    -
-                                                    {{ $pendaftaran->pendidikan->nisn ?? 'NISN belum ada' }}
-                                                </option>
+                                    <label for="santriNilaiSearch">Pilih Santri</label>
+                                    <div id="santriNilaiPicker" style="position: relative;">
+                                        <input type="text" id="santriNilaiSearch" required
+                                            placeholder="Cari nama santri atau NISN..." autocomplete="off"
+                                            role="combobox" aria-autocomplete="list" aria-expanded="false"
+                                            aria-controls="santriNilaiList" aria-describedby="santriNilaiHelp">
+                                        <input type="hidden" name="pendaftaran_id" id="santriNilaiId">
+                                        <div id="santriNilaiList" role="listbox" hidden
+                                            style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1051; max-height: 240px; overflow-y: auto; background: white; border: 1px solid #ced4da; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,.12);">
+                                            @foreach (($pendaftarans ?? []) as $pendaftaran)
+                                                <div role="option" aria-selected="false"
+                                                    id="santriNilaiOption{{ $pendaftaran->id }}"
+                                                    data-value="{{ $pendaftaran->id }}"
+                                                    style="padding: 10px 12px; cursor: pointer;">
+                                                    {{ $pendaftaran->nama_lengkap }} - {{ $pendaftaran->pendidikan->nisn ?? 'NISN belum ada' }}
+                                                </div>
                                             @endforeach
-                                        @endisset
-                                    </select>
+                                            <div id="santriNilaiEmpty" hidden style="padding: 10px 12px;" role="status">
+                                                Tidak ada santri yang cocok.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <small id="santriNilaiHelp" class="text-muted" role="status">
+                                        Hanya santri yang sudah diterima dan belum memiliki nilai yang dapat dipilih.
+                                    </small>
                                 </div>
 
                             </div>
@@ -3974,6 +3981,19 @@
                     </div>
                 </div>
             </div>
+        @endif
+
+        @if ($errors->any() && session('virtual_tour_form'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const modalId = @json(session('virtual_tour_form') === 'create_hotspot' ? 'modalTambahHotspot' : 'modalTambahScene');
+                    const modalElement = document.getElementById(modalId);
+
+                    if (modalElement && window.jQuery) {
+                        window.jQuery(modalElement).modal('show');
+                    }
+                });
+            </script>
         @endif
     @endif
 </body>

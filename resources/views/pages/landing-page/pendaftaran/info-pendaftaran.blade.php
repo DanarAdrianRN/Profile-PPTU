@@ -63,14 +63,8 @@
                                 -
                                 {{ \Carbon\Carbon::parse($item->tanggal_selesai)->translatedFormat('d F Y') }}
                             </div>
-                            @php
-                                $promo = $item->promos
-                                    ->where('is_active', true)
-                                    ->first();
-                            @endphp
-
-                            @if($promo)
-                                <div class="diskon @if($loop->even) biru @endif">
+                            @forelse ($item->promos->where('is_active', true) as $promo)
+                                <div class="diskon @if($loop->parent->even) biru @endif">
                                     <i class="fa-solid fa-tag"></i>
                                     {{ $promo->nama_promo }}
                                 </div>
@@ -82,11 +76,11 @@
                                         Berlaku untuk seluruh pendaftar
                                     @endif
                                 </p>
-                            @else
+                            @empty
                                 <p>
                                     Tidak ada informasi promo
                                 </p>
-                            @endif
+                            @endforelse
                         </div>
                     @empty
                         <div class="jadwal-card">

@@ -108,7 +108,11 @@
 
 <div class="form-group">
     <label>Upload Panorama 360°</label>
-    <input type="file" name="panorama" accept="image/*">
+    <input type="file" name="panorama" accept="image/jpeg,image/png,image/webp" {{ $scene ? '' : 'required' }}>
+    <small>Wajib berupa gambar panorama equirectangular dengan rasio 2:1 (contoh 6000 &times; 3000 px), format JPG, PNG, atau WEBP, maksimal 20 MB.</small>
+    @error('panorama')
+        <small class="text-danger">{{ $message }}</small>
+    @enderror
     <small data-panorama-file style="{{ $scene?->panorama ? '' : 'display: none;' }}">
         File saat ini: {{ $scene?->panorama ? basename($scene->panorama) : '' }}
     </small>

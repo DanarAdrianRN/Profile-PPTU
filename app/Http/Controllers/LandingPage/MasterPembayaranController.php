@@ -7,6 +7,7 @@ use App\Models\GelombangPendaftaran;
 use App\Models\JadwalPendaftaran;
 use App\Models\Pembayaran;
 use App\Models\Periode;
+use App\Models\Promo;
 
 class MasterPembayaranController extends Controller
 {
@@ -63,9 +64,14 @@ class MasterPembayaranController extends Controller
             ->orderBy('urutan')
             ->first();
 
-        $promos = $gelombangAktif?->promos()
-            ->where('is_active', true)
-            ->first();
+        $promos = $gelombangAktif
+            ? Promo::periodeAktif()->where('is_active', true)
+                ->where(function ($query) use ($gelombangAktif) {
+                    $query->whereNull('gelombang_pendaftaran_id')
+                        ->orWhere('gelombang_pendaftaran_id', $gelombangAktif->id);
+                })
+                ->first()
+            : null;
 
         /*
         |--------------------------------------------------------------------------
@@ -83,6 +89,15 @@ class MasterPembayaranController extends Controller
         | TAMPILKAN BANNER
         |--------------------------------------------------------------------------
         */
+
+        $promoSemuaGelombang = Promo::periodeAktif()
+            ->where('is_active', true)
+            ->whereNull('gelombang_pendaftaran_id')
+            ->get();
+
+        foreach ($gelombangs as $gelombang) {
+            $gelombang->setRelation('promos', $gelombang->promos->merge($promoSemuaGelombang));
+        }
 
         $periodeAktif = Periode::aktif()->first();
 

@@ -72,19 +72,21 @@
 
         <div class="form-group full" data-biaya-list>
             <label>Pilih Biaya</label>
-            <div class="checkbox-wrapper">
+            <div class="promo-biaya-options">
                 @foreach ($promoPembayarans as $pembayaran)
-                    <label>
-                        <input type="checkbox"
-                            name="pembayaran_ids[]"
+                    <label class="promo-biaya-option" data-biaya-jenjang="{{ $pembayaran->jenjang }}">
+                        <input type="checkbox" name="pembayaran_ids[]"
                             value="{{ $pembayaran->id }}"
                             @checked(in_array($pembayaran->id, $selectedBiayaIds))>
-                        {{ $pembayaran->jenjang }} -
-                        {{ $pembayaran->nama_pembayaran }}
-                        ({{ $pembayaran->kategori }})
+                        <span class="promo-biaya-description">
+                            <strong>{{ $pembayaran->nama_pembayaran }}</strong>
+                            <small>{{ $pembayaran->jenjang }} &middot; {{ $pembayaran->kategori }}</small>
+                        </span>
+                        <span class="promo-biaya-amount">Rp {{ number_format($pembayaran->nominal, 0, ',', '.') }}</span>
                     </label>
                 @endforeach
             </div>
+            <small class="text-muted" data-biaya-summary role="status"></small>
         </div>
 
         <div class="form-group">

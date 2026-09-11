@@ -110,6 +110,101 @@
 
     @push('script')
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const picker = document.getElementById('santriNilaiPicker');
+                const search = document.getElementById('santriNilaiSearch');
+                const selectedId = document.getElementById('santriNilaiId');
+                const list = document.getElementById('santriNilaiList');
+                const empty = document.getElementById('santriNilaiEmpty');
+                const options = Array.from(list.querySelectorAll('[role="option"]'));
+                let visible = options;
+                let active = -1;
+
+                function highlight(index) {
+                    active = index;
+                    options.forEach(option => {
+                        option.style.background = '';
+                        option.setAttribute('aria-selected', String(option.dataset.value === selectedId.value));
+                    });
+                    search.removeAttribute('aria-activedescendant');
+                    if (visible[active]) {
+                        visible[active].style.background = '#e9ecef';
+                        search.setAttribute('aria-activedescendant', visible[active].id);
+                        visible[active].scrollIntoView({ block: 'nearest' });
+                    }
+                }
+
+                function close() {
+                    list.hidden = true;
+                    search.setAttribute('aria-expanded', 'false');
+                    highlight(-1);
+                }
+
+                function open() {
+                    const query = selectedId.value ? '' : search.value.trim().toLocaleLowerCase('id');
+                    visible = options.filter(option => {
+                        const matches = option.textContent.toLocaleLowerCase('id').includes(query);
+                        option.hidden = !matches;
+                        return matches;
+                    });
+                    empty.hidden = visible.length > 0;
+                    empty.textContent = options.length ? 'Tidak ada santri yang cocok.'
+                        : 'Belum ada santri diterima yang belum memiliki nilai.';
+                    list.hidden = false;
+                    search.setAttribute('aria-expanded', 'true');
+                    highlight(-1);
+                }
+
+                function choose(option) {
+                    selectedId.value = option.dataset.value;
+                    search.value = option.textContent.trim().replace(/\s+/g, ' ');
+                    search.setCustomValidity('');
+                    close();
+                }
+
+                search.addEventListener('focus', open);
+                search.addEventListener('click', open);
+                search.addEventListener('input', function () {
+                    selectedId.value = '';
+                    search.setCustomValidity('Pilih santri dari daftar yang tersedia.');
+                    open();
+                });
+                search.addEventListener('keydown', function (event) {
+                    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                        event.preventDefault();
+                        if (list.hidden) open();
+                        if (visible.length) {
+                            highlight(event.key === 'ArrowDown'
+                                ? (active + 1) % visible.length
+                                : (active <= 0 ? visible.length - 1 : active - 1));
+                        }
+                    } else if (event.key === 'Enter' && !list.hidden) {
+                        event.preventDefault();
+                        if (visible[active]) choose(visible[active]);
+                    } else if (event.key === 'Escape') {
+                        event.preventDefault();
+                        close();
+                    }
+                });
+                options.forEach(option => {
+                    option.addEventListener('mousedown', event => event.preventDefault());
+                    option.addEventListener('click', () => choose(option));
+                });
+                picker.addEventListener('focusout', function (event) {
+                    if (!picker.contains(event.relatedTarget)) close();
+                });
+                document.addEventListener('click', function (event) {
+                    if (!picker.contains(event.target)) close();
+                });
+                document.getElementById('formTambahNilai').addEventListener('submit', function (event) {
+                    if (!selectedId.value) {
+                        event.preventDefault();
+                        search.setCustomValidity('Pilih santri dari daftar yang tersedia.');
+                        search.reportValidity();
+                    }
+                });
+            });
+
             const tableBody = document.getElementById('nilaiTableBody');
             const allRows = [...tableBody.querySelectorAll('tr')].filter(row => row.querySelector('.hasil-name'));
             const rowsPerPageSelect = document.getElementById('rowsPerPage');

@@ -47,10 +47,10 @@ class PendaftaranHasilTes extends Model
         }
 
         return match (true) {
-            $this->rata_rata >= 85 => 'Sangat Baik',
-            $this->rata_rata >= 75 => 'Baik',
-            $this->rata_rata >= 65 => 'Cukup',
-            default => 'Perlu Bimbingan',
+            $this->rata_rata >= 85 => 'Santri Masuk Kelas Ula 1A',
+            $this->rata_rata >= 75 => 'Santri Masuk Kelas Ula 1B',
+            $this->rata_rata >= 65 => 'Santri Masuk Kelas Idadiyah A',
+            default => 'Santri Masuk Kelas Idadiyah B',   
         };
     }
 

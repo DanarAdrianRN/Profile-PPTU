@@ -5,6 +5,7 @@ namespace App\Http\Controllers\LandingPage;
 use App\Http\Controllers\Controller;
 use App\Models\GelombangPendaftaran;
 use App\Models\Periode;
+use App\Models\Promo;
 
 class HomeController extends Controller
 {
@@ -16,9 +17,14 @@ class HomeController extends Controller
             ->orderBy('urutan')
             ->first();
 
-        $promos = $gelombangAktif?->promos()
-            ->where('is_active', true)
-            ->first();
+        $promos = $gelombangAktif
+            ? Promo::periodeAktif()->where('is_active', true)
+                ->where(function ($query) use ($gelombangAktif) {
+                    $query->whereNull('gelombang_pendaftaran_id')
+                        ->orWhere('gelombang_pendaftaran_id', $gelombangAktif->id);
+                })
+                ->first()
+            : null;
 
         $jadwalPendaftarans = $periodeAktif?->jadwalPendaftarans()
             ->publish()

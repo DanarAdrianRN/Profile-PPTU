@@ -358,6 +358,20 @@
         </div>
     @endforeach
 
+    <style>
+        .promo-form .promo-biaya-options { display: grid; gap: 8px; max-height: 300px; overflow-y: auto; padding: 2px; }
+        .promo-form .promo-biaya-option { display: flex; align-items: center; gap: 12px; margin: 0; padding: 12px; border: 1px solid #dee2e6; border-radius: 8px; cursor: pointer; background: #fff; }
+        .promo-form .promo-biaya-option:has(input:checked) { border-color: #198754; background: #f0faf4; }
+        .promo-form .promo-biaya-option input { width: 18px; height: 18px; flex: 0 0 18px; margin: 0; accent-color: #198754; }
+        .promo-form .promo-biaya-description { flex: 1; min-width: 0; }
+        .promo-form .promo-biaya-description strong, .promo-form .promo-biaya-description small { display: block; }
+        .promo-form .promo-biaya-description small { color: #6c757d; margin-top: 3px; }
+        .promo-form .promo-biaya-amount { font-size: 13px; font-weight: 600; white-space: nowrap; }
+        @media (max-width: 480px) {
+            .promo-form .promo-biaya-option { flex-wrap: wrap; }
+            .promo-form .promo-biaya-amount { margin-left: 30px; }
+        }
+    </style>
     @push('script')
         <script>
             const tableBody = document.getElementById('promoTableBody');
@@ -421,18 +435,39 @@
                 const gelombangSelect = form.querySelector('[data-gelombang-field]');
                 const biayaMode = form.querySelector('[name="cakupan_biaya"]');
                 const biayaList = form.querySelector('[data-biaya-list]');
+                const jenjang = form.querySelector('[name="jenjang"]');
+                const biayaOptions = form.querySelectorAll('[data-biaya-jenjang]');
+                const biayaSummary = form.querySelector('[data-biaya-summary]');
                 const tipe = form.querySelector('[name="tipe"]');
                 const nilai = form.querySelector('[name="nilai"]');
 
                 function syncFields() {
                     gelombangSelect.style.display = gelombangMode.value === 'satu' ? '' : 'none';
                     biayaList.style.display = biayaMode.value === 'satu' ? '' : 'none';
+                    let available = 0;
+                    let selected = 0;
+                    biayaOptions.forEach(option => {
+                        const matches = !jenjang.value || option.dataset.biayaJenjang === jenjang.value;
+                        const checkbox = option.querySelector('input');
+                        option.style.display = matches ? '' : 'none';
+                        checkbox.disabled = !matches || biayaMode.value !== 'satu';
+                        if (!matches) checkbox.checked = false;
+                        if (matches) {
+                            available++;
+                            if (checkbox.checked) selected++;
+                        }
+                    });
+                    biayaSummary.textContent = available
+                        ? selected + ' biaya dipilih dari ' + available + ' biaya tersedia.'
+                        : 'Belum ada biaya aktif untuk jenjang ini.';
                     nilai.closest('.form-group').style.display = tipe.value === 'gratis_biaya' ? 'none' : '';
                 }
 
                 gelombangMode.addEventListener('change', syncFields);
                 biayaMode.addEventListener('change', syncFields);
                 tipe.addEventListener('change', syncFields);
+                jenjang.addEventListener('change', syncFields);
+                biayaOptions.forEach(option => option.querySelector('input').addEventListener('change', syncFields));
                 syncFields();
             });
 
