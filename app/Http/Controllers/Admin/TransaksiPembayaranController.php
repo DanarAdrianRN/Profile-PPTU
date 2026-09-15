@@ -71,7 +71,7 @@ class TransaksiPembayaranController extends Controller
     {
         $tagihan->load('pendaftaran.pendidikan', 'details');
 
-        $pdf = Pdf::loadView('pages.admin.administrasi.print-tagihan-santri', compact('tagihan'))
+        $pdf = Pdf::loadView('pages.admin.administrasi.cetak-tagihan-pdf', compact('tagihan'))
             ->setPaper('a4', 'portrait');
 
         return $pdf->download('tagihan-' . str_replace(' ', '-', $tagihan->pendaftaran->nama_lengkap) . '.pdf');

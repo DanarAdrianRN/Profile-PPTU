@@ -47,15 +47,17 @@ class GelombangPendaftaranController extends Controller
             'nama_gelombang' => 'required|max:255',
             'periode_id' => 'required|exists:periodes,id',
 
-            'tanggal_mulai' => 'required|date',
+            'tanggal_mulai' => 'required|date_format:Y-m-d',
 
             'tanggal_selesai' =>
-                'required|date|after_or_equal:tanggal_mulai',
+                'required|date_format:Y-m-d|after_or_equal:tanggal_mulai',
 
             'urutan' => 'nullable|integer',
 
             'is_publish' => 'nullable|boolean',
 
+        ], [
+            'tanggal_selesai.after_or_equal' => 'Tanggal selesai tidak boleh lebih awal dari tanggal mulai.',
         ]);
 
         $gelombang = GelombangPendaftaran::create([
@@ -90,15 +92,17 @@ class GelombangPendaftaranController extends Controller
             'nama_gelombang' => 'required|max:255',
             'periode_id' => 'required|exists:periodes,id',
 
-            'tanggal_mulai' => 'required|date',
+            'tanggal_mulai' => 'required|date_format:Y-m-d',
 
             'tanggal_selesai' =>
-                'required|date|after_or_equal:tanggal_mulai',
+                'required|date_format:Y-m-d|after_or_equal:tanggal_mulai',
 
             'urutan' => 'nullable|integer',
 
             'is_publish' => 'nullable|boolean',
 
+        ], [
+            'tanggal_selesai.after_or_equal' => 'Tanggal selesai tidak boleh lebih awal dari tanggal mulai.',
         ]);
 
         $gelombang->update([

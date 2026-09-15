@@ -19,6 +19,16 @@
         }
     }
 
+    .registration-instructions {
+        background: #fff;
+        border-left: 4px solid var.$color-primary;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        border-radius: 8px;
+        p { margin: 0 0 8px; }
+        p:last-child { margin-bottom: 0; }
+    }
+
     /* STEP */
     .step-progress {
         display: flex;

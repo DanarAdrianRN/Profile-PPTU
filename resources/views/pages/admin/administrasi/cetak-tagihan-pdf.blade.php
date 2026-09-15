@@ -4,22 +4,23 @@
     <meta charset="utf-8">
     <title>Tagihan {{ $tagihan->pendaftaran->nama_lengkap ?? '' }}</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; color: #172033; font-size: 12px; }
-        .sheet { width: 100%; border: 1px solid #d8dee9; border-radius: 8px; padding: 28px; box-sizing: border-box; }
+        @page { margin: 18mm; }
+        body { margin: 0; padding: 0; font-family: DejaVu Sans, sans-serif; color: #172033; font-size: 12px; }
+        .sheet { width: auto; border: 1px solid #d8dee9; border-radius: 8px; padding: 20px; }
         .header { border-bottom: 2px solid #0f766e; padding-bottom: 16px; margin-bottom: 20px; }
         h1 { color: #0f766e; font-size: 20px; margin: 0 0 6px; }
         .subtitle { color: #64748b; }
         table.info { width: 100%; margin-bottom: 16px; }
         table.info td { padding: 4px 0; vertical-align: top; }
         table.info td:first-child { width: 30%; color: #64748b; }
-        table.items { width: 100%; border-collapse: collapse; margin: 16px 0; }
-        table.items th, table.items td { padding: 8px 10px; border-bottom: 1px solid #edf0f4; text-align: left; }
+        table.items { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 16px 0; }
+        table.items th, table.items td { padding: 8px 6px; overflow-wrap: break-word; border-bottom: 1px solid #edf0f4; text-align: left; }
         table.items th { background: #f8fafc; color: #334155; }
-        .text-right { text-align: right; }
+        table.items .text-right, .text-right { text-align: right; }
         .status-lunas { color: #15803d; font-weight: bold; }
         .status-belum { color: #b45309; font-weight: bold; }
         .summary { margin-top: 18px; }
-        .summary table { width: 50%; margin-left: auto; }
+        .summary table { width: 65%; margin-left: auto; }
         .summary td { padding: 6px 0; }
         .summary td:first-child { color: #64748b; }
         .summary .grand-total td { border-top: 2px solid #0f766e; padding-top: 10px; font-size: 15px; font-weight: bold; color: #0f766e; }
@@ -41,6 +42,12 @@
 
         @foreach ($tagihan->details->groupBy('kategori') as $kategori => $items)
             <table class="items">
+                <colgroup>
+                    <col style="width: 27%;">
+                    <col style="width: 27%;">
+                    <col style="width: 28%;">
+                    <col style="width: 18%;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th colspan="2">{{ $kategori }}</th>

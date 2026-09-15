@@ -19,7 +19,7 @@
 <div class="form-group">
     <label>Username</label>
     <input type="text" name="username" placeholder="Masukkan username admin"
-        value="{{ old('username', $formAdmin?->username) }}" {{ $isEdit ? 'disabled' : 'required' }}>
+        value="{{ old('username', $formAdmin?->username) }}" {{ $isEdit ? 'readonly' : 'required' }}>
 </div>
 
 <div class="form-group">

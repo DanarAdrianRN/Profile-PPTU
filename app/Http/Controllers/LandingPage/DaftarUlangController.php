@@ -91,6 +91,8 @@ class DaftarUlangController extends Controller
     private function ensureTagihan(Pendaftaran $pendaftaran): TagihanSantri
     {
         return DB::transaction(function () use ($pendaftaran) {
+            // Serialisasi pembuatan rincian untuk pendaftar yang sama.
+            $pendaftaran = Pendaftaran::whereKey($pendaftaran->id)->lockForUpdate()->firstOrFail();
             $pendaftaran->loadMissing('pendidikan');
 
             $jenjang = $pendaftaran->pendidikan?->jenjang_pendidikan ?? 'SMP';
@@ -129,7 +131,7 @@ class DaftarUlangController extends Controller
 
             $pembayarans = Pembayaran::untukPeriode($pendaftaran->periode_id)->where('jenjang', $jenjang)
                 ->where('is_active', true)
-                ->orderByRaw("FIELD(kategori, 'Biaya Tahunan', 'Biaya Bulanan')")
+                ->orderByRaw("CASE kategori WHEN 'Biaya Tahunan' THEN 1 WHEN 'Biaya Bulanan' THEN 2 ELSE 3 END")
                 ->orderBy('id')
                 ->get();
 
@@ -140,13 +142,13 @@ class DaftarUlangController extends Controller
 
                 if ($existingDetail) {
                     if ($existingDetail->status_pembayaran === 'belum_dibayar') {
-                        $this->applyPromoToDetail($existingDetail, $pembayaran, $jenjang, $gelombangId, $tanggalPromo);
+                        $this->applyPromoToDetail($existingDetail, $pembayaran, $jenjang, $gelombangId, $tanggalPromo, $tagihan->id);
                     }
 
                     continue;
                 }
 
-                $promo = $this->promoFor($pembayaran, $jenjang, $gelombangId, $tanggalPromo);
+                $promo = $this->promoFor($pembayaran, $jenjang, $gelombangId, $tanggalPromo, $tagihan->id);
                 $potongan = $this->potonganPromo($pembayaran, $promo);
                 $nominalAkhir = max(0, $pembayaran->nominal - $potongan);
                 $isPaid = in_array($pembayaran->id, $paidPaymentIds) || $nominalAkhir === 0;
@@ -185,9 +187,14 @@ class DaftarUlangController extends Controller
         return $gelombangId;
     }
 
-    private function applyPromoToDetail($detail, Pembayaran $pembayaran, string $jenjang, ?int $gelombangId, $tanggalPromo): void
+    private function applyPromoToDetail($detail, Pembayaran $pembayaran, string $jenjang, ?int $gelombangId, $tanggalPromo, int $tagihanId): void
     {
-        $promo = $this->promoFor($pembayaran, $jenjang, $gelombangId, $tanggalPromo);
+        // Diskon yang sudah dialokasikan tetap berlaku saat halaman dibuka ulang.
+        if ($detail->promo_id !== null) {
+            return;
+        }
+
+        $promo = $this->promoFor($pembayaran, $jenjang, $gelombangId, $tanggalPromo, $tagihanId);
         $potongan = $this->potonganPromo($pembayaran, $promo);
         $nominalAkhir = max(0, $pembayaran->nominal - $potongan);
 
@@ -202,9 +209,9 @@ class DaftarUlangController extends Controller
         ]);
     }
 
-    private function promoFor(Pembayaran $pembayaran, string $jenjang, ?int $gelombangId, $tanggalPromo): ?Promo
+    private function promoFor(Pembayaran $pembayaran, string $jenjang, ?int $gelombangId, $tanggalPromo, int $tagihanId): ?Promo
     {
-        return Promo::untukPeriode($pembayaran->periode_id)->where('is_active', true)
+        $promos = Promo::untukPeriode($pembayaran->periode_id)->where('is_active', true)
             ->where(function ($query) use ($gelombangId) {
                 $query->whereNull('gelombang_pendaftaran_id')
                     ->orWhere('gelombang_pendaftaran_id', $gelombangId);
@@ -221,15 +228,39 @@ class DaftarUlangController extends Controller
                 $query->whereNull('tanggal_selesai')
                     ->orWhereDate('tanggal_selesai', '>=', $tanggalPromo);
             })
-            ->where(function ($query) {
-                $query->whereNull('kuota')
-                    ->orWhereColumn('terpakai', '<', 'kuota');
-            })
             ->whereHas('pembayarans', function ($query) use ($pembayaran) {
                 $query->where('pembayarans.id', $pembayaran->id);
             })
             ->latest()
-            ->first();
+            ->lockForUpdate()
+            ->get();
+
+        foreach ($promos as $promo) {
+            if ($this->potonganPromo($pembayaran, $promo) <= 0) {
+                continue;
+            }
+
+            // Sertakan tagihan lama yang mendapat promo sebelum penghitung diperbaiki.
+            $usage = $promo->tagihanSantriDetails();
+            $used = max($promo->terpakai, (clone $usage)->distinct()->count('tagihan_santri_id'));
+            $alreadyUsed = (clone $usage)->where('tagihan_santri_id', $tagihanId)->exists();
+
+            if ($used !== $promo->terpakai) {
+                $promo->update(['terpakai' => $used]);
+            }
+
+            if (! $alreadyUsed && $promo->kuota !== null && $used >= $promo->kuota) {
+                continue;
+            }
+
+            if (! $alreadyUsed) {
+                $promo->increment('terpakai');
+            }
+
+            return $promo;
+        }
+
+        return null;
     }
 
     private function potonganPromo(Pembayaran $pembayaran, ?Promo $promo): int

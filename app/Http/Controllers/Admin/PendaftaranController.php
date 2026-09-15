@@ -427,6 +427,16 @@ class PendaftaranController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|in:L,P',
+            'agama' => 'required|string|max:100',
+            'tanggal_lahir' => 'required|date_format:Y-m-d',
+            'tanggal_lahir_ayah' => 'nullable|date_format:Y-m-d',
+            'tanggal_lahir_ibu' => 'nullable|date_format:Y-m-d',
+            'tanggal_lahir_wali' => 'nullable|date_format:Y-m-d',
+        ]);
+
         
         $pendaftaran = Pendaftaran::with([
             'pendidikan',

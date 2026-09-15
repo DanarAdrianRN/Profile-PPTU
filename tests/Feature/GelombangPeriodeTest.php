@@ -34,6 +34,42 @@ class GelombangPeriodeTest extends TestCase
         $controller->update(Request::create('/', 'POST', $data), $wave->id);
     }
 
+    public function test_reversed_dates_are_rejected_when_creating_and_editing(): void
+    {
+        $period = Periode::create(['nama_periode' => '2026/2027', 'is_active' => true]);
+        $wave = GelombangPendaftaran::create([
+            'nama_gelombang' => 'Gelombang 1', 'periode_id' => $period->id,
+            'tanggal_mulai' => '2026-09-10', 'tanggal_selesai' => '2026-09-15',
+            'urutan' => 1, 'is_publish' => true,
+        ]);
+        $controller = new GelombangPendaftaranController;
+        $data = [
+            'nama_gelombang' => 'Gelombang Terbalik', 'periode_id' => $period->id,
+            'tanggal_mulai' => '2026-09-10', 'tanggal_selesai' => '2026-09-09',
+        ];
+
+        foreach (['store', 'update'] as $method) {
+            try {
+                $request = Request::create('/', 'POST', $data);
+                $method === 'store' ? $controller->store($request) : $controller->update($request, $wave->id);
+                $this->fail('Tanggal terbalik harus ditolak.');
+            } catch (ValidationException $exception) {
+                $this->assertArrayHasKey('tanggal_selesai', $exception->errors());
+                $this->assertSame(
+                    'Tanggal selesai tidak boleh lebih awal dari tanggal mulai.',
+                    $exception->errors()['tanggal_selesai'][0]
+                );
+            }
+            $this->assertDatabaseCount('gelombang_pendaftarans', 1);
+            $this->assertSame('2026-09-15', $wave->fresh()->tanggal_selesai->format('Y-m-d'));
+            $this->assertSame('Gelombang 1', $wave->fresh()->nama_gelombang);
+        }
+
+        $data['tanggal_selesai'] = $data['tanggal_mulai'];
+        $controller->update(Request::create('/', 'POST', $data), $wave->id);
+        $this->assertSame('2026-09-10', $wave->fresh()->tanggal_selesai->format('Y-m-d'));
+    }
+
     public function test_nonexistent_period_is_rejected(): void
     {
         $this->expectException(ValidationException::class);

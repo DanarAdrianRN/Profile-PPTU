@@ -265,6 +265,28 @@
     </div>
 @push('script')
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('#formTambahGelombang, form[id^="formEditGelombang"]').forEach(function (form) {
+                const mulai = form.querySelector('[name="tanggal_mulai"]');
+                const selesai = form.querySelector('[name="tanggal_selesai"]');
+
+                function validasiTanggal() {
+                    selesai.min = mulai.value;
+                    selesai.setCustomValidity(
+                        mulai.value && selesai.value && selesai.value < mulai.value
+                            ? 'Tanggal selesai tidak boleh lebih awal dari tanggal mulai.'
+                            : ''
+                    );
+                }
+
+                mulai.addEventListener('input', validasiTanggal);
+                selesai.addEventListener('input', validasiTanggal);
+                validasiTanggal();
+            });
+        });
+    </script>
+
+    <script>
         const tableBody = document.getElementById('biayaTableBody');
         const allRows = tableBody.querySelectorAll('tr[data-category]');
         const rowsPerPageSelect =

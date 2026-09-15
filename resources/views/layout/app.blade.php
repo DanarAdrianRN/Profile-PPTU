@@ -1375,7 +1375,7 @@
                                     <div class="form-group">
                                         <label>Tanggal Lahir</label>
                                         <input name="tanggal_lahir" type="date"
-                                            value="{{ $pendaftaran->tanggal_lahir }}">
+                                            value="{{ $pendaftaran->tanggal_lahir?->format('Y-m-d') }}">
                                     </div>
 
                                     <div class="form-group">
@@ -2609,7 +2609,7 @@
                                         Tanggal Mulai
                                     </label>
                                     <input type="date" name="tanggal_mulai"
-                                        value="{{ old('tanggal_mulai') }}">
+                                        value="{{ old('tanggal_mulai') }}" required>
                                     @error('tanggal_mulai')
                                         <small class="text-danger">
                                             {{ $message }}
@@ -2622,7 +2622,7 @@
                                         Tanggal Selesai
                                     </label>
                                     <input type="date" name="tanggal_selesai"
-                                        value="{{ old('tanggal_selesai') }}">
+                                        value="{{ old('tanggal_selesai') }}" required>
                                     @error('tanggal_selesai')
                                         <small class="text-danger">
                                             {{ $message }}
@@ -2778,7 +2778,10 @@
                                             </label>
 
                                             <input type="date" name="tanggal_mulai"
-                                                value="{{ old('tanggal_mulai', $item->tanggal_mulai?->format('Y-m-d')) }}">
+                                                value="{{ old('tanggal_mulai', $item->tanggal_mulai?->format('Y-m-d')) }}" required>
+                                            @error('tanggal_mulai')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
 
                                         </div>
 
@@ -2790,7 +2793,10 @@
                                             </label>
 
                                             <input type="date" name="tanggal_selesai"
-                                                value="{{ old('tanggal_selesai', $item->tanggal_selesai?->format('Y-m-d')) }}">
+                                                value="{{ old('tanggal_selesai', $item->tanggal_selesai?->format('Y-m-d')) }}" required>
+                                            @error('tanggal_selesai')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
 
                                         </div>
 

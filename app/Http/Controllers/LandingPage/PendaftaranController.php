@@ -4,6 +4,7 @@ namespace App\Http\Controllers\LandingPage;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePendaftaranRequest;
 
 use App\Models\Pendaftaran;
 use App\Models\PendaftaranPendidikan;
@@ -115,7 +116,7 @@ class PendaftaranController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function store(Request $request)
+    public function store(StorePendaftaranRequest $request)
     {
         $request->merge(['nisn' => trim((string) $request->input('nisn'))]);
 
@@ -129,23 +130,9 @@ class PendaftaranController extends Controller
             ]);
         }
 
-        $request->validate([
-
-            'nama_lengkap' => 'required',
-            'jenis_kelamin' => 'required',
-            'agama' => 'required',
-            'nisn' => 'nullable|string|max:20|unique:pendaftaran_pendidikans,nisn',
-
-            'akta_kelahiran' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'ktp_ortu'       => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'kk'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'ijazah'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'nisn_file'      => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'kip'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'foto_warna'     => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
-            'foto_bw'        => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
-
-        ]);
+        if ($request->input('nisn') === '-') {
+            $request->merge(['nisn' => null]);
+        }
 
         /*
         |--------------------------------------------------------------------------
@@ -287,72 +274,20 @@ class PendaftaranController extends Controller
 
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | DATA AYAH
-        |--------------------------------------------------------------------------
-        */
-        PendaftaranOrangTua::create([
+        // Simpan seluruh data orang tua/wali yang diisi pada formulir.
+        foreach (['ayah', 'ibu', 'wali'] as $tipe) {
+            $data = [
+                'pendaftaran_id' => $pendaftaran->id,
+                'tipe' => $tipe,
+            ];
 
-            'pendaftaran_id' => $pendaftaran->id,
+            foreach (['nama', 'status', 'tempat_lahir', 'tanggal_lahir', 'agama',
+                'pendidikan', 'pekerjaan', 'penghasilan', 'alamat'] as $field) {
+                $data[$field] = $request->input($field . '_' . $tipe);
+            }
 
-            'tipe' => 'ayah',
-
-            'nama' => $request->nama_ayah,
-
-            'status' => $request->status_ayah,
-
-            'tempat_lahir' => $request->tempat_lahir_ayah,
-
-            'tanggal_lahir' => $request->tanggal_lahir_ayah,
-
-            'agama' => $request->agama_ayah,
-
-            'pendidikan' => $request->pendidikan_ayah,
-
-            'pekerjaan' => $request->pekerjaan_ayah,
-
-            'penghasilan' => $request->penghasilan_ayah,
-
-            'alamat' => $request->alamat_ayah,
-
-        ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | DATA IBU
-        |--------------------------------------------------------------------------
-        */
-        PendaftaranOrangTua::create([
-
-            'pendaftaran_id' => $pendaftaran->id,
-
-            'tipe' => 'ibu',
-
-            'nama' => $request->nama_ibu,
-
-            'status' => $request->status_ibu,
-
-        ]);
-
-        /*
-        |--------------------------------------------------------------------------
-        | DATA WALI
-        |--------------------------------------------------------------------------
-        */
-        PendaftaranOrangTua::create([
-
-            'pendaftaran_id' => $pendaftaran->id,
-
-            'tipe' => 'wali',
-
-            'nama' => $request->nama_wali,
-
-            'pekerjaan' => $request->pekerjaan_wali,
-
-            'alamat' => $request->alamat_wali,
-
-        ]);
+            PendaftaranOrangTua::create($data);
+        }
 
         /*
         |--------------------------------------------------------------------------
