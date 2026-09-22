@@ -30,7 +30,7 @@
         </div>
     </section>
 
-    <section class="stats">
+    {{-- <section class="stats">
         <div class="container">
             <div class="stat-item">
                 <h2>8+</h2>
@@ -52,7 +52,7 @@
                 <p>Alumni</p>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="program">
         <div class="container">
