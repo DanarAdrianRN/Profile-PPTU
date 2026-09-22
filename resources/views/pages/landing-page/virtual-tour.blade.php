@@ -135,323 +135,1978 @@
         </div>
     </section>
 
-    @push('script')
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                let viewer = null;
-                let currentMarzipanoScene = null;
-                let currentInitialView = {
-                    yaw: 0,
-                    pitch: 0,
-                    fov: Math.PI / 2
-                };
+@push('script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
-                function setViewParameters(parameters) {
-                    const view = currentMarzipanoScene?.view?.();
+            // =========================================================
+            // GLOBAL VARIABLE
+            // =========================================================
 
-                    if (!view) return;
+            let viewer = null;
+            let currentMarzipanoScene = null;
+            let isSceneTransitioning = false;
 
-                    view.setParameters(parameters);
-                }
+            let currentInitialView = {
+                yaw: 0,
+                pitch: 0,
+                fov: Math.PI / 2
+            };
 
-                const fullscreenButton = document.getElementById('fullscreenTourButton');
-                const fullscreenTarget = document.querySelector('.tour-viewer-wrapper');
 
-                fullscreenButton?.addEventListener('click', async function () {
-                    if (!fullscreenTarget) return;
+            // =========================================================
+            // BASIC VIEW CONTROL
+            // =========================================================
 
-                    try {
-                        if (!document.fullscreenElement) {
-                            if (fullscreenTarget.requestFullscreen) {
-                                await fullscreenTarget.requestFullscreen();
-                            } else if (fullscreenTarget.webkitRequestFullscreen) {
-                                fullscreenTarget.webkitRequestFullscreen();
-                            }
-                        } else {
-                            if (document.exitFullscreen) {
-                                await document.exitFullscreen();
-                            } else if (document.webkitExitFullscreen) {
-                                document.webkitExitFullscreen();
-                            }
+            function setViewParameters(parameters) {
+                const view = currentMarzipanoScene?.view?.();
+
+                if (!view) return;
+
+                view.setParameters(parameters);
+            }
+
+
+            // =========================================================
+            // FULLSCREEN
+            // =========================================================
+
+            const fullscreenButton =
+                document.getElementById('fullscreenTourButton');
+
+            const fullscreenTarget =
+                document.querySelector('.tour-viewer-wrapper');
+
+
+            fullscreenButton?.addEventListener('click', async function() {
+
+                if (!fullscreenTarget) return;
+
+                try {
+
+                    if (!document.fullscreenElement) {
+
+                        if (fullscreenTarget.requestFullscreen) {
+
+                            await fullscreenTarget.requestFullscreen();
+
+                        } else if (
+                            fullscreenTarget.webkitRequestFullscreen
+                        ) {
+
+                            fullscreenTarget.webkitRequestFullscreen();
                         }
-                    } catch (error) {
-                        console.error('Fullscreen error:', error);
-                    }
-                });
 
-
-                document.addEventListener('fullscreenchange', function () {
-                    updateFullscreenState();
-                });
-
-                document.addEventListener('webkitfullscreenchange', function () {
-                    updateFullscreenState();
-                });
-
-                function updateFullscreenState() {
-                    const isFullscreen =
-                        document.fullscreenElement ||
-                        document.webkitFullscreenElement;
-
-                    const icon = fullscreenButton?.querySelector('i');
-
-                    if (isFullscreen) {
-                        icon?.classList.remove('fa-expand');
-                        icon?.classList.add('fa-compress');
-
-                        fullscreenButton?.setAttribute(
-                            'aria-label',
-                            'Keluar Fullscreen'
-                        );
                     } else {
-                        icon?.classList.remove('fa-compress');
-                        icon?.classList.add('fa-expand');
 
-                        fullscreenButton?.setAttribute(
-                            'aria-label',
-                            'Fullscreen'
-                        );
+                        if (document.exitFullscreen) {
+
+                            await document.exitFullscreen();
+
+                        } else if (
+                            document.webkitExitFullscreen
+                        ) {
+
+                            document.webkitExitFullscreen();
+                        }
                     }
 
-                    // Beri waktu browser menyelesaikan perubahan ukuran
-                    // sebelum Marzipano menghitung ulang ukuran viewer.
-                    setTimeout(() => {
-                        if (viewer) {
-                            viewer.updateSize();
+                } catch (error) {
 
-                            requestAnimationFrame(() => {
-                                viewer.updateSize();
-                            });
-                        }
-                    }, 200);
+                    console.error(
+                        'Fullscreen error:',
+                        error
+                    );
+                }
+            });
+
+
+            document.addEventListener(
+                'fullscreenchange',
+                updateFullscreenState
+            );
+
+
+            document.addEventListener(
+                'webkitfullscreenchange',
+                updateFullscreenState
+            );
+
+
+            function updateFullscreenState() {
+
+                const isFullscreen =
+                    document.fullscreenElement ||
+                    document.webkitFullscreenElement;
+
+
+                const icon =
+                    fullscreenButton?.querySelector('i');
+
+
+                if (isFullscreen) {
+
+                    icon?.classList.remove('fa-expand');
+                    icon?.classList.add('fa-compress');
+
+                    fullscreenButton?.setAttribute(
+                        'aria-label',
+                        'Keluar Fullscreen'
+                    );
+
+                } else {
+
+                    icon?.classList.remove('fa-compress');
+                    icon?.classList.add('fa-expand');
+
+                    fullscreenButton?.setAttribute(
+                        'aria-label',
+                        'Fullscreen'
+                    );
                 }
 
-                document.getElementById('resetTourButton')?.addEventListener('click', function() {
-                    setViewParameters(currentInitialView);
+
+                setTimeout(() => {
+
+                    if (viewer) {
+
+                        viewer.updateSize();
+
+                        requestAnimationFrame(() => {
+                            viewer.updateSize();
+                        });
+                    }
+
+                }, 200);
+            }
+
+
+            // =========================================================
+            // RESET VIEW
+            // =========================================================
+
+            document
+                .getElementById('resetTourButton')
+                ?.addEventListener('click', function() {
+
+                    setViewParameters(
+                        currentInitialView
+                    );
                 });
 
-                document.getElementById('centerTourButton')?.addEventListener('click', function() {
+
+            // =========================================================
+            // CENTER VIEW
+            // =========================================================
+
+            document
+                .getElementById('centerTourButton')
+                ?.addEventListener('click', function() {
+
                     setViewParameters({
                         yaw: currentInitialView.yaw,
                         pitch: currentInitialView.pitch
                     });
                 });
 
-                const viewerElement = document.getElementById("panoramaViewer");
-                if (!viewerElement) return;
 
-                @if (!$activeScene)
-                    // Tidak ada scene tersedia
-                    return;
-                @endif
+            // =========================================================
+            // VIEWER ELEMENT
+            // =========================================================
 
-                const tourScenes = @json($tourScenes);
-                const activeSceneId = @json($activeScene?->id);
-                const sceneDataById = new Map(tourScenes.map(scene => [Number(scene.id), scene]));
-                const marzipanoScenes = new Map();
-                const locationItems = document.querySelectorAll('.location-item[data-scene-id]');
-                const titleElement = document.querySelector('.viewer-header h3');
-                const defaultFov = Math.PI / 2;
+            const viewerElement =
+                document.getElementById("panoramaViewer");
 
-                if (!sceneDataById.get(Number(activeSceneId))?.panoramaUrl) return;
 
-                viewer = new Marzipano.Viewer(viewerElement);
+            if (!viewerElement) return;
 
-                const limiter = Marzipano.RectilinearView.limit.traditional(
-                    1024,
-                    120 * Math.PI / 180
+
+            /*
+             * Fallback agar ketika texture berikutnya
+             * belum siap, tidak muncul flash putih.
+             */
+            viewerElement.style.backgroundColor = '#000';
+
+
+            @if (!$activeScene)
+
+                return;
+
+            @endif
+
+
+            // =========================================================
+            // DATA FROM LARAVEL
+            // =========================================================
+
+            const tourScenes =
+                @json($tourScenes);
+
+
+            const activeSceneId =
+                @json($activeScene?->id);
+
+
+            const sceneDataById =
+                new Map(
+
+                    tourScenes.map(
+                        scene => [
+                            Number(scene.id),
+                            scene
+                        ]
+                    )
                 );
 
-                const geometry = new Marzipano.EquirectGeometry([{
-                    width: 4000
-                }]);
 
-                function createHotspotElement(hotspot) {
-                    const element = document.createElement('div');
+            const marzipanoScenes =
+                new Map();
 
-                    element.classList.add(
-                        hotspot.tipe === 'information' ? 'info-hotspot' : 'hotspot-arrow'
+
+            /*
+             * Cache preload panorama.
+             */
+            const panoramaPreloadCache =
+                new Map();
+
+
+            const locationItems =
+                document.querySelectorAll(
+                    '.location-item[data-scene-id]'
+                );
+
+
+            const titleElement =
+                document.querySelector(
+                    '.viewer-header h3'
+                );
+
+
+            const defaultFov =
+                Math.PI / 2;
+
+
+            const initialSceneData =
+                sceneDataById.get(
+                    Number(activeSceneId)
+                );
+
+
+            if (!initialSceneData?.panoramaUrl) {
+
+                return;
+            }
+
+
+            // =========================================================
+            // CREATE VIEWER
+            // =========================================================
+
+            viewer =
+                new Marzipano.Viewer(
+                    viewerElement
+                );
+
+
+            // =========================================================
+            // VIEW LIMIT
+            // =========================================================
+
+            const limiter =
+                Marzipano
+                    .RectilinearView
+                    .limit
+                    .traditional(
+                        1024,
+                        120 * Math.PI / 180
                     );
 
-                    if (hotspot.tipe === 'information') {
-                        element.innerHTML = `
-                            <div class="info-icon">
-                                <i class="fa-solid fa-info"></i>
-                            </div>
 
-                            <div class="info-popup">
-                                <h5>${hotspot.judul ?? 'Informasi Lokasi'}</h5>
-                                <p>${hotspot.deskripsi ?? ''}</p>
-                            </div>
-                        `;
+            // =========================================================
+            // GEOMETRY
+            // =========================================================
 
-                        return element;
+            const geometry =
+                new Marzipano.EquirectGeometry([
+                    {
+                        width: 4000
                     }
+                ]);
 
-                    const navigationIcons = {
-                        arrow: 'fa-circle-chevron-right',
-                        'arrow-right': 'fa-circle-chevron-right',
-                        'arrow-up': 'fa-circle-chevron-up',
-                        'arrow-down': 'fa-circle-chevron-down',
-                        'arrow-left': 'fa-circle-chevron-left',
-                        door: 'fa-door-open',
-                        camera: 'fa-camera',
-                    };
+
+            // =========================================================
+            // PRELOAD PANORAMA
+            // =========================================================
+
+            function preloadPanorama(url) {
+
+                if (!url) {
+
+                    return Promise.resolve();
+                }
+
+
+                /*
+                 * Jika pernah diload,
+                 * gunakan promise yang sama.
+                 */
+
+                if (
+                    panoramaPreloadCache.has(url)
+                ) {
+
+                    return panoramaPreloadCache.get(url);
+                }
+
+
+                const promise =
+                    new Promise((resolve) => {
+
+                        const image =
+                            new Image();
+
+
+                        image.onload = function() {
+
+                            resolve(true);
+                        };
+
+
+                        /*
+                         * Jangan blokir navigasi walaupun
+                         * gambar gagal dipreload.
+                         */
+                        image.onerror = function() {
+
+                            console.warn(
+                                'Gagal preload panorama:',
+                                url
+                            );
+
+                            resolve(false);
+                        };
+
+
+                        image.src = url;
+                    });
+
+
+                panoramaPreloadCache.set(
+                    url,
+                    promise
+                );
+
+
+                return promise;
+            }
+
+
+            // =========================================================
+            // PRELOAD ALL PANORAMAS
+            // =========================================================
+
+            function preloadAllPanoramas() {
+
+                tourScenes.forEach(
+                    scene => {
+
+                        if (
+                            scene?.panoramaUrl &&
+                            Number(scene.id) !==
+                            Number(activeSceneId)
+                        ) {
+
+                            preloadPanorama(
+                                scene.panoramaUrl
+                            );
+                        }
+                    }
+                );
+            }
+
+
+            /*
+             * Jangan mengganggu loading scene pertama.
+             * Preload panorama lain setelah browser
+             * mulai idle.
+             */
+
+            if ('requestIdleCallback' in window) {
+
+                requestIdleCallback(
+                    preloadAllPanoramas
+                );
+
+            } else {
+
+                setTimeout(
+                    preloadAllPanoramas,
+                    1000
+                );
+            }
+
+
+            // =========================================================
+            // ANIMATION HELPERS
+            // =========================================================
+
+            function lerp(
+                start,
+                end,
+                progress
+            ) {
+
+                return start +
+                    (
+                        end - start
+                    ) *
+                    progress;
+            }
+
+
+            function clamp(
+                value,
+                min,
+                max
+            ) {
+
+                return Math.min(
+                    Math.max(
+                        value,
+                        min
+                    ),
+                    max
+                );
+            }
+
+
+            function easeInOutCubic(t) {
+
+                return t < 0.5
+
+                    ? 4 * t * t * t
+
+                    : 1 -
+                        Math.pow(
+                            -2 * t + 2,
+                            3
+                        ) / 2;
+            }
+
+
+            function easeOutCubic(t) {
+
+                return 1 -
+                    Math.pow(
+                        1 - t,
+                        3
+                    );
+            }
+
+
+            function shortestAngle(
+                from,
+                to
+            ) {
+
+                return Math.atan2(
+
+                    Math.sin(
+                        to - from
+                    ),
+
+                    Math.cos(
+                        to - from
+                    )
+                );
+            }
+
+
+            // =========================================================
+            // INITIAL VIEW
+            // =========================================================
+
+            function getInitialView(sceneData) {
+
+                return {
+
+                    yaw: Number(
+                        sceneData
+                            ?.initialView
+                            ?.yaw ??
+                        0
+                    ),
+
+                    pitch: Number(
+                        sceneData
+                            ?.initialView
+                            ?.pitch ??
+                        0
+                    ),
+
+                    fov: Number(
+                        sceneData
+                            ?.initialView
+                            ?.fov ??
+                        defaultFov
+                    )
+                };
+            }
+
+
+            // =========================================================
+            // HOTSPOT ARRIVAL VIEW
+            // =========================================================
+
+            function getArrivalView(hotspot) {
+
+                const hasCustomView =
+
+                    hotspot.targetYaw !== null &&
+                    hotspot.targetYaw !== undefined ||
+
+                    hotspot.targetPitch !== null &&
+                    hotspot.targetPitch !== undefined ||
+
+                    hotspot.targetFov !== null &&
+                    hotspot.targetFov !== undefined;
+
+
+                if (!hasCustomView) {
+
+                    return null;
+                }
+
+
+                return {
+
+                    yaw:
+                        hotspot.targetYaw,
+
+                    pitch:
+                        hotspot.targetPitch,
+
+                    fov:
+                        hotspot.targetFov
+                };
+            }
+
+
+            // =========================================================
+            // RESOLVE VIEW
+            // =========================================================
+
+            function resolveView(
+                sceneData,
+                arrivalView = null
+            ) {
+
+                const initial =
+                    getInitialView(
+                        sceneData
+                    );
+
+
+                if (!arrivalView) {
+
+                    return initial;
+                }
+
+
+                return {
+
+                    yaw: Number(
+
+                        arrivalView.yaw ??
+                        initial.yaw
+                    ),
+
+                    pitch: Number(
+
+                        arrivalView.pitch ??
+                        initial.pitch
+                    ),
+
+                    fov: Number(
+
+                        arrivalView.fov ??
+                        initial.fov
+                    )
+                };
+            }
+
+
+            // =========================================================
+            // CREATE HOTSPOT ELEMENT
+            // =========================================================
+
+            function createHotspotElement(
+                hotspot
+            ) {
+
+                const element =
+                    document.createElement(
+                        'div'
+                    );
+
+
+                element.classList.add(
+
+                    hotspot.tipe ===
+                    'information'
+
+                        ? 'info-hotspot'
+
+                        : 'hotspot-arrow'
+                );
+
+
+                // =====================================================
+                // INFORMATION HOTSPOT
+                // =====================================================
+
+                if (
+                    hotspot.tipe ===
+                    'information'
+                ) {
 
                     element.innerHTML = `
-                        <i class="fa-solid ${navigationIcons[hotspot.icon] || navigationIcons.arrow}"></i>
+
+                        <div class="info-icon">
+
+                            <i class="fa-solid fa-info"></i>
+
+                        </div>
+
+                        <div class="info-popup">
+
+                            <h5>
+                                ${hotspot.judul ?? 'Informasi Lokasi'}
+                            </h5>
+
+                            <p>
+                                ${hotspot.deskripsi ?? ''}
+                            </p>
+
+                        </div>
                     `;
 
-                    element.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        if (hotspot.targetSceneId && switchScene(
-                                hotspot.targetSceneId,
-                                true,
-                                getArrivalView(hotspot)
-                            )) {
-                            return;
-                        }
-
-                        if (hotspot.targetUrl) window.location.href = hotspot.targetUrl;
-                    });
 
                     return element;
                 }
 
-                function getInitialView(sceneData) {
-                    return {
-                        yaw: Number(sceneData?.initialView?.yaw ?? 0),
-                        pitch: Number(sceneData?.initialView?.pitch ?? 0),
-                        fov: Number(sceneData?.initialView?.fov ?? defaultFov)
-                    };
-                }
 
-                function getArrivalView(hotspot) {
-                    const hasCustomView = hotspot.targetYaw !== null ||
-                        hotspot.targetPitch !== null ||
-                        hotspot.targetFov !== null;
+                // =====================================================
+                // NAVIGATION ICON
+                // =====================================================
 
-                    if (!hasCustomView) return null;
+                const navigationIcons = {
 
-                    return {
-                        yaw: hotspot.targetYaw,
-                        pitch: hotspot.targetPitch,
-                        fov: hotspot.targetFov
-                    };
-                }
+                    arrow:
+                        'fa-circle-chevron-right',
 
-                function resolveView(sceneData, arrivalView = null) {
-                    if (!arrivalView) {
-                        return getInitialView(sceneData);
-                    }
+                    'arrow-right':
+                        'fa-circle-chevron-right',
 
-                    const initialSceneView = getInitialView(sceneData);
+                    'arrow-up':
+                        'fa-circle-chevron-up',
 
-                    return {
-                        yaw: Number(arrivalView.yaw ?? initialSceneView.yaw),
-                        pitch: Number(arrivalView.pitch ?? initialSceneView.pitch),
-                        fov: Number(arrivalView.fov ?? initialSceneView.fov)
-                    };
-                }
+                    'arrow-down':
+                        'fa-circle-chevron-down',
 
-                function buildScene(sceneData) {
-                    if (!sceneData?.panoramaUrl) return null;
+                    'arrow-left':
+                        'fa-circle-chevron-left',
 
-                    const sceneId = Number(sceneData.id);
+                    door:
+                        'fa-door-open',
 
-                    if (marzipanoScenes.has(sceneId)) {
-                        return marzipanoScenes.get(sceneId);
-                    }
+                    camera:
+                        'fa-camera'
+                };
 
-                    const source = Marzipano.ImageUrlSource.fromString(sceneData.panoramaUrl);
-                    const view = new Marzipano.RectilinearView(null, limiter);
-                    const scene = viewer.createScene({
-                        source,
-                        geometry,
-                        view
-                    });
 
-                    sceneData.hotspots.forEach(hotspot => {
-                        scene.hotspotContainer().createHotspot(
-                            createHotspotElement(hotspot), {
-                                yaw: hotspot.yaw,
-                                pitch: hotspot.pitch
-                            }
+                element.innerHTML = `
+
+                    <i class="fa-solid ${
+                        navigationIcons[
+                            hotspot.icon
+                        ] ||
+                        navigationIcons.arrow
+                    }"></i>
+
+                `;
+
+
+                // =====================================================
+                // PRELOAD TARGET OF THIS HOTSPOT
+                // =====================================================
+
+                if (
+                    hotspot.targetSceneId
+                ) {
+
+                    const targetSceneData =
+                        sceneDataById.get(
+                            Number(
+                                hotspot.targetSceneId
+                            )
                         );
-                    });
 
-                    marzipanoScenes.set(sceneId, scene);
 
-                    return scene;
-                }
+                    if (
+                        targetSceneData?.panoramaUrl
+                    ) {
 
-                function setActiveSidebar(sceneId) {
-                    locationItems.forEach(item => {
-                        item.classList.toggle(
-                            'active',
-                            Number(item.dataset.sceneId) === Number(sceneId)
-                        );
-                    });
-                }
-
-                function switchScene(sceneId, shouldPushState = false, arrivalView = null) {
-                    const numericSceneId = Number(sceneId);
-                    const sceneData = sceneDataById.get(numericSceneId);
-                    const nextScene = buildScene(sceneData);
-                    const viewParameters = resolveView(sceneData, arrivalView);
-
-                    if (!sceneData || !nextScene) return false;
-
-                    nextScene.view().setParameters(viewParameters);
-                    nextScene.switchTo({
-                        transitionDuration: 650
-                    });
-                    currentMarzipanoScene = nextScene;
-                    currentInitialView = getInitialView(sceneData);
-                    setActiveSidebar(numericSceneId);
-
-                    if (titleElement) {
-                        titleElement.textContent = sceneData.namaLokasi || 'Virtual Tour';
-                    }
-
-                    if (shouldPushState) {
-                        history.pushState({
-                                sceneId: numericSceneId,
-                                arrivalView
-                            },
-                            '',
-                            sceneData.url
+                        preloadPanorama(
+                            targetSceneData.panoramaUrl
                         );
                     }
-
-                    return true;
                 }
 
-                locationItems.forEach(item => {
-                    item.addEventListener('click', function(event) {
-                        if (!switchScene(this.dataset.sceneId, true)) return;
+
+                // =====================================================
+                // CLICK
+                // =====================================================
+
+                element.addEventListener(
+                    'click',
+                    async function(event) {
 
                         event.preventDefault();
+
+                        event.stopPropagation();
+
+
+                        if (
+                            isSceneTransitioning
+                        ) {
+
+                            return;
+                        }
+
+
+                        // =============================================
+                        // NAVIGATION TO ANOTHER SCENE
+                        // =============================================
+
+                        if (
+                            hotspot.targetSceneId
+                        ) {
+
+                            const targetData =
+                                sceneDataById.get(
+                                    Number(
+                                        hotspot.targetSceneId
+                                    )
+                                );
+
+
+                            /*
+                             * Pastikan file panorama setidaknya
+                             * sudah masuk browser cache sebelum
+                             * animasi dimulai.
+                             */
+
+                            if (
+                                targetData?.panoramaUrl
+                            ) {
+
+                                await preloadPanorama(
+                                    targetData.panoramaUrl
+                                );
+                            }
+
+
+                            streetViewTransition(
+
+                                hotspot.targetSceneId,
+
+                                hotspot,
+
+                                true,
+
+                                getArrivalView(
+                                    hotspot
+                                )
+                            );
+
+
+                            return;
+                        }
+
+
+                        // =============================================
+                        // NAVIGATION TO URL
+                        // =============================================
+
+                        if (
+                            hotspot.targetUrl
+                        ) {
+
+                            window.location.href =
+                                hotspot.targetUrl;
+                        }
+                    }
+                );
+
+
+                return element;
+            }
+
+
+            // =========================================================
+            // BUILD SCENE
+            // =========================================================
+
+            function buildScene(
+                sceneData
+            ) {
+
+                if (
+                    !sceneData?.panoramaUrl
+                ) {
+
+                    return null;
+                }
+
+
+                const sceneId =
+                    Number(
+                        sceneData.id
+                    );
+
+
+                /*
+                 * Return existing scene.
+                 */
+
+                if (
+                    marzipanoScenes.has(
+                        sceneId
+                    )
+                ) {
+
+                    return marzipanoScenes.get(
+                        sceneId
+                    );
+                }
+
+
+                const source =
+                    Marzipano
+                        .ImageUrlSource
+                        .fromString(
+                            sceneData.panoramaUrl
+                        );
+
+
+                const view =
+                    new Marzipano
+                        .RectilinearView(
+                            null,
+                            limiter
+                        );
+
+
+                const scene =
+                    viewer.createScene({
+
+                        source,
+
+                        geometry,
+
+                        view,
+
+                        /*
+                         * Pertahankan level pertama
+                         * sebagai fallback.
+                         */
+                        pinFirstLevel: true
                     });
+
+
+                // =====================================================
+                // CREATE HOTSPOTS
+                // =====================================================
+
+                (
+                    sceneData.hotspots ||
+                    []
+                ).forEach(
+                    hotspot => {
+
+                        scene
+                            .hotspotContainer()
+                            .createHotspot(
+
+                                createHotspotElement(
+                                    hotspot
+                                ),
+
+                                {
+                                    yaw:
+                                        Number(
+                                            hotspot.yaw
+                                        ),
+
+                                    pitch:
+                                        Number(
+                                            hotspot.pitch
+                                        )
+                                }
+                            );
+                    }
+                );
+
+
+                marzipanoScenes.set(
+                    sceneId,
+                    scene
+                );
+
+
+                return scene;
+            }
+
+
+            // =========================================================
+            // ACTIVE SIDEBAR
+            // =========================================================
+
+            function setActiveSidebar(
+                sceneId
+            ) {
+
+                locationItems.forEach(
+                    item => {
+
+                        item
+                            .classList
+                            .toggle(
+
+                                'active',
+
+                                Number(
+                                    item.dataset.sceneId
+                                ) ===
+
+                                Number(
+                                    sceneId
+                                )
+                            );
+                    }
+                );
+            }
+
+
+            // =========================================================
+            // STREET VIEW STYLE TRANSITION
+            // =========================================================
+
+            function streetViewTransition(
+                sceneId,
+                hotspot,
+                shouldPushState = true,
+                arrivalView = null
+            ) {
+
+                if (
+                    isSceneTransitioning
+                ) {
+
+                    return false;
+                }
+
+
+                const numericSceneId =
+                    Number(sceneId);
+
+
+                const sceneData =
+                    sceneDataById.get(
+                        numericSceneId
+                    );
+
+
+                if (
+                    !sceneData ||
+                    !currentMarzipanoScene
+                ) {
+
+                    return false;
+                }
+
+
+                const nextScene =
+                    buildScene(
+                        sceneData
+                    );
+
+
+                if (!nextScene) {
+
+                    return false;
+                }
+
+
+                isSceneTransitioning =
+                    true;
+
+
+                // =====================================================
+                // DISABLE INPUT TEMPORARILY
+                // =====================================================
+
+                const previousPointerEvents =
+                    viewerElement
+                        .style
+                        .pointerEvents;
+
+
+                viewerElement.style
+                    .pointerEvents =
+                    'none';
+
+
+                // =====================================================
+                // CURRENT VIEW
+                // =====================================================
+
+                const oldScene =
+                    currentMarzipanoScene;
+
+
+                const oldView =
+                    oldScene.view();
+
+
+                const oldParameters =
+                    oldView.parameters();
+
+
+                // =====================================================
+                // TARGET VIEW
+                // =====================================================
+
+                const finalView =
+                    resolveView(
+                        sceneData,
+                        arrivalView
+                    );
+
+
+                // =====================================================
+                // MOVEMENT DIRECTION
+                // =====================================================
+
+                const hotspotYaw =
+                    Number(
+                        hotspot?.yaw ??
+                        oldParameters.yaw
+                    );
+
+
+                const hotspotPitch =
+                    Number(
+                        hotspot?.pitch ??
+                        oldParameters.pitch
+                    );
+
+
+                const yawDifference =
+                    shortestAngle(
+
+                        oldParameters.yaw,
+
+                        hotspotYaw
+                    );
+
+
+                const pitchDifference =
+
+                    hotspotPitch -
+
+                    oldParameters.pitch;
+
+
+                /*
+                 * Hanya geser sedikit.
+                 *
+                 * Tidak memutar kamera hingga
+                 * menghadap hotspot.
+                 */
+
+                const outgoingYawMovement =
+                    clamp(
+
+                        yawDifference *
+                        0.10,
+
+                        -0.075,
+
+                        0.075
+                    );
+
+
+                const outgoingPitchMovement =
+                    clamp(
+
+                        pitchDifference *
+                        0.06,
+
+                        -0.03,
+
+                        0.03
+                    );
+
+
+                // =====================================================
+                // TRANSITION CONFIG
+                // =====================================================
+
+                /*
+                 * Total durasi transisi.
+                 */
+                const duration =
+                    520;
+
+
+                /*
+                 * Panorama baru masuk pada 48%.
+                 */
+                const swapPoint =
+                    0.48;
+
+
+                /*
+                 * Blur maksimal.
+                 */
+                const maxBlur =
+                    2.5;
+
+
+                /*
+                 * Zoom maju.
+                 *
+                 * 1    = tidak zoom
+                 * 0.8  = sedikit zoom
+                 * 0.7  = lebih kuat
+                 */
+                const zoomFactor =
+                    0.78;
+
+
+                // =====================================================
+                // OLD SCENE
+                // =====================================================
+
+                const startFov =
+                    Number(
+                        oldParameters.fov
+                    );
+
+
+                const zoomedOldFov =
+                    startFov *
+                    zoomFactor;
+
+
+                // =====================================================
+                // NEW SCENE
+                // =====================================================
+
+                const targetFinalFov =
+                    Number(
+                        finalView.fov
+                    );
+
+
+                const targetStartFov =
+                    targetFinalFov *
+                    zoomFactor;
+
+
+                // =====================================================
+                // CONTINUOUS OFFSET
+                // =====================================================
+
+                const arrivalYawOffset =
+                    clamp(
+
+                        outgoingYawMovement *
+                        0.30,
+
+                        -0.025,
+
+                        0.025
+                    );
+
+
+                const arrivalPitchOffset =
+                    clamp(
+
+                        outgoingPitchMovement *
+                        0.30,
+
+                        -0.012,
+
+                        0.012
+                    );
+
+
+                const startArrivalYaw =
+
+                    Number(
+                        finalView.yaw
+                    ) -
+
+                    arrivalYawOffset;
+
+
+                const startArrivalPitch =
+
+                    Number(
+                        finalView.pitch
+                    ) -
+
+                    arrivalPitchOffset;
+
+
+                // =====================================================
+                // STORE ORIGINAL STYLE
+                // =====================================================
+
+                const originalFilter =
+                    viewerElement
+                        .style
+                        .filter;
+
+
+                const originalTransform =
+                    viewerElement
+                        .style
+                        .transform;
+
+
+                const originalTransformOrigin =
+                    viewerElement
+                        .style
+                        .transformOrigin;
+
+
+                const originalWillChange =
+                    viewerElement
+                        .style
+                        .willChange;
+
+
+                viewerElement.style
+                    .willChange =
+                    'filter, transform';
+
+
+                viewerElement.style
+                    .transformOrigin =
+                    'center center';
+
+
+                let startTime =
+                    null;
+
+
+                let sceneSwitched =
+                    false;
+
+
+                // =====================================================
+                // ANIMATION LOOP
+                // =====================================================
+
+                function animate(
+                    timestamp
+                ) {
+
+                    if (
+                        startTime === null
+                    ) {
+
+                        startTime =
+                            timestamp;
+                    }
+
+
+                    const elapsed =
+
+                        timestamp -
+
+                        startTime;
+
+
+                    const progress =
+                        Math.min(
+
+                            elapsed /
+                            duration,
+
+                            1
+                        );
+
+
+                    // =================================================
+                    // PHASE 1
+                    // OLD PANORAMA
+                    // =================================================
+
+                    if (
+                        progress <
+                        swapPoint
+                    ) {
+
+                        const localProgress =
+
+                            progress /
+
+                            swapPoint;
+
+
+                        const eased =
+                            easeInOutCubic(
+                                localProgress
+                            );
+
+
+                        oldView.setParameters({
+
+                            yaw:
+
+                                oldParameters.yaw +
+
+                                outgoingYawMovement *
+                                eased,
+
+
+                            pitch:
+
+                                oldParameters.pitch +
+
+                                outgoingPitchMovement *
+                                eased,
+
+
+                            fov:
+
+                                lerp(
+
+                                    startFov,
+
+                                    zoomedOldFov,
+
+                                    eased
+                                )
+                        });
+
+
+                        /*
+                         * Blur meningkat.
+                         */
+
+                        const blur =
+
+                            maxBlur *
+                            eased;
+
+
+                        /*
+                         * Sedikit scale.
+                         */
+
+                        const scale =
+
+                            1 +
+
+                            (
+                                0.01 *
+                                eased
+                            );
+
+
+                        viewerElement.style
+                            .filter =
+
+                            `blur(${blur}px)`;
+
+
+                        viewerElement.style
+                            .transform =
+
+                            `scale(${scale})`;
+                    }
+
+
+                    // =================================================
+                    // PHASE 2
+                    // TARGET PANORAMA
+                    // =================================================
+
+                    else {
+
+                        if (
+                            !sceneSwitched
+                        ) {
+
+                            /*
+                             * Scene tujuan dimulai
+                             * dalam keadaan sedikit zoom.
+                             */
+
+                            nextScene
+                                .view()
+                                .setParameters({
+
+                                    yaw:
+                                        startArrivalYaw,
+
+                                    pitch:
+                                        startArrivalPitch,
+
+                                    fov:
+                                        targetStartFov
+                                });
+
+
+                            /*
+                             * Pindah langsung.
+                             *
+                             * Tidak menggunakan fade.
+                             */
+                            nextScene.switchTo({
+
+                                transitionDuration:
+                                    0
+                            });
+
+
+                            currentMarzipanoScene =
+                                nextScene;
+
+
+                            currentInitialView =
+                                getInitialView(
+                                    sceneData
+                                );
+
+
+                            setActiveSidebar(
+                                numericSceneId
+                            );
+
+
+                            // =========================================
+                            // TITLE
+                            // =========================================
+
+                            if (
+                                titleElement
+                            ) {
+
+                                titleElement.textContent =
+
+                                    sceneData.namaLokasi ||
+
+                                    'Virtual Tour';
+                            }
+
+
+                            // =========================================
+                            // HISTORY
+                            // =========================================
+
+                            if (
+                                shouldPushState
+                            ) {
+
+                                history.pushState(
+
+                                    {
+                                        sceneId:
+                                            numericSceneId,
+
+                                        arrivalView:
+                                            arrivalView
+                                    },
+
+                                    '',
+
+                                    sceneData.url
+                                );
+                            }
+
+
+                            sceneSwitched =
+                                true;
+                        }
+
+
+                        /*
+                         * Lanjutkan gerakan
+                         * setelah scene berganti.
+                         */
+
+                        const localProgress =
+
+                            (
+                                progress -
+                                swapPoint
+                            ) /
+
+                            (
+                                1 -
+                                swapPoint
+                            );
+
+
+                        const eased =
+                            easeOutCubic(
+                                localProgress
+                            );
+
+
+                        const newView =
+                            nextScene.view();
+
+
+                        newView.setParameters({
+
+                            yaw:
+
+                                lerp(
+
+                                    startArrivalYaw,
+
+                                    Number(
+                                        finalView.yaw
+                                    ),
+
+                                    eased
+                                ),
+
+
+                            pitch:
+
+                                lerp(
+
+                                    startArrivalPitch,
+
+                                    Number(
+                                        finalView.pitch
+                                    ),
+
+                                    eased
+                                ),
+
+
+                            fov:
+
+                                lerp(
+
+                                    targetStartFov,
+
+                                    targetFinalFov,
+
+                                    eased
+                                )
+                        });
+
+
+                        /*
+                         * Blur menghilang.
+                         */
+
+                        const blur =
+
+                            maxBlur *
+                            (
+                                1 -
+                                eased
+                            );
+
+
+                        const scale =
+
+                            1 +
+
+                            (
+                                0.01 *
+                                (
+                                    1 -
+                                    eased
+                                )
+                            );
+
+
+                        viewerElement.style
+                            .filter =
+
+                            `blur(${blur}px)`;
+
+
+                        viewerElement.style
+                            .transform =
+
+                            `scale(${scale})`;
+                    }
+
+
+                    // =================================================
+                    // CONTINUE
+                    // =================================================
+
+                    if (
+                        progress < 1
+                    ) {
+
+                        requestAnimationFrame(
+                            animate
+                        );
+
+                        return;
+                    }
+
+
+                    // =================================================
+                    // FINISH
+                    // =================================================
+
+                    nextScene
+                        .view()
+                        .setParameters(
+                            finalView
+                        );
+
+
+                    viewerElement.style
+                        .filter =
+                        originalFilter;
+
+
+                    viewerElement.style
+                        .transform =
+                        originalTransform;
+
+
+                    viewerElement.style
+                        .transformOrigin =
+                        originalTransformOrigin;
+
+
+                    viewerElement.style
+                        .willChange =
+                        originalWillChange;
+
+
+                    viewerElement.style
+                        .pointerEvents =
+                        previousPointerEvents;
+
+
+                    isSceneTransitioning =
+                        false;
+                }
+
+
+                requestAnimationFrame(
+                    animate
+                );
+
+
+                return true;
+            }
+
+
+            // =========================================================
+            // NORMAL SWITCH SCENE
+            // =========================================================
+            //
+            // Digunakan untuk:
+            //
+            // - Initial scene
+            // - Sidebar
+            // - Browser back / forward
+            //
+            // =========================================================
+
+            function switchScene(
+                sceneId,
+                shouldPushState = false,
+                arrivalView = null,
+                transitionDuration = 650
+            ) {
+
+                const numericSceneId =
+                    Number(sceneId);
+
+
+                const sceneData =
+                    sceneDataById.get(
+                        numericSceneId
+                    );
+
+
+                if (!sceneData) {
+
+                    return false;
+                }
+
+
+                const nextScene =
+                    buildScene(
+                        sceneData
+                    );
+
+
+                if (!nextScene) {
+
+                    return false;
+                }
+
+
+                const viewParameters =
+                    resolveView(
+
+                        sceneData,
+
+                        arrivalView
+                    );
+
+
+                nextScene
+                    .view()
+                    .setParameters(
+                        viewParameters
+                    );
+
+
+                nextScene.switchTo({
+
+                    transitionDuration:
+                        transitionDuration
                 });
 
-                window.addEventListener('popstate', function(event) {
-                    const params = new URLSearchParams(window.location.search);
-                    const sceneId = event.state?.sceneId || params.get('scene') || activeSceneId;
 
-                    switchScene(sceneId, false, event.state?.arrivalView || null);
-                });
+                currentMarzipanoScene =
+                    nextScene;
 
-                history.replaceState({
-                    sceneId: Number(activeSceneId),
-                    arrivalView: null
-                }, '', window.location.href);
-                switchScene(activeSceneId, false);
-            });
-        </script>
-    @endpush
+
+                currentInitialView =
+                    getInitialView(
+                        sceneData
+                    );
+
+
+                setActiveSidebar(
+                    numericSceneId
+                );
+
+
+                if (
+                    titleElement
+                ) {
+
+                    titleElement.textContent =
+
+                        sceneData.namaLokasi ||
+
+                        'Virtual Tour';
+                }
+
+
+                if (
+                    shouldPushState
+                ) {
+
+                    history.pushState(
+
+                        {
+                            sceneId:
+                                numericSceneId,
+
+                            arrivalView:
+                                arrivalView
+                        },
+
+                        '',
+
+                        sceneData.url
+                    );
+                }
+
+
+                return true;
+            }
+
+
+            // =========================================================
+            // SIDEBAR CLICK
+            // =========================================================
+
+            locationItems.forEach(
+                item => {
+
+                    item.addEventListener(
+                        'click',
+                        async function(event) {
+
+                            event.preventDefault();
+
+
+                            if (
+                                isSceneTransitioning
+                            ) {
+
+                                return;
+                            }
+
+
+                            const sceneId =
+                                Number(
+                                    this.dataset.sceneId
+                                );
+
+
+                            const targetData =
+                                sceneDataById.get(
+                                    sceneId
+                                );
+
+
+                            /*
+                             * Preload dulu supaya sidebar
+                             * juga tidak flash putih.
+                             */
+                            if (
+                                targetData?.panoramaUrl
+                            ) {
+
+                                await preloadPanorama(
+                                    targetData.panoramaUrl
+                                );
+                            }
+
+
+                            switchScene(
+                                sceneId,
+                                true
+                            );
+                        }
+                    );
+                }
+            );
+
+
+            // =========================================================
+            // BROWSER BACK / FORWARD
+            // =========================================================
+
+            window.addEventListener(
+                'popstate',
+                async function(event) {
+
+                    if (
+                        isSceneTransitioning
+                    ) {
+
+                        return;
+                    }
+
+
+                    const params =
+                        new URLSearchParams(
+                            window.location.search
+                        );
+
+
+                    const sceneId =
+
+                        Number(
+
+                            event.state
+                                ?.sceneId ||
+
+                            params.get(
+                                'scene'
+                            ) ||
+
+                            activeSceneId
+                        );
+
+
+                    const targetData =
+                        sceneDataById.get(
+                            sceneId
+                        );
+
+
+                    if (
+                        targetData?.panoramaUrl
+                    ) {
+
+                        await preloadPanorama(
+                            targetData.panoramaUrl
+                        );
+                    }
+
+
+                    switchScene(
+
+                        sceneId,
+
+                        false,
+
+                        event.state
+                            ?.arrivalView ||
+
+                        null
+                    );
+                }
+            );
+
+
+            // =========================================================
+            // INITIAL HISTORY
+            // =========================================================
+
+            history.replaceState(
+
+                {
+                    sceneId:
+                        Number(
+                            activeSceneId
+                        ),
+
+                    arrivalView:
+                        null
+                },
+
+                '',
+
+                window.location.href
+            );
+
+
+            // =========================================================
+            // FIRST SCENE
+            // =========================================================
+
+            switchScene(
+                activeSceneId,
+                false,
+                null,
+                0
+            );
+
+        });
+    </script>
+@endpush
 
     @include('components.footer')
 @endsection

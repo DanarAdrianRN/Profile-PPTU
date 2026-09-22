@@ -33,7 +33,7 @@
             </ul>
         </li>
         <li><a href="{{ route('virtual-tour') }}" @class(['active' => request()->routeIs('virtual-tour', 'virtual-tour.scene.redirect')]) @if(request()->routeIs('virtual-tour', 'virtual-tour.scene.redirect')) aria-current="page" @endif>Virtual Tour</a></li>
-        <li><a href="{{ route('informasi-pendaftaran') }}" @class(['btn', 'active' => request()->routeIs('informasi-pendaftaran', 'form-pendaftaran')]) @if(request()->routeIs('informasi-pendaftaran', 'form-pendaftaran')) aria-current="page" @endif>PPDB</a></li>
+        <li><a href="{{ route('informasi-pendaftaran') }}" @class(['btn', 'active' => request()->routeIs('informasi-pendaftaran', 'form-pendaftaran')]) @if(request()->routeIs('informasi-pendaftaran', 'form-pendaftaran')) aria-current="page" @endif>Pendaftaran</a></li>
     </ul>
 </nav>
 
