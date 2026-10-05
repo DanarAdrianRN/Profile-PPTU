@@ -15,6 +15,25 @@
                 align-items: center;
 
             }
+
+        #panoramaViewer:focus-visible {
+            outline: 3px solid #117a8b;
+            outline-offset: -4px;
+        }
+        #panoramaViewer [data-tour-hotspot]:focus-visible,
+        #panoramaViewer .info-hotspot:focus-visible .info-icon {
+            outline: 3px solid #ffcf33;
+            outline-offset: 5px;
+            border-radius: 50%;
+        }
+        #panoramaViewer .info-hotspot[aria-expanded="true"] .info-popup {
+            opacity: 1;
+            visibility: visible;
+        }
+        #panoramaViewer .info-hotspot[aria-expanded="false"]:focus .info-popup {
+            opacity: 0;
+            visibility: hidden;
+        }
     </style>
     <section class="virtual-tour">
         <div class="tour-hero">
@@ -99,7 +118,7 @@
 
                         <div class="tour-viewer">
                             @if ($activeScene?->panorama_url)
-                                <div id="panoramaViewer"></div>
+                                <div id="panoramaViewer" tabindex="0" role="region" aria-label="Panorama 360 derajat" aria-describedby="tourKeyboardHelp"></div>
                             @else
                                 <div class="empty-tour-viewer">
                                     <i class="fa-solid fa-panorama"></i>
@@ -126,6 +145,7 @@
                                 <div>
                                     <h5>Mode 360°</h5>
                                     <p>Gunakan mouse atau sentuhan layar untuk mengelilingi panorama.</p>
+                                    <p id="tourKeyboardHelp">Klik atau fokuskan panorama untuk memakai keyboard: panah/WASD untuk bergerak, +/- untuk zoom, R untuk reset, F untuk fullscreen. Tab memilih hotspot navigasi maupun informasi. Enter/Spasi berpindah lokasi atau membuka/menutup informasi. Tab di hotspot terakhir keluar dari viewer; Escape kembali ke panorama.</p>
                                 </div>
                             </div>
                         </div>
@@ -407,6 +427,92 @@
                     viewerElement
                 );
 
+
+            // Keyboard stays on this viewer; removing it also removes its event scope.
+            const sceneHotspots = new WeakMap();
+            const tourPath = window.location.pathname;
+            const panStep = Math.PI / 60;
+            const zoomStep = Math.PI / 60;
+
+            viewerElement.addEventListener('pointerdown', function(event) {
+                if (!event.target.closest('[data-tour-hotspot], input, textarea, select, [contenteditable]')) {
+                    viewerElement.focus({ preventScroll: true });
+                }
+            });
+
+            viewerElement.addEventListener('keydown', function(event) {
+                const target = event.target;
+                if (!viewerElement.isConnected || document.hidden ||
+                    window.location.pathname !== tourPath ||
+                    event.defaultPrevented || event.isComposing ||
+                    event.ctrlKey || event.metaKey || event.altKey ||
+                    target.closest('input, textarea, select') || target.isContentEditable) {
+                    return;
+                }
+
+                const key = event.key.toLowerCase();
+                const hotspots = sceneHotspots.get(currentMarzipanoScene) || [];
+                const focusedHotspot = target.closest('[data-tour-hotspot]');
+                const index = hotspots.findIndex(item => item.element === focusedHotspot);
+
+                if (key === 'tab') {
+                    if (event.shiftKey || isSceneTransitioning) return;
+                    const nextIndex = index + 1;
+                    const next = hotspots[nextIndex];
+                    // After the last hotspot, retain native Tab navigation out of the viewer.
+                    if (!next) return;
+                    event.preventDefault();
+                    const selectedScene = currentMarzipanoScene;
+                    setViewParameters({ yaw: next.yaw, pitch: next.pitch });
+                    // Let Marzipano render off-screen hotspots before giving them focus.
+                    requestAnimationFrame(() => {
+                        if (viewerElement.isConnected && next.element.isConnected &&
+                            currentMarzipanoScene === selectedScene && !isSceneTransitioning &&
+                            viewerElement.contains(document.activeElement)) {
+                            next.element.focus({ preventScroll: true });
+                        }
+                    });
+                    return;
+                }
+
+                if (key === 'enter' || key === ' ') {
+                    if (index < 0) return;
+                    event.preventDefault();
+                    if (!event.repeat && !isSceneTransitioning) focusedHotspot.click();
+                    return;
+                }
+
+                if (key === 'escape' && index >= 0) {
+                    event.preventDefault();
+                    focusedHotspot.setAttribute('aria-expanded', 'false');
+                    viewerElement.focus({ preventScroll: true });
+                    return;
+                }
+
+                const actions = {
+                    arrowleft: ['yaw', -panStep], a: ['yaw', -panStep],
+                    arrowright: ['yaw', panStep], d: ['yaw', panStep],
+                    arrowup: ['pitch', -panStep], w: ['pitch', -panStep],
+                    arrowdown: ['pitch', panStep], s: ['pitch', panStep],
+                    '+': ['fov', -zoomStep], '=': ['fov', -zoomStep],
+                    '-': ['fov', zoomStep], '_': ['fov', zoomStep]
+                };
+                const action = actions[key];
+                if (!action && key !== 'r' && key !== 'f') return;
+                event.preventDefault();
+                if (isSceneTransitioning) return;
+
+                if (action) {
+                    const view = currentMarzipanoScene?.view();
+                    if (view) {
+                        const parameters = view.parameters();
+                        setViewParameters({ [action[0]]: parameters[action[0]] + action[1] });
+                    }
+                } else if (!event.repeat) {
+                    if (key === 'r') setViewParameters(currentInitialView);
+                    if (key === 'f') fullscreenButton?.click();
+                }
+            });
 
             // =========================================================
             // VIEW LIMIT
@@ -761,6 +867,12 @@
                 );
 
 
+                element.tabIndex = -1;
+                element.dataset.tourHotspot = '';
+                element.setAttribute('role', 'button');
+                element.setAttribute('aria-label', hotspot.judul ||
+                    (hotspot.tipe === 'information' ? 'Informasi lokasi' : 'Pindah lokasi'));
+
                 // =====================================================
                 // INFORMATION HOTSPOT
                 // =====================================================
@@ -791,6 +903,15 @@
                         </div>
                     `;
 
+
+                    element.setAttribute('aria-expanded', 'false');
+                    element.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        if (isSceneTransitioning) return;
+                        element.setAttribute('aria-expanded',
+                            element.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+                    });
 
                     return element;
                 }
@@ -1025,6 +1146,9 @@
                     });
 
 
+                const keyboardHotspots = [];
+                sceneHotspots.set(scene, keyboardHotspots);
+
                 // =====================================================
                 // CREATE HOTSPOTS
                 // =====================================================
@@ -1034,14 +1158,18 @@
                     []
                 ).forEach(
                     hotspot => {
+                        const element = createHotspotElement(hotspot);
+                        keyboardHotspots.push({
+                            element,
+                            yaw: Number(hotspot.yaw),
+                            pitch: Number(hotspot.pitch)
+                        });
 
                         scene
                             .hotspotContainer()
                             .createHotspot(
 
-                                createHotspotElement(
-                                    hotspot
-                                ),
+                                element,
 
                                 {
                                     yaw:
@@ -1076,6 +1204,12 @@
             function setActiveSidebar(
                 sceneId
             ) {
+
+                // Release focus from the old scene after either existing switch path.
+                if (viewerElement.contains(document.activeElement) &&
+                    document.activeElement !== viewerElement) {
+                    viewerElement.focus({ preventScroll: true });
+                }
 
                 locationItems.forEach(
                     item => {
